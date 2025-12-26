@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search, CheckCircle, Calendar, ClipboardCheck, MessageSquare, Lightbulb } from 'lucide-react';
+import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search, CheckCircle, Calendar, ClipboardCheck, MessageSquare, Lightbulb, Phone, HelpCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Accordion,
@@ -18,7 +18,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { teamMembers, divisions } from '@/lib/data';
+import { teamMembers, divisions, faqItems } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -167,23 +167,6 @@ const ImpactStat = ({ value, label }: { value: string, label: string }) => (
   </div>
 );
 
-const faqItems = [
-  {
-    id: "faq1",
-    question: "Bagaimana cara mendaftar jadi pengurus OSIS?",
-    answer: "Pendaftaran pengurus OSIS biasanya dibuka setiap awal tahun ajaran baru. Kamu bisa memantau pengumuman di mading sekolah, media sosial OSIS, atau bertanya langsung kepada pengurus OSIS saat ini. Prosesnya meliputi pengisian formulir, seleksi berkas, dan wawancara."
-  },
-  {
-    id: "faq2",
-    question: "Siapa saja yang boleh ikut program kerja OSIS?",
-    answer: "Seluruh siswa dan siswi sekolah berhak untuk berpartisipasi dalam program kerja OSIS, baik sebagai panitia maupun peserta. Beberapa acara mungkin memiliki target audiens tertentu, namun pada dasarnya semua kegiatan kami terbuka untuk umum."
-  },
-    {
-    id: "faq3",
-    question: "Apa keuntungan bergabung dengan OSIS?",
-    answer: "Bergabung dengan OSIS memberikan banyak sekali manfaat! Kamu akan belajar tentang kepemimpinan, kerja sama tim, manajemen waktu, dan cara berkomunikasi yang efektif. Selain itu, ini adalah kesempatan emas untuk memperluas jaringan pertemanan dan membuat perubahan positif di lingkungan sekolah."
-  }
-];
 
 export default function LandingPage() {
 
@@ -379,16 +362,31 @@ export default function LandingPage() {
 
         {/* FAQ Section */}
         <section>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-16 items-center">
-                <div className="lg:col-span-1 text-left">
-                    <h2 className="font-headline text-5xl font-extrabold tracking-tight text-foreground">Masih Penasaran?</h2>
-                    <p className="mt-4 text-muted-foreground">Temukan jawaban atas pertanyaan umum mengenai OSIS dan kehidupan sekolah di sini.</p>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+                <div className="lg:col-span-1">
+                    <h2 className="font-headline text-5xl font-extrabold tracking-tight text-foreground">
+                        FAQ<br/><span className="text-primary">COMMON GROUND.</span>
+                    </h2>
+                    <p className="mt-4 text-muted-foreground">
+                        Punya ganjalan atau pertanyaan seputar OSIS? Kami rangkum jawaban yang paling sering ditanyakan di sini untuk mempermudahmu.
+                    </p>
+                    <Button variant="default" size="lg" className="mt-8 w-full h-auto py-4 rounded-2xl bg-primary text-primary-foreground">
+                        <div className="flex items-center gap-4 text-left">
+                             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                                <HelpCircle className="w-6 h-6 text-primary-foreground" />
+                            </div>
+                            <div>
+                                <p className="font-bold">BUTUH RESPON LEBIH CEPAT?</p>
+                                <p className="text-xs font-mono uppercase tracking-wider">CONTACT PUBLIC RELATION</p>
+                            </div>
+                        </div>
+                    </Button>
                 </div>
                 <div className="lg:col-span-2">
                     <Accordion type="single" collapsible className="w-full space-y-4">
                         {faqItems.map((item) => (
-                             <AccordionItem key={item.id} value={item.id} className="bg-card border-none rounded-2xl shadow-sm">
-                                <AccordionTrigger className="p-6 font-bold text-base hover:no-underline text-left">
+                             <AccordionItem key={item.id} value={item.id} className="bg-card border-none rounded-2xl shadow-sm data-[state=open]:border data-[state=open]:border-primary/50">
+                                <AccordionTrigger className="p-6 font-bold text-sm uppercase tracking-wider hover:no-underline text-left data-[state=open]:text-primary">
                                     {item.question}
                                 </AccordionTrigger>
                                 <AccordionContent className="p-6 pt-0 text-muted-foreground text-left">

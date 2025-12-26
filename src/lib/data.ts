@@ -1,4 +1,4 @@
-import type { Announcement, TeamMember, VisionMission, Division, NewsArticle } from './types';
+import type { Announcement, TeamMember, VisionMission, Division, NewsArticle, FaqItem } from './types';
 import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Calendar, ClipboardCheck } from 'lucide-react';
 import { PlaceHolderImages } from './placeholder-images';
 
@@ -218,4 +218,21 @@ export const newsArticles: NewsArticle[] = [
   },
 ];
 
+export const faqItems: FaqItem[] = [
+  {
+    id: "faq1",
+    question: "Siapa pengelola website ini?",
+    answer: "Website ini dikelola penuh oleh Sekbid Teknologi OSIS SMANSA sebagai portofolio inovasi digital sekolah sekaligus kanal informasi publik resmi."
+  },
+  {
+    id: "faq2",
+    question: "Syarat daftar pengurus?",
+    answer: "Pendaftaran pengurus OSIS biasanya dibuka setiap awal tahun ajaran baru. Syarat utamanya adalah siswa aktif, memiliki komitmen, dan lolos seleksi yang diadakan. Pantau terus informasinya di media sosial kami!"
+  },
+    {
+    id: "faq3",
+    question: "Cara kerjasama/sponsor?",
+    answer: "Kami sangat terbuka untuk kerjasama dan sponsorship. Anda dapat menghubungi kami melalui halaman Kontak atau mengirimkan proposal langsung ke email OSIS yang tertera di bagian footer."
+  }
+];
     
