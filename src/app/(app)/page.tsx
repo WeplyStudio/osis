@@ -161,15 +161,15 @@ export default function LandingPage() {
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
-                <Link href="/events">
-                  Lihat Agenda
+                <Link href="/#programs">
+                  Lihat Program
                 </Link>
               </Button>
             </div>
         </section>
 
         {/* About Us Section */}
-        <section>
+        <section id="about">
           <div className="text-center mb-12">
             <p className="font-headline text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
             <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">Tentang Kami</h2>
@@ -251,7 +251,7 @@ export default function LandingPage() {
         </section>
 
         {/* Divisions Section */}
-        <section className="text-center">
+        <section id="divisions">
            <SectionTitle>Divisi <span className="text-primary">Kami</span></SectionTitle>
            <DivisionTabs />
         </section>

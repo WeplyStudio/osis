@@ -1,5 +1,5 @@
-import type { Announcement, Event, TeamMember, VisionMission, Division, NewsArticle } from './types';
-import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages } from 'lucide-react';
+import type { Announcement, TeamMember, VisionMission, Division, NewsArticle, Program } from './types';
+import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Calendar, ClipboardCheck } from 'lucide-react';
 import { PlaceHolderImages } from './placeholder-images';
 
 export const announcements: Announcement[] = [
@@ -26,35 +26,40 @@ export const announcements: Announcement[] = [
   },
 ];
 
-export const events: Event[] = [
+export const programs: Program[] = [
   {
     id: '1',
-    title: 'Annual School Festival',
-    description: 'Join us for a day of exciting games, delicious food stalls, and amazing student performances. A day not to be missed!',
-    date: 'October 28, 2024',
-    time: '10:00 AM - 4:00 PM',
-    location: 'School Field',
-    image: PlaceHolderImages.find(p => p.id === "event1")?.imageUrl || '',
+    title: 'Kegiatan Badminton',
+    description: 'Turnamen badminton antar kelas untuk memperebutkan piala bergengsi sekolah.',
+    date: '11 Oktober 2025',
+    type: 'event',
+    image: 'https://picsum.photos/seed/prog1/800/600',
   },
   {
     id: '2',
-    title: 'Music & Arts Night',
-    description: 'An evening dedicated to showcasing the incredible musical and artistic talents of our students. Come and be inspired.',
-    date: 'November 15, 2024',
-    time: '7:00 PM - 9:00 PM',
-    location: 'Auditorium',
-    image: PlaceHolderImages.find(p => p.id === "event2")?.imageUrl || '',
+    title: 'MPLS 2025',
+    date: '21 Juni 2025',
+    type: 'event',
+    icon: Calendar,
   },
   {
     id: '3',
-    title: 'Tech Symposium 2024',
-    description: 'Explore the latest in technology with guest speakers, workshops, and interactive demos. Open to all students.',
-    date: 'December 5, 2024',
-    time: '9:00 AM - 3:00 PM',
-    location: 'Main Hall',
-    image: PlaceHolderImages.find(p => p.id === "event3")?.imageUrl || '',
+    title: 'Lomba Poster & Video 17an',
+    description: 'Tunjukkan kreativitasmu dalam merayakan kemerdekaan Indonesia!',
+    date: '5 Agustus 2025',
+    type: 'competition',
+    status: 60,
+  },
+    {
+    id: '4',
+    title: 'Lihat Semua Program',
+    description: 'Temukan lebih banyak kegiatan dan acara yang akan datang.',
+    date: '',
+    type: 'registration',
+    icon: ClipboardCheck,
   },
 ];
+
 
 export const teamMembers: TeamMember[] = [
     {

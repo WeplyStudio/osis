@@ -8,16 +8,6 @@ export type Announcement = {
   icon: LucideIcon;
 };
 
-export type Event = {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  location: string;
-  image: string;
-};
-
 export type TeamMember = {
   id: string;
   name: string;
@@ -49,3 +39,14 @@ export type NewsArticle = {
   image: string;
   imageHint: string;
 };
+
+export type Program = {
+  id: string;
+  title: string;
+  description?: string;
+  date: string;
+  type: 'event' | 'competition' | 'registration';
+  status?: number;
+  image?: string;
+  icon?: LucideIcon;
+}

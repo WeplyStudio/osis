@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Home, Calendar, GalleryHorizontal, Lightbulb, Menu, Mail, Phone } from "lucide-react";
+import { Facebook, Twitter, Instagram, Home, Menu, Phone, Users, Briefcase, Info } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -23,9 +23,9 @@ const OasisLogo = () => (
 
 const navItems = [
     { href: '/', icon: Home, label: 'Beranda' },
-    { href: '/events', icon: Calendar, label: 'Divisi' },
-    { href: '/gallery', icon: GalleryHorizontal, label: 'Program' },
-    { href: '/ideas', icon: Lightbulb, label: 'Tentang' },
+    { href: '/#divisions', icon: Users, label: 'Divisi' },
+    { href: '/#programs', icon: Briefcase, label: 'Program' },
+    { href: '/#about', icon: Info, label: 'Tentang' },
 ];
 
 const AppFooter = () => (
