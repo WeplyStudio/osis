@@ -33,3 +33,11 @@ export type VisionMission = {
     description: string;
     color: string;
 };
+
+export type Division = {
+    id: string;
+    title: string;
+    description: string;
+    icon: LucideIcon;
+    image: string;
+};

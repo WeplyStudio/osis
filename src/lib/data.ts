@@ -1,5 +1,5 @@
-import type { Announcement, Event, TeamMember, VisionMission } from './types';
-import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem } from 'lucide-react';
+import type { Announcement, Event, TeamMember, VisionMission, Division } from './types';
+import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages } from 'lucide-react';
 import { PlaceHolderImages } from './placeholder-images';
 
 export const announcements: Announcement[] = [
@@ -141,4 +141,75 @@ export const mission: VisionMission[] = [
     }
 ];
 
-    
+export const divisions: Division[] = [
+  {
+    id: '1',
+    title: 'Keimanan',
+    description: 'Membentuk karakter spiritual dan moral siswa melalui kegiatan keagamaan yang mendalam.',
+    icon: Heart,
+    image: 'https://picsum.photos/seed/div1/800/600',
+  },
+  {
+    id: '2',
+    title: 'Budi Pekerti',
+    description: 'Mengembangkan sopan santun, etika luhur, dan rasa saling menghargai di lingkungan sekolah.',
+    icon: Shield,
+    image: 'https://picsum.photos/seed/div2/800/600',
+  },
+  {
+    id: '3',
+    title: 'Kepribadian Unggul',
+    description: 'Membangun jiwa kepemimpinan, kemandirian, dan rasa percaya diri siswa.',
+    icon: Sparkles,
+    image: 'https://picsum.photos/seed/div3/800/600',
+  },
+  {
+    id: '4',
+    title: 'Akademik',
+    description: 'Meningkatkan prestasi akademik dan memperluas wawasan keilmuan melalui program-program berkualitas.',
+    icon: Brain,
+    image: 'https://picsum.photos/seed/div4/800/600',
+  },
+  {
+    id: '5',
+    title: 'Politik',
+    description: 'Memberikan pendidikan demokrasi, kesadaran berbangsa, dan pemahaman politik yang sehat.',
+    icon: Landmark,
+    image: 'https://picsum.photos/seed/div5/800/600',
+  },
+  {
+    id: '6',
+    title: 'Kreativitas',
+    description: 'Mewadahi dan mengembangkan bakat seni, keterampilan, dan daya cipta siswa.',
+    icon: Palette,
+    image: 'https://picsum.photos/seed/div6/800/600',
+  },
+  {
+    id: '7',
+    title: 'Olahraga',
+    description: 'Mendukung kesehatan jasmani, semangat sportivitas, dan prestasi di bidang olahraga.',
+    icon: Dumbbell,
+    image: 'https://picsum.photos/seed/div7/800/600',
+  },
+  {
+    id: '8',
+    title: 'Sastra & Budaya',
+    description: 'Melestarikan, mengapresiasi, dan mengembangkan kekayaan sastra dan budaya.',
+    icon: BookOpen,
+    image: 'https://picsum.photos/seed/div8/800/600',
+  },
+  {
+    id: '9',
+    title: 'Teknologi',
+    description: 'Mengembangkan inovasi, literasi digital, dan pemanfaatan teknologi secara positif.',
+    icon: Cpu,
+    image: 'https://picsum.photos/seed/div9/800/600',
+  },
+  {
+    id: '10',
+    title: 'Bahasa Inggris',
+    description: 'Meningkatkan kemampuan komunikasi global dan membuka wawasan internasional.',
+    icon: Languages,
+    image: 'https://picsum.photos/seed/div10/800/600',
+  },
+];

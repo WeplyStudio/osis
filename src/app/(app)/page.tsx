@@ -1,8 +1,6 @@
-
-
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search } from 'lucide-react';
@@ -14,21 +12,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { teamMembers, vision, mission } from '@/lib/data';
+import { teamMembers, vision, mission, divisions } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
-const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
-    <div className="relative group overflow-hidden rounded-3xl bg-card/80 border-2 border-b-8 border-border/60 shadow-lg transition-all duration-300 hover:shadow-primary/40 hover:-translate-y-2 h-full flex flex-col p-6 text-center items-center">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <div className="relative z-10 flex flex-col items-center">
-            <div className="mb-4 text-primary drop-shadow-lg transition-transform duration-300 group-hover:scale-110">{icon}</div>
-            <h3 className="font-headline text-xl font-bold text-white mb-2 drop-shadow-md">{title}</h3>
-            <p className="text-white/70 text-sm font-medium flex-grow">{description}</p>
-        </div>
-    </div>
-);
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -61,6 +49,79 @@ const MissionCard = ({ icon: Icon, title, description, color, className }: { ico
         <p className="text-muted-foreground text-sm flex-grow">{description}</p>
     </div>
 );
+
+const DivisionAccordion = () => {
+    const [active, setActive] = useState(0);
+
+    return (
+        <div className="w-full">
+            {/* Desktop Horizontal Accordion */}
+            <div className="hidden md:flex w-full h-[450px] gap-4">
+                {divisions.map((division, index) => (
+                    <div
+                        key={division.id}
+                        className={cn(
+                            "relative rounded-3xl overflow-hidden transition-all duration-700 ease-in-out cursor-pointer shadow-xl border-4 border-transparent",
+                            active === index ? "flex-[5] border-primary" : "flex-[1]"
+                        )}
+                        onClick={() => setActive(index)}
+                        onMouseEnter={() => setActive(index)}
+                    >
+                        <Image
+                            src={division.image}
+                            alt={division.title}
+                            fill
+                            className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/0" />
+                        <div className="relative z-10 p-6 flex flex-col justify-end h-full text-white">
+                             <div className="absolute top-6 left-6 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">
+                                {String(index + 1).padStart(2, '0')}
+                            </div>
+                            <div className={cn("transition-all duration-500", active === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+                                <h3 className="font-headline text-3xl font-bold mb-2">{division.title}</h3>
+                                <p className="text-white/90">{division.description}</p>
+                            </div>
+                             <div className={cn("absolute bottom-6 left-6 transition-all duration-500", active === index ? "opacity-0 -translate-y-4" : "opacity-100")}>
+                                <h3 className="font-headline text-2xl font-bold [writing-mode:vertical-rl] rotate-180 whitespace-nowrap">{division.title}</h3>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Mobile Vertical Accordion */}
+            <div className="block md:hidden space-y-4">
+                 <Accordion type="single" collapsible defaultValue="item-0">
+                    {divisions.map((division, index) => (
+                        <AccordionItem value={`item-${index}`} key={division.id} className="bg-card/80 border-border/30 rounded-2xl border overflow-hidden">
+                            <AccordionTrigger className="p-4 text-left hover:no-underline">
+                                 <div className="flex items-center gap-4">
+                                    <div className="bg-primary text-primary-foreground w-8 h-8 rounded-md flex items-center justify-center font-bold">
+                                        {String(index + 1).padStart(2, '0')}
+                                    </div>
+                                    <h3 className="font-headline text-lg font-bold text-white">{division.title}</h3>
+                                </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="p-4 pt-0">
+                                <div className="relative h-40 w-full rounded-lg overflow-hidden mb-4">
+                                     <Image
+                                        src={division.image}
+                                        alt={division.title}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                     <div className="absolute inset-0 bg-black/30" />
+                                </div>
+                                <p className="text-muted-foreground text-sm">{division.description}</p>
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                 </Accordion>
+            </div>
+        </div>
+    );
+};
 
 
 export default function LandingPage() {
@@ -189,58 +250,7 @@ export default function LandingPage() {
         {/* Divisions Section */}
         <section className="text-center">
            <SectionTitle>Divisi <span className="text-primary">Kami</span></SectionTitle>
-           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-              <FeatureCard 
-                icon={<Heart size={48} />}
-                title="Keimanan"
-                description="Membentuk karakter spiritual dan moral siswa."
-              />
-              <FeatureCard 
-                icon={<Shield size={48} />}
-                title="Budi Pekerti"
-                description="Mengembangkan sopan santun dan etika luhur."
-              />
-              <FeatureCard 
-                icon={<Sparkles size={48} />}
-                title="Kepribadian Unggul"
-                description="Membangun kepemimpinan dan rasa percaya diri."
-              />
-              <FeatureCard 
-                icon={<Brain size={48} />}
-                title="Akademik"
-                description="Meningkatkan prestasi dan wawasan keilmuan."
-              />
-              <FeatureCard 
-                icon={<Landmark size={48} />}
-                title="Politik"
-                description="Pendidikan demokrasi dan kesadaran berbangsa."
-              />
-              <FeatureCard 
-                icon={<Palette size={48} />}
-                title="Kreativitas"
-                description="Mewadahi bakat seni dan keterampilan siswa."
-              />
-              <FeatureCard 
-                icon={<Dumbbell size={48} />}
-                title="Olahraga"
-                description="Mendukung kesehatan jasmani dan sportivitas."
-              />
-              <FeatureCard 
-                icon={<BookOpen size={48} />}
-                title="Sastra & Budaya"
-                description="Melestarikan dan mengembangkan sastra dan budaya."
-              />
-              <FeatureCard 
-                icon={<Cpu size={48} />}
-                title="Teknologi"
-                description="Mengembangkan inovasi dan literasi digital."
-              />
-              <FeatureCard 
-                icon={<Languages size={48} />}
-                title="Bahasa Inggris"
-                description="Meningkatkan kemampuan komunikasi global."
-              />
-           </div>
+           <DivisionAccordion />
         </section>
 
         {/* Join Us Section */}
