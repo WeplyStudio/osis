@@ -13,14 +13,6 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-const OasisLogo = () => (
-    <div className="p-2 bg-primary rounded-lg shadow-md">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM8.46 15.54C9.45 16.53 10.71 17.09 12 17.09C13.29 17.09 14.55 16.53 15.54 15.54C16.03 15.05 16.03 14.25 15.54 13.76C15.05 13.27 14.25 13.27 13.76 13.76C13.22 14.3 12.55 14.59 11.82 14.59C11.09 14.59 10.42 14.3 9.88 13.76C8.92 12.8 8.92 11.2 9.88 10.24C10.42 9.7 11.09 9.41 11.82 9.41C12.55 9.41 13.22 9.7 13.76 10.24C14.25 10.73 15.05 10.73 15.54 10.24C16.03 9.75 16.03 8.95 15.54 8.46C14.55 7.47 13.29 6.91 12 6.91C10.71 6.91 9.45 7.47 8.46 8.46C6.51 10.41 6.51 13.59 8.46 15.54Z" fill="hsl(var(--primary-foreground))"/>
-        </svg>
-    </div>
-);
-
 const navItems = [
     { href: '/', icon: Home, label: 'Beranda' },
     { href: '/#divisions', icon: Users, label: 'Divisi' },
@@ -33,7 +25,6 @@ const AppFooter = () => (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="col-span-1 md:col-span-2 lg:col-span-1">
                     <Link href="/" className="flex items-center gap-3 mb-4">
-                      <OasisLogo />
                       <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
                     </Link>
                     <p className="text-muted-foreground text-sm max-w-xs">
@@ -105,7 +96,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         )}>
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-3">
-              <OasisLogo />
               <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
             </Link>
           </div>
@@ -134,7 +124,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <SheetContent side="left" className="w-[300px] flex flex-col p-0">
                   <SheetHeader className="p-6 pb-0">
                     <Link href="/" className="flex items-center gap-3">
-                      <OasisLogo />
                       <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
                     </Link>
                     <SheetTitle className="sr-only">Menu</SheetTitle>
