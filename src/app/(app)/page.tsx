@@ -137,7 +137,7 @@ export default function LandingPage() {
         </section>
 
         {/* Vision Section */}
-        <section className="relative py-12 rounded-[2rem] border-t-2 border-l-2 border-r-2 border-border/60 bg-card/50 stacked-card">
+        <section className="relative py-12">
             <SectionTitle>Visi <span className="text-primary">Kami</span></SectionTitle>
             <div className="relative max-w-2xl mx-auto">
                 <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-border/30 transform -translate-x-1/2 hidden md:block">
@@ -158,7 +158,7 @@ export default function LandingPage() {
         </section>
 
         {/* Mission Section */}
-        <section className="relative py-12 rounded-[2rem] border-t-2 border-l-2 border-r-2 border-border/60 stacked-card">
+        <section className="relative py-12">
             <SectionTitle>Misi <span className="text-primary">Kami</span></SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-8 max-w-5xl mx-auto">
                 <MissionCard {...mission[0]} className="md:col-span-2"/>
@@ -243,5 +243,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
