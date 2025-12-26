@@ -36,13 +36,25 @@ const SectionTitle = ({ children, className }: { children: React.ReactNode, clas
   </h2>
 );
 
-const VisionMissionCard = ({ icon: Icon, title, description, color }: { icon: React.ElementType, title: string, description: string, color: string }) => (
-    <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-b-8 border-border/60 flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-2">
-        <div className={`mb-4 p-4 rounded-full bg-background shadow-inner`}>
+const VisionCard = ({ icon: Icon, title, description, color }: { icon: React.ElementType, title: string, description: string, color: string }) => (
+    <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-b-8 border-border/60 flex items-center gap-6 transition-transform duration-300 hover:-translate-y-2">
+        <div className={`flex-shrink-0 p-4 rounded-full bg-background shadow-inner`}>
             <Icon className={`w-12 h-12 ${color}`} strokeWidth={2.5}/>
         </div>
-        <h3 className="font-headline text-2xl font-bold text-white mb-2">{title}</h3>
-        <p className="text-muted-foreground">{description}</p>
+        <div>
+            <h3 className="font-headline text-2xl font-bold text-white mb-1">{title}</h3>
+            <p className="text-muted-foreground">{description}</p>
+        </div>
+    </div>
+);
+
+const MissionCard = ({ icon: Icon, title, description, color }: { icon: React.ElementType, title: string, description: string, color: string }) => (
+    <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-b-8 border-border/60 flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-2 h-full">
+        <div className={`mb-4 p-4 rounded-full bg-background shadow-inner`}>
+            <Icon className={`w-10 h-10 ${color}`} strokeWidth={2.5}/>
+        </div>
+        <h3 className="font-headline text-xl font-bold text-white mb-2">{title}</h3>
+        <p className="text-muted-foreground text-sm flex-grow">{description}</p>
     </div>
 );
 
@@ -119,21 +131,19 @@ export default function LandingPage() {
             </Carousel>
         </section>
 
-        {/* Vision & Mission Section */}
+        {/* Vision Section */}
         <section>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                <div>
-                    <SectionTitle>Visi <span className="text-primary">Kami</span></SectionTitle>
-                    <div className="grid grid-cols-1 gap-8">
-                        {vision.map((item) => <VisionMissionCard key={item.title} {...item} />)}
-                    </div>
-                </div>
-                <div>
-                    <SectionTitle>Misi <span className="text-primary">Kami</span></SectionTitle>
-                    <div className="grid grid-cols-1 gap-8">
-                        {mission.map((item) => <VisionMissionCard key={item.title} {...item} />)}
-                    </div>
-                </div>
+            <SectionTitle>Visi <span className="text-primary">Kami</span></SectionTitle>
+            <div className="max-w-3xl mx-auto space-y-8">
+                {vision.map((item) => <VisionCard key={item.title} {...item} />)}
+            </div>
+        </section>
+
+        {/* Mission Section */}
+        <section>
+            <SectionTitle>Misi <span className="text-primary">Kami</span></SectionTitle>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {mission.map((item) => <MissionCard key={item.title} {...item} />)}
             </div>
         </section>
 
