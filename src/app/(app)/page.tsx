@@ -49,7 +49,7 @@ const AspirationDialog = ({ title, children }: { title: string, children: React.
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-                <DialogTitle className="font-headline text-primary tracking-wider uppercase">{title}</DialogTitle>
+                <DialogTitle className="font-body text-primary tracking-wider uppercase">{title}</DialogTitle>
                 <DialogDescription>
                     Berikan saran atau kritik kamu secara jelas dan sopan.
                 </DialogDescription>
@@ -80,7 +80,7 @@ const DivisionTabs = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 min-h-[400px]">
                 {/* Left Nav */}
                 <div className="lg:col-span-4">
-                    <h3 className="font-headline text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Pilih Divisi</h3>
+                    <h3 className="font-body text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Pilih Divisi</h3>
                     <div className="flex flex-col space-y-2">
                         {divisions.map((division, index) => (
                             <button
@@ -111,8 +111,8 @@ const DivisionTabs = () => {
                 <div className="lg:col-span-8 flex flex-col justify-center">
                     {activeDivisionData && (
                         <div className="flex flex-col text-center lg:text-left">
-                            <p className="font-headline text-sm font-bold tracking-wider uppercase text-primary mb-2">{activeDivisionData.department}</p>
-                            <h3 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-3">
+                            <p className="font-body text-sm font-bold tracking-wider uppercase text-primary mb-2">{activeDivisionData.department}</p>
+                            <h3 className="font-body text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-3">
                                 {activeDivisionData.title}
                             </h3>
                             <p className="text-muted-foreground text-lg mb-6">
@@ -164,22 +164,9 @@ const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
 
 const ImpactStat = ({ value, label }: { value: string, label: string }) => (
   <div className="text-center">
-    <p className="font-headline text-5xl md:text-7xl font-bold tracking-tighter">{value}</p>
+    <p className="font-body text-5xl md:text-7xl font-bold tracking-tighter">{value}</p>
     <p className="font-sans text-sm uppercase tracking-widest font-medium">{label}</p>
   </div>
-);
-
-const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg {...props} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8 3.33331V12.6666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M3.33331 8H12.6666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-const MinusIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg {...props} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3.33331 8H12.6666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
 );
 
 
@@ -238,12 +225,12 @@ export default function LandingPage() {
         {/* About Us Section */}
         <section id="about">
           <div className="text-center mb-12">
-            <p className="font-headline text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
+            <p className="font-body text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
             <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tight text-foreground italic uppercase">Tentang Kami</h2>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="order-2 lg:order-1">
-              <h3 className="font-headline text-3xl font-bold tracking-tight text-foreground">
+              <h3 className="font-body text-3xl font-bold tracking-tight text-foreground">
                 Membangun Karakter, <br/><span className="text-primary">Mewujudkan Perubahan.</span>
               </h3>
               <p className="mt-4 text-muted-foreground">
@@ -252,13 +239,13 @@ export default function LandingPage() {
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <Card className="bg-card/80 border-border/80 shadow-sm">
                   <CardContent className="p-6">
-                    <h4 className="font-headline text-lg font-bold text-primary mb-2">Visi</h4>
+                    <h4 className="font-body text-lg font-bold text-primary mb-2">Visi</h4>
                     <p className="text-sm text-muted-foreground">Menjadi barometer organisasi sekolah yang religius, kreatif, dan mandiri.</p>
                   </CardContent>
                 </Card>
                 <Card className="bg-card/80 border-border/80 shadow-sm">
                   <CardContent className="p-6">
-                    <h4 className="font-headline text-lg font-bold text-primary mb-2">Misi</h4>
+                    <h4 className="font-body text-lg font-bold text-primary mb-2">Misi</h4>
                     <p className="text-sm text-muted-foreground">Mengoptimalkan minat bakat melalui program kerja inovatif.</p>
                   </CardContent>
                 </Card>
@@ -294,7 +281,7 @@ export default function LandingPage() {
                     </div>
                 </div>
                 <div className="bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 flex flex-col justify-center">
-                    <h3 className="font-headline text-3xl font-extrabold tracking-tight mb-6">Kenapa Harus Bersuara?</h3>
+                    <h3 className="font-body text-3xl font-extrabold tracking-tight mb-6">Kenapa Harus Bersuara?</h3>
                     <div className="space-y-5">
                         <WhySpeakUpItem number={1} text="Aspirasi kamu dibaca langsung oleh Ketua Umum & Sekbid terkait." />
                         <WhySpeakUpItem number={2} text="Transparansi penuh: Laporan tindak lanjut akan dipublikasikan." />
@@ -379,7 +366,7 @@ export default function LandingPage() {
         <section>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                 <div className="lg:col-span-1">
-                    <h2 className="font-body text-5xl font-extrabold tracking-tight text-foreground italic">
+                    <h2 className="font-body text-5xl font-extrabold tracking-tight text-foreground italic uppercase">
                         FAQ<br/><span className="text-primary">COMMON GROUND.</span>
                     </h2>
                     <p className="mt-4 text-muted-foreground">
@@ -400,11 +387,11 @@ export default function LandingPage() {
                 <div className="lg:col-span-2">
                     <Accordion type="single" collapsible className="w-full space-y-4">
                         {faqItems.map((item) => (
-                             <AccordionItem key={item.id} value={item.id} className="bg-card border-none rounded-2xl shadow-sm data-[state=open]:border data-[state=open]:border-primary/50">
+                             <AccordionItem key={item.id} value={item.id} className="group bg-card border-none rounded-2xl shadow-sm data-[state=open]:border data-[state=open]:border-primary/50">
                                 <AccordionTrigger className="p-6 font-bold text-sm uppercase tracking-wider hover:no-underline text-left data-[state=open]:text-primary [&>svg]:hidden">
                                     {item.question}
-                                    <PlusIcon className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=closed]:block hidden" />
-                                    <MinusIcon className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:block hidden" />
+                                    <span className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=closed]:block hidden">↓</span>
+                                    <span className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:block hidden">↑</span>
                                 </AccordionTrigger>
                                 <AccordionContent className="p-6 pt-0 text-muted-foreground text-left">
                                     {item.answer}
@@ -420,5 +407,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
