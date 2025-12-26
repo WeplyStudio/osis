@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search, CheckCircle } from 'lucide-react';
+import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search, CheckCircle, Calendar, ClipboardCheck } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Accordion,
@@ -18,10 +18,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { teamMembers, divisions, newsArticles } from '@/lib/data';
+import { teamMembers, divisions, newsArticles, programs } from '@/lib/data';
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Progress } from '@/components/ui/progress';
 
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -203,6 +204,64 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* Programs Section */}
+        <section id="programs">
+           <SectionTitle>Program <span className="text-primary">Kami</span></SectionTitle>
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {programs.map((program) => {
+                    if (program.id === '1') {
+                        return (
+                            <Card key={program.id} className="lg:col-span-2 lg:row-span-2 bg-card text-card-foreground rounded-3xl p-8 flex flex-col justify-end relative overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                <Image src={program.image!} alt={program.title} fill className="object-cover z-0" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+                                <div className="z-20 text-white">
+                                    <h3 className="font-headline text-3xl font-bold mb-2">{program.title}</h3>
+                                    <p className="text-white/80 mb-4">{program.description}</p>
+                                    <p className="font-bold">{program.date}</p>
+                                </div>
+                            </Card>
+                        )
+                    }
+                    if (program.id === '2') {
+                        return (
+                             <Card key={program.id} className="lg:col-span-2 bg-accent text-accent-foreground rounded-3xl p-8 flex items-center justify-between shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                <div>
+                                    <h3 className="font-headline text-2xl font-bold">{program.title}</h3>
+                                    <p className="font-bold text-primary">{program.date}</p>
+                                </div>
+                                {program.icon && <program.icon className="w-12 h-12 text-primary" />}
+                            </Card>
+                        )
+                    }
+                     if (program.id === '3') {
+                        return (
+                             <Card key={program.id} className="lg:col-span-2 bg-card rounded-3xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                <div>
+                                    <p className="text-sm text-muted-foreground">{program.type === 'competition' ? 'LOMBA' : 'EVENT'}</p>
+                                    <h3 className="font-headline text-2xl font-bold mb-2">{program.title}</h3>
+                                    <p className="text-muted-foreground mb-4">{program.description}</p>
+                                    <div className="flex items-center gap-4">
+                                        <Progress value={program.status} className="w-full h-2" />
+                                        <span className="font-bold text-primary">{program.status}%</span>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground mt-2">{program.date}</p>
+                                </div>
+                            </Card>
+                        )
+                    }
+                    if (program.id === '4') {
+                        return (
+                             <Card key={program.id} className="lg:col-span-2 bg-primary text-primary-foreground rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                {program.icon && <program.icon className="w-12 h-12 mb-4" />}
+                                <h3 className="font-headline text-2xl font-bold">{program.title}</h3>
+                                <p>{program.description}</p>
+                            </Card>
+                        )
+                    }
+                    return null;
+                })}
+            </div>
+        </section>
 
         {/* Our Team Section */}
         <section>
@@ -270,7 +329,7 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
               <ImpactStat value="45+" label="PROKER / TAHUN" />
               <ImpactStat value="1.2K" label="SISWA TERLIBAT" />
-              <ImpactStat value="12" label="AWARD NASIONAL" />
+              <ImpactStat value="4" label="PERIODE" />
             </div>
           </div>
         </section>
@@ -313,5 +372,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
