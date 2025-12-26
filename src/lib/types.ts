@@ -41,3 +41,11 @@ export type Division = {
     icon: LucideIcon;
     image: string;
 };
+
+export type NewsArticle = {
+  id: string;
+  category: string;
+  title: string;
+  image: string;
+  imageHint: string;
+};

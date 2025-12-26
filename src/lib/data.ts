@@ -1,4 +1,4 @@
-import type { Announcement, Event, TeamMember, VisionMission, Division } from './types';
+import type { Announcement, Event, TeamMember, VisionMission, Division, NewsArticle } from './types';
 import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages } from 'lucide-react';
 import { PlaceHolderImages } from './placeholder-images';
 
@@ -211,5 +211,29 @@ export const divisions: Division[] = [
     description: 'Meningkatkan kemampuan komunikasi global dan membuka wawasan internasional.',
     icon: Languages,
     image: 'https://picsum.photos/seed/div10/800/600',
+  },
+];
+
+export const newsArticles: NewsArticle[] = [
+  {
+    id: '1',
+    category: 'Prestasi',
+    title: 'SMANSA Raih Juara 1 Nasional Karya Ilmiah Remaja',
+    image: 'https://picsum.photos/seed/news1/600/400',
+    imageHint: 'academic competition students'
+  },
+  {
+    id: '2',
+    category: 'Kegiatan',
+    title: 'Tips Mengatur Waktu Antara Belajar & Berorganisasi',
+    image: 'https://picsum.photos/seed/news2/600/400',
+    imageHint: 'students studying group'
+  },
+  {
+    id: '3',
+    category: 'Update',
+    title: 'E-Voting Pemilihan Ketua OSIS Resmi Diluncurkan',
+    image: 'https://picsum.photos/seed/news3/600/400',
+    imageHint: 'student voting election'
   },
 ];
