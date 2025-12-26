@@ -5,31 +5,57 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { teamMembers } from '@/lib/data';
+import { teamMembers, aboutUsImage } from '@/lib/data';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, Image as ImageIcon, Users, LogOut, BarChart3, Home } from 'lucide-react';
+import { Upload, Image as ImageIcon, Users, LogOut, BarChart3, Home, Loader2 } from 'lucide-react';
 
 const TeamMemberCard = ({ member }: { member: typeof teamMembers[0] }) => {
   const [newImageUrl, setNewImageUrl] = React.useState('');
+  const [isUpdating, setIsUpdating] = React.useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
-  const handleUpdateImage = () => {
-    // In a real app, you'd update this in your backend.
-    // For now, we'll just show a toast.
-    if (newImageUrl) {
-        console.log(`Updating ${member.name}'s image to ${newImageUrl}`);
-        toast({
-            title: `Gambar ${member.name} Diperbarui!`,
-            description: 'Perubahan akan terlihat setelah me-refresh halaman (simulasi).',
-        });
-    } else {
-        toast({
-            variant: "destructive",
-            title: 'URL Kosong',
-            description: 'Harap masukkan URL gambar yang valid.',
-        });
+  const handleUpdateImage = async () => {
+    if (!newImageUrl) {
+      toast({
+        variant: "destructive",
+        title: 'URL Kosong',
+        description: 'Harap masukkan URL gambar yang valid.',
+      });
+      return;
+    }
+    setIsUpdating(true);
+    try {
+      const response = await fetch('/api/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'teamMember',
+          id: member.id,
+          url: newImageUrl,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal memperbarui gambar');
+      }
+
+      toast({
+        title: `Gambar ${member.name} Diperbarui!`,
+        description: 'Perubahan akan terlihat setelah me-refresh halaman.',
+      });
+      setNewImageUrl('');
+      router.refresh(); // Refresh the page to show the new image
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: 'Uh oh! Terjadi kesalahan.',
+        description: error.message || 'Tidak dapat menyimpan gambar.',
+      });
+    } finally {
+        setIsUpdating(false);
     }
   };
 
@@ -37,24 +63,27 @@ const TeamMemberCard = ({ member }: { member: typeof teamMembers[0] }) => {
     <Card>
       <CardHeader>
         <div className="flex items-center gap-4">
-            <Image src={member.image} alt={member.name} width={60} height={60} className="rounded-full object-cover" />
-            <div>
-                <CardTitle className="text-lg">{member.name}</CardTitle>
-                <CardDescription>{member.role}</CardDescription>
-            </div>
+          <Image src={member.image} alt={member.name} width={60} height={60} className="rounded-full object-cover" />
+          <div>
+            <CardTitle className="text-lg">{member.name}</CardTitle>
+            <CardDescription>{member.role}</CardDescription>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
         <Label htmlFor={`image-url-${member.id}`}>URL Gambar Baru</Label>
         <div className="flex gap-2">
-            <Input
+          <Input
             id={`image-url-${member.id}`}
             type="url"
             placeholder="https://example.com/image.png"
             value={newImageUrl}
             onChange={(e) => setNewImageUrl(e.target.value)}
-            />
-            <Button onClick={handleUpdateImage} size="icon" variant="outline"><Upload className="w-4 h-4"/></Button>
+            disabled={isUpdating}
+          />
+          <Button onClick={handleUpdateImage} size="icon" variant="outline" disabled={isUpdating}>
+            {isUpdating ? <Loader2 className="w-4 h-4 animate-spin"/> : <Upload className="w-4 h-4" />}
+          </Button>
         </div>
       </CardContent>
     </Card>
@@ -64,27 +93,58 @@ const TeamMemberCard = ({ member }: { member: typeof teamMembers[0] }) => {
 
 const AboutUsCard = () => {
   const [newImageUrl, setNewImageUrl] = React.useState('');
+  const [isUpdating, setIsUpdating] = React.useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
-  const handleUpdateImage = () => {
-    if (newImageUrl) {
-        console.log(`Updating About Us image to ${newImageUrl}`);
-        toast({
-            title: `Gambar "Tentang Kami" Diperbarui!`,
-            description: 'Perubahan akan terlihat setelah me-refresh halaman (simulasi).',
-        });
-    } else {
+  const handleUpdateImage = async () => {
+    if (!newImageUrl) {
         toast({
             variant: "destructive",
             title: 'URL Kosong',
             description: 'Harap masukkan URL gambar yang valid.',
         });
+        return;
+    }
+    setIsUpdating(true);
+    try {
+        const response = await fetch('/api/content', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                type: 'aboutUsImage',
+                url: newImageUrl,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Gagal memperbarui gambar');
+        }
+
+        toast({
+            title: `Gambar "Tentang Kami" Diperbarui!`,
+            description: 'Perubahan akan terlihat setelah me-refresh halaman.',
+        });
+        setNewImageUrl('');
+        router.refresh();
+    } catch (error: any) {
+         toast({
+            variant: "destructive",
+            title: 'Uh oh! Terjadi kesalahan.',
+            description: error.message || 'Tidak dapat menyimpan gambar.',
+        });
+    } finally {
+        setIsUpdating(false);
     }
   };
+
     return (
         <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><ImageIcon className="w-5 h-5"/> Gambar "Tentang Kami"</CardTitle>
+                 <div className="relative aspect-video w-full rounded-md overflow-hidden mt-2">
+                     <Image src={aboutUsImage.url} alt="Current About Us" fill className="object-cover" />
+                 </div>
             </CardHeader>
             <CardContent className="space-y-2">
                  <Label htmlFor="about-us-image-url">URL Gambar Baru</Label>
@@ -95,8 +155,11 @@ const AboutUsCard = () => {
                     placeholder="https://example.com/image.png"
                     value={newImageUrl}
                     onChange={(e) => setNewImageUrl(e.target.value)}
+                    disabled={isUpdating}
                     />
-                    <Button onClick={handleUpdateImage} size="icon" variant="outline"><Upload className="w-4 h-4"/></Button>
+                    <Button onClick={handleUpdateImage} size="icon" variant="outline" disabled={isUpdating}>
+                         {isUpdating ? <Loader2 className="w-4 h-4 animate-spin"/> : <Upload className="w-4 h-4" />}
+                    </Button>
                 </div>
             </CardContent>
         </Card>
@@ -190,3 +253,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    

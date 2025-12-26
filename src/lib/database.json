@@ -1,0 +1,58 @@
+{
+  "teamMembers": [
+    {
+      "id": "1",
+      "name": "Budi Dora",
+      "role": "Ketua OSIS",
+      "image": "https://picsum.photos/seed/1/400/300",
+      "bgColor": "",
+      "quote": "Harapannya, OSIS SMA Negeri 6 Jakarta dapat menjadi organisasi yang berperan aktif dalam pengembangan potensi minat dan bakat siswa/i. Progresif, kreatif, komunikatif, serta memiliki profesionalitas."
+    },
+    {
+      "id": "2",
+      "name": "Siti Wati",
+      "role": "Wakil Ketua OSIS",
+      "image": "https://picsum.photos/seed/2/400/300",
+      "bgColor": "",
+      "quote": "Bersama, kita ciptakan lingkungan sekolah yang mendukung, di mana setiap siswa merasa didengar dan dihargai. Mari kita berkolaborasi untuk kemajuan bersama."
+    },
+    {
+      "id": "3",
+      "name": "Ahmad Yani",
+      "role": "Sekretaris 1",
+      "image": "https://picsum.photos/seed/3/400/300",
+      "bgColor": "",
+      "quote": "Administrasi yang rapi adalah kunci kelancaran organisasi. Saya berkomitmen untuk memastikan semua program OSIS berjalan dengan teratur dan terdokumentasi dengan baik."
+    },
+    {
+      "id": "4",
+      "name": "Rina Rini",
+      "role": "Bendahara 1",
+      "image": "https://picsum.photos/seed/4/400/300",
+      "bgColor": "",
+      "quote": "Transparansi dan pengelolaan keuangan yang bertanggung jawab adalah prioritas saya untuk mendukung semua kegiatan positif yang diselenggarakan oleh OSIS."
+    },
+    {
+      "id": "5",
+      "name": "Joko Purnomo",
+      "role": "Sekretaris 2",
+      "image": "https://picsum.photos/seed/5/400/300",
+      "bgColor": "",
+      "quote": "Saya siap membantu memastikan semua notulensi dan surat-menyurat terdokumentasi dengan akurat untuk kelancaran program kerja."
+    },
+    {
+      "id": "6",
+      "name": "Dewi Lestari",
+      "role": "Bendahara 2",
+      "image": "https://picsum.photos/seed/6/400/300",
+      "bgColor": "",
+      "quote": "Dengan pengelolaan dana yang cermat, kita bisa mewujudkan lebih banyak inisiatif kreatif dari siswa untuk siswa."
+    }
+  ],
+  "aboutUsImage": {
+    "url": "https://picsum.photos/seed/101/800/600",
+    "hint": "students collaboration"
+  }
+}
+
+    

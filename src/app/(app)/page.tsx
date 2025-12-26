@@ -18,7 +18,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { teamMembers, divisions, faqItems } from '@/lib/data';
+import { teamMembers, divisions, faqItems, aboutUsImage } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -243,7 +243,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="order-1 lg:order-2 relative aspect-video lg:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border">
-              <Image src="https://picsum.photos/seed/101/800/600" alt="About OSIS" fill className="object-cover" data-ai-hint="students collaboration" />
+              <Image src={aboutUsImage.url} alt="About OSIS" fill className="object-cover" data-ai-hint={aboutUsImage.hint} />
             </div>
           </div>
         </section>
@@ -403,3 +403,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
