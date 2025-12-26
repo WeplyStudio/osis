@@ -9,11 +9,6 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        body: ['Plus Jakarta Sans', 'sans-serif'],
-        headline: ['Space Grotesk', 'sans-serif'],
-        code: ['monospace'],
-      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -94,6 +89,11 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
+     fontFamily: {
+        body: ['Plus Jakarta Sans', 'sans-serif'],
+        headline: ['Space Grotesk', 'sans-serif'],
+        code: ['monospace'],
+      },
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
