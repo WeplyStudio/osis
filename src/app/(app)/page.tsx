@@ -390,8 +390,8 @@ export default function LandingPage() {
                              <AccordionItem key={item.id} value={item.id} className="group bg-card border-none rounded-2xl shadow-sm data-[state=open]:border data-[state=open]:border-primary/50">
                                 <AccordionTrigger className="p-6 font-bold text-sm uppercase tracking-wider hover:no-underline text-left data-[state=open]:text-primary [&>svg]:hidden">
                                     {item.question}
-                                    <span className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=closed]:block hidden">↓</span>
-                                    <span className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:block hidden">↑</span>
+                                    <span className="ml-auto shrink-0 transition-transform duration-200 group-data-[state=closed]:block hidden italic text-primary">↓</span>
+                                    <span className="ml-auto shrink-0 transition-transform duration-200 group-data-[state=open]:block hidden italic text-primary">↑</span>
                                 </AccordionTrigger>
                                 <AccordionContent className="p-6 pt-0 text-muted-foreground text-left">
                                     {item.answer}
