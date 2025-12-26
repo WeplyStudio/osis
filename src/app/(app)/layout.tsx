@@ -132,21 +132,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   <span className="sr-only">Buka menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[300px]">
-                  <SheetHeader className="mb-8">
+              <SheetContent side="left" className="w-[300px] flex flex-col p-0">
+                  <SheetHeader className="p-6 pb-0">
                     <Link href="/" className="flex items-center gap-3">
                       <OasisLogo />
                       <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
                     </Link>
                     <SheetTitle className="sr-only">Menu</SheetTitle>
                   </SheetHeader>
-                  <div className="flex flex-col h-full">
+                  <div className="flex flex-col h-full p-6">
                   <nav className="flex flex-col gap-3 flex-grow">
                     {navItems.map((item) => (
-                      <Link key={item.href} href={item.href} className="flex items-center gap-4 p-3 rounded-lg text-lg font-medium hover:bg-accent transition-colors">
-                          <item.icon className="w-6 h-6" />
-                          {item.label}
-                      </Link>
+                      <Button key={item.href} asChild variant="ghost" className="justify-start text-lg h-14">
+                          <Link href={item.href} className="flex items-center gap-4">
+                              <item.icon className="w-6 h-6" />
+                              {item.label}
+                          </Link>
+                      </Button>
                     ))}
                   </nav>
                     <Button asChild className="mt-auto w-full font-bold text-lg py-6 rounded-full shadow-lg">
