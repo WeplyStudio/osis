@@ -141,7 +141,7 @@ const NewsCard = ({ article }: { article: (typeof newsArticles)[0] }) => (
 export default function LandingPage() {
   return (
     <div className="w-full bg-background text-foreground min-h-screen pt-24 md:pt-32">
-      <main className="container mx-auto px-4 space-y-24 md:space-y-32">
+      <main className="container mx-auto px-4 space-y-24 md:space-y-32 pb-24 md:pb-32">
         {/* Hero Section */}
         <section className="text-center">
           <div className="inline-block bg-card rounded-full px-6 py-2 mb-4 border">
