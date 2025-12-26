@@ -37,7 +37,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-  <h2 className={cn(`font-headline text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-foreground`, className)}>
+  <h2 className={cn(`font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-foreground italic uppercase`, className)}>
     {children}
   </h2>
 );
@@ -134,8 +134,9 @@ const DivisionTabs = () => {
     );
 };
 
-const AspirationCard = ({ title, description, status, statusVariant, ...props }: { title: string; description: string; status: string; statusVariant: "default" | "secondary" | "outline" | "destructive" | null | undefined, [key: string]: any }) => (
-    <Card className="hover:bg-accent/50 transition-colors duration-200 cursor-pointer" {...props}>
+const AspirationCard = React.forwardRef<HTMLDivElement, { title: string; description: string; status: string; statusVariant: "default" | "secondary" | "outline" | "destructive" | null | undefined, [key: string]: any }>(
+    ({ title, description, status, statusVariant, ...props }, ref) => (
+    <Card ref={ref} className="hover:bg-accent/50 transition-colors duration-200 cursor-pointer" {...props}>
         <CardContent className="p-6 flex items-center justify-between">
             <div>
                 <h4 className="font-bold text-lg text-foreground">{title}</h4>
@@ -146,7 +147,8 @@ const AspirationCard = ({ title, description, status, statusVariant, ...props }:
             </Badge>
         </CardContent>
     </Card>
-);
+));
+AspirationCard.displayName = 'AspirationCard';
 
 const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
     <div className="flex items-start gap-4">
@@ -165,6 +167,19 @@ const ImpactStat = ({ value, label }: { value: string, label: string }) => (
     <p className="font-headline text-5xl md:text-7xl font-bold tracking-tighter">{value}</p>
     <p className="font-sans text-sm uppercase tracking-widest font-medium">{label}</p>
   </div>
+);
+
+const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 3.33331V12.6666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M3.33331 8H12.6666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const MinusIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3.33331 8H12.6666" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
 );
 
 
@@ -199,7 +214,7 @@ export default function LandingPage() {
             <div className="inline-block bg-accent text-accent-foreground rounded-full px-4 py-2 mb-6">
                 <p className="font-bold text-sm tracking-wider uppercase">EMPOWERING FUTURE LEADERS</p>
             </div>
-            <h1 className="font-headline text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 text-foreground">
+            <h1 className="font-body text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 text-foreground italic uppercase">
                 Inovasi Digital<br/>
                 <span className="text-primary">Satu Suara Kigra.</span>
             </h1>
@@ -224,7 +239,7 @@ export default function LandingPage() {
         <section id="about">
           <div className="text-center mb-12">
             <p className="font-headline text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
-            <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">Tentang Kami</h2>
+            <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tight text-foreground italic uppercase">Tentang Kami</h2>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="order-2 lg:order-1">
@@ -259,7 +274,7 @@ export default function LandingPage() {
         <section id="aspirasi">
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                 <div>
-                    <h2 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tighter text-foreground mb-4">
+                    <h2 className="font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-foreground mb-4 italic uppercase">
                         Suara Kamu, <br/><span className="text-primary">Perubahan Kita.</span>
                     </h2>
                     <p className="text-muted-foreground mb-8 max-w-lg">
@@ -345,7 +360,7 @@ export default function LandingPage() {
         <section className="bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 lg:p-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="space-y-4 text-center lg:text-left">
-              <h2 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tighter">
+              <h2 className="font-body text-5xl md:text-6xl font-extrabold tracking-tighter italic uppercase">
                 Dampak Kami.
               </h2>
               <p className="text-lg md:text-xl max-w-md mx-auto lg:mx-0">
@@ -386,8 +401,10 @@ export default function LandingPage() {
                     <Accordion type="single" collapsible className="w-full space-y-4">
                         {faqItems.map((item) => (
                              <AccordionItem key={item.id} value={item.id} className="bg-card border-none rounded-2xl shadow-sm data-[state=open]:border data-[state=open]:border-primary/50">
-                                <AccordionTrigger className="p-6 font-bold text-sm uppercase tracking-wider hover:no-underline text-left data-[state=open]:text-primary">
+                                <AccordionTrigger className="p-6 font-bold text-sm uppercase tracking-wider hover:no-underline text-left data-[state=open]:text-primary [&>svg]:hidden">
                                     {item.question}
+                                    <PlusIcon className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=closed]:block hidden" />
+                                    <MinusIcon className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:block hidden" />
                                 </AccordionTrigger>
                                 <AccordionContent className="p-6 pt-0 text-muted-foreground text-left">
                                     {item.answer}
@@ -403,3 +420,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
