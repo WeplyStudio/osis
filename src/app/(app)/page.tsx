@@ -5,7 +5,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { Gamepad2, Rocket, Trophy, ArrowRight, Star, Users, Briefcase, Mic, Award, MessageSquare, PlusCircle, CheckCircle, Search } from 'lucide-react';
+import { Gamepad2, Rocket, Trophy, ArrowRight, Star, Users, Briefcase, Mic, Award, MessageSquare, PlusCircle, CheckCircle, Search, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -18,18 +18,14 @@ import { teamMembers, vision, mission } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-const FeatureCard = ({ icon, title, description, buttonText, href, className }: { icon: React.ReactNode, title: string, description: string, buttonText: string, href: string, className?: string }) => (
-  <div className={`rounded-3xl border-2 border-b-8 p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl ${className} flex flex-col bg-card/80`}>
+const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
+  <div className={`rounded-3xl border-2 border-b-8 p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl flex flex-col bg-card/80 border-border/30`}>
     <div className="mb-4 text-primary drop-shadow-md">{icon}</div>
-    <h3 className="font-headline text-3xl font-bold text-white mb-2 drop-shadow-md">{title}</h3>
-    <p className="text-white/80 flex-grow mb-6">{description}</p>
-    <Button asChild size="lg" className="mt-auto w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg py-6 rounded-xl shadow-md transition-transform hover:scale-105 border-2 border-b-4 border-yellow-600">
-      <Link href={href}>
-        {buttonText}
-      </Link>
-    </Button>
+    <h3 className="font-headline text-2xl font-bold text-white mb-2 drop-shadow-md">{title}</h3>
+    <p className="text-white/80 flex-grow text-sm">{description}</p>
   </div>
 );
+
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <h2 className={`font-headline text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-white ${className}`}
@@ -136,7 +132,7 @@ export default function LandingPage() {
         </section>
 
         {/* Vision Section */}
-        <section>
+        <section className="relative py-12 rounded-3xl stacked-card">
             <SectionTitle>Visi <span className="text-primary">Kami</span></SectionTitle>
             <div className="relative max-w-2xl mx-auto">
                 <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-border/30 transform -translate-x-1/2 hidden md:block">
@@ -157,7 +153,7 @@ export default function LandingPage() {
         </section>
 
         {/* Mission Section */}
-        <section>
+        <section className="relative py-12 rounded-3xl stacked-card">
             <SectionTitle>Misi <span className="text-primary">Kami</span></SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-8 max-w-5xl mx-auto">
                 <MissionCard {...mission[0]} className="md:col-span-2"/>
@@ -166,33 +162,59 @@ export default function LandingPage() {
             </div>
         </section>
 
-        {/* Featured Programs Section */}
+        {/* Divisions Section */}
         <section className="text-center">
-           <SectionTitle>Program <span className="text-primary">Unggulan</span></SectionTitle>
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+           <SectionTitle>Divisi <span className="text-primary">Kami</span></SectionTitle>
+           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               <FeatureCard 
-                icon={<Gamepad2 size={48} />}
-                title="Acara Seru"
-                description="Jangan lewatkan acara-acara paling heboh dari OSIS. Mulai dari festival, kompetisi, sampai acara amal!"
-                buttonText="Lihat Semua Acara"
-                href="/events"
-                className="border-border/30"
+                icon={<Heart size={40} />}
+                title="Keimanan"
+                description="Membentuk karakter spiritual dan moral siswa."
               />
               <FeatureCard 
-                icon={<Rocket size={48} />}
-                title="Bank Ide Gila"
-                description="Punya ide brilian untuk mengubah sekolah? Sumbangkan idemu dan kita wujudkan bersama OSIS!"
-                buttonText="Sumbang Ide Kamu"
-                href="/ideas"
-                className="border-border/30"
+                icon={<Shield size={40} />}
+                title="Budi Pekerti"
+                description="Mengembangkan sopan santun dan etika luhur."
               />
               <FeatureCard 
-                icon={<Trophy size={48} />}
-                title="Galeri Prestasi"
-                description="Lihat momen-momen terbaik dan prestasi gemilang yang telah diraih oleh siswa-siswi kita."
-                buttonText="Jelajahi Galeri"
-                href="/gallery"
-                className="border-border/30"
+                icon={<Sparkles size={40} />}
+                title="Kepribadian Unggul"
+                description="Membangun kepemimpinan dan rasa percaya diri."
+              />
+              <FeatureCard 
+                icon={<Brain size={40} />}
+                title="Akademik"
+                description="Meningkatkan prestasi dan wawasan keilmuan."
+              />
+              <FeatureCard 
+                icon={<Landmark size={40} />}
+                title="Politik"
+                description="Pendidikan demokrasi dan kesadaran berbangsa."
+              />
+              <FeatureCard 
+                icon={<Palette size={40} />}
+                title="Kreativitas"
+                description="Mewadahi bakat seni dan keterampilan siswa."
+              />
+              <FeatureCard 
+                icon={<Dumbbell size={40} />}
+                title="Olahraga"
+                description="Mendukung kesehatan jasmani dan sportivitas."
+              />
+              <FeatureCard 
+                icon={<BookOpen size={40} />}
+                title="Sastra & Budaya"
+                description="Melestarikan dan mengembangkan sastra dan budaya."
+              />
+              <FeatureCard 
+                icon={<Cpu size={40} />}
+                title="Teknologi"
+                description="Mengembangkan inovasi dan literasi digital."
+              />
+              <FeatureCard 
+                icon={<Languages size={40} />}
+                title="Bahasa Inggris"
+                description="Meningkatkan kemampuan komunikasi global."
               />
            </div>
         </section>
