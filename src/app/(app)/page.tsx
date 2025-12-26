@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React from 'react';
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/carousel";
 import { teamMembers, vision, mission } from '@/lib/data';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 const FeatureCard = ({ icon, title, description, buttonText, href, className }: { icon: React.ReactNode, title: string, description: string, buttonText: string, href: string, className?: string }) => (
   <div className={`rounded-3xl border-2 border-b-8 p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl ${className} flex flex-col bg-card/80`}>
@@ -36,20 +38,22 @@ const SectionTitle = ({ children, className }: { children: React.ReactNode, clas
   </h2>
 );
 
-const VisionCard = ({ icon: Icon, title, description, color }: { icon: React.ElementType, title: string, description: string, color: string }) => (
-    <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-b-8 border-border/60 flex items-center gap-6 transition-transform duration-300 hover:-translate-y-2">
-        <div className={`flex-shrink-0 p-4 rounded-full bg-background shadow-inner`}>
-            <Icon className={`w-12 h-12 ${color}`} strokeWidth={2.5}/>
-        </div>
-        <div>
-            <h3 className="font-headline text-2xl font-bold text-white mb-1">{title}</h3>
-            <p className="text-muted-foreground">{description}</p>
+const VisionCard = ({ icon: Icon, title, description, color, align = 'left' }: { icon: React.ElementType, title: string, description: string, color: string, align?: 'left' | 'right' }) => (
+    <div className={`relative z-10 w-full md:w-2/5 ${align === 'left' ? 'self-start' : 'self-end'}`}>
+        <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-b-8 border-border/60 flex items-center gap-6 transition-transform duration-300 hover:-translate-y-2">
+            <div className={`flex-shrink-0 p-4 rounded-full bg-background shadow-inner`}>
+                <Icon className={`w-12 h-12 ${color}`} strokeWidth={2.5}/>
+            </div>
+            <div>
+                <h3 className="font-headline text-2xl font-bold text-white mb-1">{title}</h3>
+                <p className="text-muted-foreground">{description}</p>
+            </div>
         </div>
     </div>
 );
 
-const MissionCard = ({ icon: Icon, title, description, color }: { icon: React.ElementType, title: string, description: string, color: string }) => (
-    <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-b-8 border-border/60 flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-2 h-full">
+const MissionCard = ({ icon: Icon, title, description, color, className }: { icon: React.ElementType, title: string, description: string, color: string, className?: string }) => (
+    <div className={cn("bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-b-8 border-border/60 flex flex-col items-start text-left transition-transform duration-300 hover:-translate-y-2 h-full", className)}>
         <div className={`mb-4 p-4 rounded-full bg-background shadow-inner`}>
             <Icon className={`w-10 h-10 ${color}`} strokeWidth={2.5}/>
         </div>
@@ -134,16 +138,31 @@ export default function LandingPage() {
         {/* Vision Section */}
         <section>
             <SectionTitle>Visi <span className="text-primary">Kami</span></SectionTitle>
-            <div className="max-w-3xl mx-auto space-y-8">
-                {vision.map((item) => <VisionCard key={item.title} {...item} />)}
+            <div className="relative max-w-2xl mx-auto">
+                <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-border/30 transform -translate-x-1/2 hidden md:block">
+                    <svg width="100%" height="100%" className="stroke-current text-border/50">
+                        <line x1="50%" y1="0" x2="50%" y2="100%" strokeWidth="2" strokeDasharray="8 8"/>
+                    </svg>
+                </div>
+                <div className="space-y-12 md:space-y-0 flex flex-col items-center">
+                    {vision.map((item, index) => (
+                        <VisionCard 
+                            key={item.title} 
+                            {...item} 
+                            align={index % 2 === 0 ? 'left' : 'right'} 
+                        />
+                    ))}
+                </div>
             </div>
         </section>
 
         {/* Mission Section */}
         <section>
             <SectionTitle>Misi <span className="text-primary">Kami</span></SectionTitle>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {mission.map((item) => <MissionCard key={item.title} {...item} />)}
+            <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-8 max-w-5xl mx-auto">
+                <MissionCard {...mission[0]} className="md:col-span-2"/>
+                <MissionCard {...mission[1]} className="md:row-start-2"/>
+                <MissionCard {...mission[2]} className="md:col-start-2 md:row-start-2"/>
             </div>
         </section>
 
@@ -223,5 +242,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
