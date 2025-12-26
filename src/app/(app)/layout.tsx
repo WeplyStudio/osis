@@ -25,14 +25,14 @@ const AppFooter = () => (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="col-span-1 md:col-span-2 lg:col-span-1">
                     <Link href="/" className="flex items-center gap-3 mb-4">
-                      <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
+                      <h1 className="text-xl font-body font-bold text-foreground">OSIS Kigra</h1>
                     </Link>
                     <p className="text-muted-foreground text-sm max-w-xs">
                         Organisasi Siswa Intra Sekolah. Berkomitmen menciptakan lingkungan sekolah yang inklusif dan inovatif.
                     </p>
                 </div>
                 <div>
-                    <h3 className="font-headline text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Navigasi</h3>
+                    <h3 className="font-body text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Navigasi</h3>
                     <ul className="space-y-3">
                         {navItems.map(item => (
                              <li key={item.label}>
@@ -44,7 +44,7 @@ const AppFooter = () => (
                     </ul>
                 </div>
                  <div>
-                    <h3 className="font-headline text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Dukungan</h3>
+                    <h3 className="font-body text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Dukungan</h3>
                     <ul className="space-y-3">
                         <li><Link href="#" className="text-sm text-foreground hover:text-primary transition-colors">Aspirasi</Link></li>
                         <li><Link href="#" className="text-sm text-foreground hover:text-primary transition-colors">Sponsor</Link></li>
@@ -52,7 +52,7 @@ const AppFooter = () => (
                     </ul>
                 </div>
                 <div>
-                     <h3 className="font-headline text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Ikuti Kami</h3>
+                     <h3 className="font-body text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Ikuti Kami</h3>
                      <div className="flex items-center gap-3">
                         <Button asChild variant="outline" size="icon" className="rounded-lg">
                             <Link href="#"><Facebook className="w-5 h-5" /></Link>
@@ -96,7 +96,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         )}>
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-3">
-              <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
+              <h1 className="text-xl font-body font-bold text-foreground">OSIS Kigra</h1>
             </Link>
           </div>
 
@@ -124,7 +124,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <SheetContent side="left" className="w-[300px] flex flex-col p-0">
                   <SheetHeader className="p-6 pb-0">
                     <Link href="/" className="flex items-center gap-3">
-                      <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
+                      <h1 className="text-xl font-body font-bold text-foreground">OSIS Kigra</h1>
                     </Link>
                     <SheetTitle className="sr-only">Menu</SheetTitle>
                   </SheetHeader>
