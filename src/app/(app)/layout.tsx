@@ -1,10 +1,15 @@
 'use client';
 
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { Home, Calendar, GalleryHorizontal, Lightbulb } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { usePathname } from "next/navigation";
+import { Home, Calendar, GalleryHorizontal, Lightbulb, Menu } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button";
 
 const OasisLogo = () => (
     <div className="p-2 bg-accent rounded-lg">
@@ -14,58 +19,64 @@ const OasisLogo = () => (
     </div>
 );
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const navItems = [
+const navItems = [
     { href: '/', icon: Home, label: 'Dashboard' },
     { href: '/events', icon: Calendar, label: 'Events' },
     { href: '/gallery', icon: GalleryHorizontal, label: 'Gallery' },
     { href: '/ideas', icon: Lightbulb, label: 'Suggest Idea' },
-  ];
+];
 
-  const currentPage = [...navItems].reverse().find(item => pathname.startsWith(item.href));
-
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
+    <div className="flex flex-col min-h-screen">
+        <header className="flex items-center justify-between p-4 border-b bg-card shadow-sm sticky top-0 z-50">
           <div className="flex items-center gap-3">
-            <OasisLogo />
-            <h1 className="text-xl font-headline font-bold text-foreground group-data-[collapsible=icon]:hidden">OASISverse</h1>
+            <Link href="/" className="flex items-center gap-3">
+              <OasisLogo />
+              <h1 className="text-xl font-headline font-bold text-foreground">OASISverse</h1>
+            </Link>
           </div>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
+
+          <nav className="hidden md:flex items-center gap-4">
             {navItems.map(item => (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton asChild isActive={item.href === '/' ? pathname === '/' : pathname.startsWith(item.href) && item.href !== '/'}>
-                  <Link href={item.href}>
-                    <item.icon />
-                    {item.label}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+                <Button key={item.href} asChild variant="ghost">
+                    <Link href={item.href} className="flex items-center gap-2">
+                        <item.icon className="w-4 h-4" />
+                        {item.label}
+                    </Link>
+                </Button>
             ))}
-          </SidebarMenu>
-        </SidebarContent>
-      </Sidebar>
-      <SidebarInset>
-        <header className="flex items-center justify-between p-4 border-b bg-card shadow-sm">
+          </nav>
+          
           <div className="flex items-center gap-4">
-            <SidebarTrigger />
-            <h2 className="text-lg font-headline font-semibold hidden sm:block">
-              {currentPage?.label || 'Dashboard'}
-            </h2>
+            <Avatar>
+              <AvatarImage src="https://picsum.photos/seed/user/40/40" alt="User avatar" />
+              <AvatarFallback>U</AvatarFallback>
+            </Avatar>
+            <div className="md:hidden">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Menu />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {navItems.map((item) => (
+                    <DropdownMenuItem key={item.href} asChild>
+                       <Link href={item.href} className="flex items-center gap-2">
+                         <item.icon className="w-4 h-4" />
+                         {item.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
-          <Avatar>
-            <AvatarImage src="https://picsum.photos/seed/user/40/40" alt="User avatar" />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
         </header>
         <main className="flex-1 p-4 md:p-6 lg:p-8 bg-background">
           {children}
         </main>
-      </SidebarInset>
-    </SidebarProvider>
+    </div>
   );
 }
