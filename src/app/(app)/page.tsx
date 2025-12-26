@@ -87,6 +87,13 @@ const DivisionTabs = () => {
     );
 };
 
+const ImpactStat = ({ value, label }: { value: string, label: string }) => (
+  <div className="text-center">
+    <p className="font-headline text-5xl md:text-7xl font-bold tracking-tighter">{value}</p>
+    <p className="font-sans text-sm uppercase tracking-widest font-medium">{label}</p>
+  </div>
+);
+
 
 export default function LandingPage() {
   return (
@@ -200,19 +207,23 @@ export default function LandingPage() {
            <DivisionTabs />
         </section>
 
-        {/* Join Us Section */}
-        <section className="text-center bg-card rounded-3xl p-8 md:p-12 border shadow-2xl">
-          <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tighter mb-4 text-foreground">
-            Jelajahi Dunia <span className="text-primary">OSIS Kigra</span>!
-          </h2>
-          <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-8">
-            Lihat semua kegiatan, acara, dan informasi terbaru dari OSIS Kigra. Jadilah bagian dari keseruan di sekolah!
-          </p>
-          <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl py-8 px-8 rounded-2xl shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
-              <Link href="/events">
-                Jelajahi <Search className="ml-2 h-6 w-6" />
-              </Link>
-          </Button>
+        {/* Impact Section */}
+        <section className="bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 lg:p-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4 text-center lg:text-left">
+              <h2 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tighter">
+                Dampak Kami.
+              </h2>
+              <p className="text-lg md:text-xl max-w-md mx-auto lg:mx-0">
+                Lebih dari sekadar organisasi, kami adalah agen perubahan nyata bagi lingkungan sekolah.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              <ImpactStat value="45+" label="PROKER / TAHUN" />
+              <ImpactStat value="1.2K" label="SISWA TERLIBAT" />
+              <ImpactStat value="12" label="AWARD NASIONAL" />
+            </div>
+          </div>
         </section>
 
       </main>
