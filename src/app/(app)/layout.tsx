@@ -44,7 +44,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out",
           "flex items-center justify-between",
           scrolled 
-            ? 'top-4 left-1/2 -translate-x-1/2 w-full max-w-4xl bg-card/80 backdrop-blur-sm rounded-full shadow-lg border p-2'
+            ? 'top-4 left-1/2 -translate-x-1/2 w-[80%] bg-card/80 backdrop-blur-sm rounded-full shadow-lg border p-2'
             : 'w-full p-4 bg-transparent'
         )}>
           <div className="flex items-center gap-3">
