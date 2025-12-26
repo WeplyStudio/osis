@@ -26,7 +26,7 @@ export default function Dashboard() {
         <div className="absolute bottom-0 left-0 p-8 text-white">
           <h1 className="font-headline text-4xl md:text-6xl font-bold drop-shadow-lg">Welcome to OASISverse!</h1>
           <p className="mt-2 text-lg max-w-xl">Your central hub for all OSIS activities, announcements, and fun. Let's make school life more exciting!</p>
-          <Button asChild className="mt-6 bg-accent text-accent-foreground hover:bg-accent/90 font-semibold">
+          <Button asChild className="mt-6 bg-accent text-accent-foreground hover:bg-accent/90 font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
             <Link href="/ideas">
               Suggest an Initiative <ArrowRight className="ml-2" />
             </Link>
@@ -39,7 +39,7 @@ export default function Dashboard() {
           <h2 className="font-headline text-2xl font-bold mb-4">📢 Announcements</h2>
           <Card className="shadow-md">
             <CardContent className="p-0">
-              <ul className="divide-y">
+              <ul className="divide-y divide-border">
                 {announcements.map((item) => (
                   <li key={item.id} className="p-4 flex items-start gap-4 hover:bg-muted/50 transition-colors">
                     <div className="p-3 bg-secondary rounded-full flex-shrink-0">
@@ -60,7 +60,7 @@ export default function Dashboard() {
         <div className="lg:col-span-2">
           <div className="flex justify-between items-center mb-4">
             <h2 className="font-headline text-2xl font-bold">🗓️ Upcoming Events</h2>
-            <Button variant="link" asChild>
+            <Button variant="link" asChild className="text-accent-foreground hover:text-accent-foreground/80">
               <Link href="/events">View All <ArrowRight className="ml-1" /></Link>
             </Button>
           </div>
