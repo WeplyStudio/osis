@@ -1,4 +1,3 @@
-
 import type { Announcement, Event, TeamMember, VisionMission } from './types';
 import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem } from 'lucide-react';
 import { PlaceHolderImages } from './placeholder-images';
@@ -63,35 +62,40 @@ export const teamMembers: TeamMember[] = [
     name: 'Budi Dora',
     role: 'Ketua OSIS',
     image: PlaceHolderImages.find(p => p.id === 'team1')?.imageUrl || 'https://picsum.photos/seed/1/400/300',
-    bgColor: ''
+    bgColor: '',
+    quote: 'Harapannya, OSIS SMA Negeri 6 Jakarta dapat menjadi organisasi yang berperan aktif dalam pengembangan potensi minat dan bakat siswa/i. Progresif, kreatif, komunikatif, serta memiliki profesionalitas.'
   },
   {
     id: '2',
     name: 'Siti Wati',
     role: 'Wakil Ketua OSIS',
     image: PlaceHolderImages.find(p => p.id === 'team2')?.imageUrl || 'https://picsum.photos/seed/2/400/300',
-    bgColor: ''
+    bgColor: '',
+    quote: 'Bersama, kita ciptakan lingkungan sekolah yang mendukung, di mana setiap siswa merasa didengar dan dihargai. Mari kita berkolaborasi untuk kemajuan bersama.'
   },
   {
     id: '3',
     name: 'Ahmad Yani',
     role: 'Sekretaris',
     image: PlaceHolderImages.find(p => p.id === 'team3')?.imageUrl || 'https://picsum.photos/seed/3/400/300',
-    bgColor: ''
+    bgColor: '',
+    quote: 'Administrasi yang rapi adalah kunci kelancaran organisasi. Saya berkomitmen untuk memastikan semua program OSIS berjalan dengan teratur dan terdokumentasi dengan baik.'
   },
   {
     id: '4',
     name: 'Rina Rini',
     role: 'Bendahara',
     image: PlaceHolderImages.find(p => p.id === 'team4')?.imageUrl || 'https://picsum.photos/seed/4/400/300',
-    bgColor: ''
+    bgColor: '',
+    quote: 'Transparansi dan pengelolaan keuangan yang bertanggung jawab adalah prioritas saya untuk mendukung semua kegiatan positif yang diselenggarakan oleh OSIS.'
   },
   {
     id: '5',
     name: 'Joko Purnomo',
     role: 'Koordinator Acara',
     image: PlaceHolderImages.find(p => p.id === 'team5')?.imageUrl || 'https://picsum.photos/seed/5/400/300',
-    bgColor: ''
+    bgColor: '',
+    quote: 'Saya siap menghadirkan acara-acara yang tidak hanya seru, tetapi juga mendidik dan berkesan. Mari buat setiap momen di sekolah menjadi tak terlupakan!'
   },
 ];
 

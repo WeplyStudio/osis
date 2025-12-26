@@ -24,6 +24,7 @@ export type TeamMember = {
   role: string;
   image: string;
   bgColor: string;
+  quote: string;
 };
 
 export type VisionMission = {

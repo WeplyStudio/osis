@@ -17,6 +17,7 @@ import {
 import { teamMembers, vision, mission } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
     <div className="relative group overflow-hidden rounded-3xl bg-card/80 border-2 border-b-8 border-border/60 shadow-lg transition-all duration-300 hover:shadow-primary/40 hover:-translate-y-2 h-full flex flex-col p-6 text-center items-center">
@@ -110,28 +111,48 @@ export default function LandingPage() {
 
         {/* Our Team Section */}
         <section>
-            <SectionTitle>Tim <span className="text-primary">Kami</span></SectionTitle>
-            <Carousel opts={{ loop: true, align: "start" }} className="w-full max-w-6xl mx-auto">
-                <CarouselContent className="-ml-4">
-                    {teamMembers.map(member => (
-                        <CarouselItem key={member.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                            <Card className="rounded-3xl overflow-hidden bg-card/80 border-2 border-border/30 shadow-lg group transition-transform duration-300 hover:-translate-y-2">
-                                <CardContent className="p-0">
-                                    <div className="aspect-[4/3] relative">
-                                        <Image src={member.image} alt={member.name} fill className="object-cover object-top transition-transform duration-500 group-hover:scale-110" />
-                                    </div>
-                                    <div className="p-4">
-                                        <h3 className="font-headline text-2xl font-bold text-white">{member.name}</h3>
-                                        <p className="text-lg font-medium text-primary">{member.role}</p>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </CarouselItem>
-                    ))}
-                </CarouselContent>
-                <CarouselPrevious className="hidden md:flex absolute left-[-60px] top-1/2 -translate-y-1/2 h-14 w-14 bg-card/80 hover:bg-card text-white border-2 border-border/30 backdrop-blur-sm rounded-full" />
-                <CarouselNext className="hidden md:flex absolute right-[-60px] top-1/2 -translate-y-1/2 h-14 w-14 bg-card/80 hover:bg-card text-white border-2 border-border/30 backdrop-blur-sm rounded-full" />
-            </Carousel>
+          <SectionTitle>Tim <span className="text-primary">Kami</span></SectionTitle>
+          <Carousel opts={{ loop: true }} className="w-full max-w-5xl mx-auto">
+            <CarouselContent>
+              {teamMembers.map((member) => (
+                <CarouselItem key={member.id}>
+                  <Card className="bg-card/80 backdrop-blur-sm shadow-xl rounded-3xl overflow-hidden border-2 border-border/30">
+                    <CardContent className="p-6 md:p-10">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 items-center">
+                        <div className="md:col-span-1 flex justify-center">
+                          <div className="relative aspect-square w-48 h-48 md:w-full md:h-full rounded-2xl overflow-hidden shadow-lg border-4 border-border/50">
+                            <Image
+                              src={member.image}
+                              alt={member.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        </div>
+                        <div className="md:col-span-2 text-center md:text-left">
+                          <p className="text-lg md:text-xl text-white/80 italic mb-6">
+                            &quot;{member.quote}&quot;
+                          </p>
+                          <div className="flex items-center justify-center md:justify-start gap-3">
+                            <Avatar className="w-12 h-12 border-2 border-primary">
+                              <AvatarImage src={member.image} alt={member.name} />
+                              <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h4 className="font-bold text-white text-lg">{member.name}</h4>
+                              <p className="text-primary font-medium">{member.role}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="hidden md:flex absolute left-[-60px] top-1/2 -translate-y-1/2 h-14 w-14 bg-card/80 hover:bg-card text-white border-2 border-border/30 backdrop-blur-sm rounded-full" />
+            <CarouselNext className="hidden md:flex absolute right-[-60px] top-1/2 -translate-y-1/2 h-14 w-14 bg-card/80 hover:bg-card text-white border-2 border-border/30 backdrop-blur-sm rounded-full" />
+          </Carousel>
         </section>
 
         {/* Vision Section */}
@@ -214,7 +235,7 @@ export default function LandingPage() {
                 title="Teknologi"
                 description="Mengembangkan inovasi dan literasi digital."
               />
-              <FeatureCard 
+              <FeatureCard package
                 icon={<Languages size={48} />}
                 title="Bahasa Inggris"
                 description="Meningkatkan kemampuan komunikasi global."
@@ -241,3 +262,4 @@ export default function LandingPage() {
     </div>
   );
 }
+
