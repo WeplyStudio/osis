@@ -19,12 +19,12 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
-    <div className="relative group overflow-hidden rounded-3xl p-6 bg-card/80 border border-border/30 shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 h-full flex flex-col">
+    <div className="relative group overflow-hidden rounded-3xl bg-card/80 border-2 border-b-8 border-border/60 shadow-lg transition-all duration-300 hover:shadow-primary/40 hover:-translate-y-2 h-full flex flex-col p-6 text-center items-center">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <div className="relative z-10">
-            <div className="mb-4 text-primary drop-shadow-lg">{icon}</div>
-            <h3 className="font-headline text-2xl font-bold text-white mb-2 drop-shadow-md">{title}</h3>
-            <p className="text-white/70 text-sm font-medium">{description}</p>
+        <div className="relative z-10 flex flex-col items-center">
+            <div className="mb-4 text-primary drop-shadow-lg transition-transform duration-300 group-hover:scale-110">{icon}</div>
+            <h3 className="font-headline text-xl font-bold text-white mb-2 drop-shadow-md">{title}</h3>
+            <p className="text-white/70 text-sm font-medium flex-grow">{description}</p>
         </div>
     </div>
 );
@@ -135,7 +135,7 @@ export default function LandingPage() {
         </section>
 
         {/* Vision Section */}
-        <section className="relative py-12">
+        <section>
             <SectionTitle>Visi <span className="text-primary">Kami</span></SectionTitle>
             <div className="relative max-w-4xl mx-auto">
                 <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-border/30 transform -translate-x-1/2 hidden md:block">
@@ -156,7 +156,7 @@ export default function LandingPage() {
         </section>
 
         {/* Mission Section */}
-        <section className="relative py-12">
+        <section>
             <SectionTitle>Misi <span className="text-primary">Kami</span></SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-8 max-w-5xl mx-auto">
                 <MissionCard {...mission[0]} className="md:col-span-2"/>
@@ -168,54 +168,54 @@ export default function LandingPage() {
         {/* Divisions Section */}
         <section className="text-center">
            <SectionTitle>Divisi <span className="text-primary">Kami</span></SectionTitle>
-           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
               <FeatureCard 
-                icon={<Heart size={40} />}
+                icon={<Heart size={48} />}
                 title="Keimanan"
                 description="Membentuk karakter spiritual dan moral siswa."
               />
               <FeatureCard 
-                icon={<Shield size={40} />}
+                icon={<Shield size={48} />}
                 title="Budi Pekerti"
                 description="Mengembangkan sopan santun dan etika luhur."
               />
               <FeatureCard 
-                icon={<Sparkles size={40} />}
+                icon={<Sparkles size={48} />}
                 title="Kepribadian Unggul"
                 description="Membangun kepemimpinan dan rasa percaya diri."
               />
               <FeatureCard 
-                icon={<Brain size={40} />}
+                icon={<Brain size={48} />}
                 title="Akademik"
                 description="Meningkatkan prestasi dan wawasan keilmuan."
               />
               <FeatureCard 
-                icon={<Landmark size={40} />}
+                icon={<Landmark size={48} />}
                 title="Politik"
                 description="Pendidikan demokrasi dan kesadaran berbangsa."
               />
               <FeatureCard 
-                icon={<Palette size={40} />}
+                icon={<Palette size={48} />}
                 title="Kreativitas"
                 description="Mewadahi bakat seni dan keterampilan siswa."
               />
               <FeatureCard 
-                icon={<Dumbbell size={40} />}
+                icon={<Dumbbell size={48} />}
                 title="Olahraga"
                 description="Mendukung kesehatan jasmani dan sportivitas."
               />
               <FeatureCard 
-                icon={<BookOpen size={40} />}
+                icon={<BookOpen size={48} />}
                 title="Sastra & Budaya"
                 description="Melestarikan dan mengembangkan sastra dan budaya."
               />
               <FeatureCard 
-                icon={<Cpu size={40} />}
+                icon={<Cpu size={48} />}
                 title="Teknologi"
                 description="Mengembangkan inovasi dan literasi digital."
               />
               <FeatureCard 
-                icon={<Languages size={40} />}
+                icon={<Languages size={48} />}
                 title="Bahasa Inggris"
                 description="Meningkatkan kemampuan komunikasi global."
               />
@@ -241,4 +241,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
