@@ -164,7 +164,7 @@ export default function LandingPage() {
                         <line x1="50%" y1="0" x2="50%" y2="100%" strokeWidth="2" strokeDasharray="8 8"/>
                     </svg>
                 </div>
-                <div className="space-y-12 md:space-y-0 flex flex-col items-center">
+                <div className="space-y-12 md:space-y-12 flex flex-col items-center">
                     {vision.map((item, index) => (
                         <VisionCard 
                             key={item.title} 
@@ -235,7 +235,7 @@ export default function LandingPage() {
                 title="Teknologi"
                 description="Mengembangkan inovasi dan literasi digital."
               />
-              <FeatureCard package
+              <FeatureCard 
                 icon={<Languages size={48} />}
                 title="Bahasa Inggris"
                 description="Meningkatkan kemampuan komunikasi global."
