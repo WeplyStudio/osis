@@ -144,22 +144,16 @@ export default function LandingPage() {
       <main className="container mx-auto px-4 space-y-24 md:space-y-32 pb-24 md:pb-32">
         {/* Hero Section */}
         <section className="text-center">
-          <div className="inline-block bg-card rounded-full px-6 py-2 mb-4 border">
-              <p className="font-bold text-primary flex items-center gap-2">
-                <Star className="w-5 h-5 fill-current" /> Platform OSIS Terbaik
-              </p>
-          </div>
-          <h1 className="font-headline text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 text-foreground">
-            Selamat Datang di <span className="text-primary">OSIS Kigra</span>!
-          </h1>
-          <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-10">
-            Pusat semua kegiatan, acara seru, dan ide-ide cemerlang OSIS. Ayo buat kehidupan sekolah lebih berwarna dan tak terlupakan!
-          </p>
-          <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl py-8 px-8 md:px-12 rounded-2xl shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
-            <Link href="/ideas">
-              Mulai Berkontribusi <ArrowRight className="ml-2 h-6 w-6" />
-            </Link>
-          </Button>
+            <div className="inline-block bg-accent text-accent-foreground rounded-full px-4 py-2 mb-6">
+                <p className="font-bold text-sm tracking-wider uppercase">Empowering Future Leaders</p>
+            </div>
+            <h1 className="font-headline text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 text-foreground">
+                Inovasi Digital<br/>
+                <span className="text-primary">Satu Suara SMANSA.</span>
+            </h1>
+            <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
+                Wadah kolaborasi inklusif bagi seluruh siswa SMANSA untuk berkarya, berinovasi, dan membawa perubahan positif bagi sekolah dan masyarakat.
+            </p>
         </section>
 
         {/* About Us Section */}
