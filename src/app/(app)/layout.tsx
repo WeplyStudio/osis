@@ -125,40 +125,39 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <Button asChild className="hidden md:flex rounded-full font-bold px-6">
                 <Link href="#">Kontak</Link>
             </Button>
-            <div className="md:hidden">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <Menu />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="w-[300px]">
-                   <SheetHeader className="mb-8">
-                     <Link href="/" className="flex items-center gap-3">
-                        <OasisLogo />
-                        <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu />
+                  <span className="sr-only">Buka menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[300px]">
+                  <SheetHeader className="mb-8">
+                    <Link href="/" className="flex items-center gap-3">
+                      <OasisLogo />
+                      <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
                     </Link>
                     <SheetTitle className="sr-only">Menu</SheetTitle>
                   </SheetHeader>
                   <div className="flex flex-col h-full">
-                    <nav className="flex flex-col gap-3 flex-grow">
-                      {navItems.map((item) => (
-                        <Link key={item.href} href={item.href} className="flex items-center gap-4 p-3 rounded-lg text-lg font-medium hover:bg-accent transition-colors">
-                           <item.icon className="w-6 h-6" />
-                           {item.label}
-                        </Link>
-                      ))}
-                    </nav>
-                     <Button asChild className="mt-auto w-full font-bold text-lg py-6 rounded-full shadow-lg">
-                        <Link href="#"><Phone className="mr-2 h-5 w-5"/>Kontak</Link>
-                    </Button>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
+                  <nav className="flex flex-col gap-3 flex-grow">
+                    {navItems.map((item) => (
+                      <Link key={item.href} href={item.href} className="flex items-center gap-4 p-3 rounded-lg text-lg font-medium hover:bg-accent transition-colors">
+                          <item.icon className="w-6 h-6" />
+                          {item.label}
+                      </Link>
+                    ))}
+                  </nav>
+                    <Button asChild className="mt-auto w-full font-bold text-lg py-6 rounded-full shadow-lg">
+                      <Link href="#"><Phone className="mr-2 h-5 w-5"/>Kontak</Link>
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </header>
-        <main className="flex-1">
+        <main className="flex-1 pb-24 md:pb-32">
           {children}
         </main>
         <AppFooter />
