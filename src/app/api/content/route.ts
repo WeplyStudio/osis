@@ -22,11 +22,7 @@ async function writeDb(data: any) {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { type, id, url } = body;
-
-        if (!type || !url) {
-            return NextResponse.json({ message: 'Tipe dan URL diperlukan' }, { status: 400 });
-        }
+        const { type, id, url, name } = body;
 
         const db = await readDb();
 
@@ -38,8 +34,18 @@ export async function POST(request: Request) {
             if (memberIndex === -1) {
                 return NextResponse.json({ message: 'Anggota tim tidak ditemukan' }, { status: 404 });
             }
-            db.teamMembers[memberIndex].image = url;
+
+            if (url) {
+                db.teamMembers[memberIndex].image = url;
+            }
+            if (name) {
+                db.teamMembers[memberIndex].name = name;
+            }
+
         } else if (type === 'aboutUsImage') {
+            if (!url) {
+                return NextResponse.json({ message: 'URL gambar diperlukan' }, { status: 400 });
+            }
             db.aboutUsImage.url = url;
         } else {
              return NextResponse.json({ message: 'Tipe konten tidak valid' }, { status: 400 });
@@ -54,5 +60,3 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: 'Terjadi kesalahan internal server' }, { status: 500 });
     }
 }
-
-    

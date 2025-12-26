@@ -9,20 +9,21 @@ import { teamMembers, aboutUsImage } from '@/lib/data';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, Image as ImageIcon, Users, LogOut, BarChart3, Home, Loader2 } from 'lucide-react';
+import { Upload, Image as ImageIcon, Users, LogOut, BarChart3, Home, Loader2, Save } from 'lucide-react';
 
 const TeamMemberCard = ({ member }: { member: typeof teamMembers[0] }) => {
+  const [newName, setNewName] = React.useState(member.name);
   const [newImageUrl, setNewImageUrl] = React.useState('');
   const [isUpdating, setIsUpdating] = React.useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
-  const handleUpdateImage = async () => {
-    if (!newImageUrl) {
+  const handleUpdateMember = async () => {
+    if (!newName && !newImageUrl) {
       toast({
         variant: "destructive",
-        title: 'URL Kosong',
-        description: 'Harap masukkan URL gambar yang valid.',
+        title: 'Tidak Ada Perubahan',
+        description: 'Harap masukkan nama atau URL gambar baru.',
       });
       return;
     }
@@ -34,25 +35,26 @@ const TeamMemberCard = ({ member }: { member: typeof teamMembers[0] }) => {
         body: JSON.stringify({
           type: 'teamMember',
           id: member.id,
+          name: newName,
           url: newImageUrl,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Gagal memperbarui gambar');
+        throw new Error('Gagal memperbarui data anggota');
       }
 
       toast({
-        title: `Gambar ${member.name} Diperbarui!`,
+        title: `Data ${member.name} Diperbarui!`,
         description: 'Perubahan akan terlihat setelah me-refresh halaman.',
       });
       setNewImageUrl('');
-      router.refresh(); // Refresh the page to show the new image
+      router.refresh(); 
     } catch (error: any) {
       toast({
         variant: "destructive",
         title: 'Uh oh! Terjadi kesalahan.',
-        description: error.message || 'Tidak dapat menyimpan gambar.',
+        description: error.message || 'Tidak dapat menyimpan perubahan.',
       });
     } finally {
         setIsUpdating(false);
@@ -70,21 +72,33 @@ const TeamMemberCard = ({ member }: { member: typeof teamMembers[0] }) => {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-2">
-        <Label htmlFor={`image-url-${member.id}`}>URL Gambar Baru</Label>
-        <div className="flex gap-2">
-          <Input
-            id={`image-url-${member.id}`}
-            type="url"
-            placeholder="https://example.com/image.png"
-            value={newImageUrl}
-            onChange={(e) => setNewImageUrl(e.target.value)}
-            disabled={isUpdating}
-          />
-          <Button onClick={handleUpdateImage} size="icon" variant="outline" disabled={isUpdating}>
-            {isUpdating ? <Loader2 className="w-4 h-4 animate-spin"/> : <Upload className="w-4 h-4" />}
-          </Button>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+            <Label htmlFor={`name-${member.id}`}>Nama Anggota</Label>
+            <Input
+                id={`name-${member.id}`}
+                type="text"
+                placeholder="Nama baru"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                disabled={isUpdating}
+            />
         </div>
+        <div className="space-y-2">
+            <Label htmlFor={`image-url-${member.id}`}>URL Gambar Baru</Label>
+            <Input
+                id={`image-url-${member.id}`}
+                type="url"
+                placeholder="https://example.com/image.png"
+                value={newImageUrl}
+                onChange={(e) => setNewImageUrl(e.target.value)}
+                disabled={isUpdating}
+            />
+        </div>
+        <Button onClick={handleUpdateMember} className="w-full" disabled={isUpdating}>
+            {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4" />}
+            Simpan Perubahan
+        </Button>
       </CardContent>
     </Card>
   );
@@ -253,5 +267,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    
