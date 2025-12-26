@@ -6,6 +6,7 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button";
@@ -137,6 +138,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         <OasisLogo />
                         <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
                     </Link>
+                    <SheetTitle className="sr-only">Menu</SheetTitle>
                   </SheetHeader>
                   <div className="flex flex-col h-full">
                     <nav className="flex flex-col gap-3 flex-grow">
