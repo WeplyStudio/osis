@@ -10,6 +10,7 @@ async function readDb() {
         return JSON.parse(data);
     } catch (error) {
         console.error("Could not read database file:", error);
+        // If the file doesn't exist or is corrupted, return a default structure
         return { teamMembers: [], aboutUsImage: {} };
     }
 }
@@ -34,19 +35,19 @@ export async function POST(request: Request) {
                 return NextResponse.json({ message: 'Anggota tim tidak ditemukan' }, { status: 404 });
             }
             
-            // Only update fields if they are provided in the request
-            if (name) {
+            // Only update fields if they are provided and not empty
+            if (name && name.trim() !== '') {
                 db.teamMembers[memberIndex].name = name;
             }
-            if (quote) {
+            if (quote && quote.trim() !== '') {
                 db.teamMembers[memberIndex].quote = quote;
             }
-            if (url) {
+            if (url && url.trim() !== '') {
                 db.teamMembers[memberIndex].image = url;
             }
 
         } else if (type === 'aboutUsImage') {
-            if (!url) {
+            if (!url || url.trim() === '') {
                 return NextResponse.json({ message: 'URL gambar diperlukan' }, { status: 400 });
             }
             db.aboutUsImage.url = url;
@@ -63,3 +64,5 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: 'Terjadi kesalahan internal server' }, { status: 500 });
     }
 }
+
+    

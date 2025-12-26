@@ -20,26 +20,33 @@ const TeamMemberCard = ({ member }: { member: any }) => {
   const router = useRouter();
 
   const handleUpdateMember = async () => {
-    if (!newName && !newImageUrl && !newQuote) {
+    const hasChangedName = newName && newName !== member.name;
+    const hasChangedQuote = newQuote && newQuote !== member.quote;
+    const hasChangedImage = newImageUrl && newImageUrl.trim() !== '';
+
+    if (!hasChangedName && !hasChangedQuote && !hasChangedImage) {
       toast({
-        variant: "destructive",
+        variant: 'destructive',
         title: 'Tidak Ada Perubahan',
-        description: 'Harap masukkan nama, kutipan, atau URL gambar baru.',
+        description: 'Anda belum membuat perubahan apa pun.',
       });
       return;
     }
+
     setIsUpdating(true);
     try {
+      const payload: { type: string; id: any; name?: string; quote?: string; url?: string } = {
+        type: 'teamMember',
+        id: member.id,
+      };
+      if (hasChangedName) payload.name = newName;
+      if (hasChangedQuote) payload.quote = newQuote;
+      if (hasChangedImage) payload.url = newImageUrl;
+      
       const response = await fetch('/api/content', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'teamMember',
-          id: member.id,
-          name: newName,
-          quote: newQuote,
-          url: newImageUrl,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -280,3 +287,5 @@ export default function ClientDashboardPage({ teamMembers, aboutUsImage }: { tea
     </div>
   );
 }
+
+    
