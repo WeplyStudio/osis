@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search, CheckCircle, Calendar, ClipboardCheck, MessageSquare, Lightbulb, Phone, HelpCircle } from 'lucide-react';
+import { ArrowRight, Eye, HelpCircle, Mail } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Accordion,
@@ -22,7 +22,6 @@ import { teamMembers, divisions, faqItems } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
@@ -72,7 +71,7 @@ const AspirationDialog = ({ title, children }: { title: string, children: React.
 
 
 const DivisionTabs = () => {
-    const [activeDivision, setActiveDivision] = useState(divisions[0].id);
+    const [activeDivision, setActiveDivision] = React.useState(divisions[0].id);
     const activeDivisionData = divisions.find(d => d.id === activeDivision);
 
     return (
@@ -159,14 +158,6 @@ const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
             {text}
         </p>
     </div>
-);
-
-
-const ImpactStat = ({ value, label }: { value: string, label: string }) => (
-  <div className="text-center">
-    <p className="font-body text-5xl md:text-7xl font-bold tracking-tighter">{value}</p>
-    <p className="font-sans text-sm uppercase tracking-widest font-medium">{label}</p>
-  </div>
 );
 
 
@@ -343,24 +334,29 @@ export default function LandingPage() {
            <DivisionTabs />
         </section>
 
-        {/* Impact Section */}
-        <section className="bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 lg:p-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div className="space-y-4 text-center lg:text-left">
-              <h2 className="font-body text-5xl md:text-6xl font-extrabold tracking-tighter italic uppercase">
-                Dampak Kami.
-              </h2>
-              <p className="text-lg md:text-xl max-w-md mx-auto lg:mx-0">
-                Lebih dari sekadar organisasi, kami adalah agen perubahan nyata bagi lingkungan sekolah.
-              </p>
+        {/* Newsletter Section */}
+        <section>
+            <div className="text-center">
+                <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-4 italic uppercase">
+                    INFO SMANSA DI <span className="text-primary">INBOXTU.</span>
+                </h2>
+                <p className="max-w-xl mx-auto text-muted-foreground mb-8">
+                    Berlangganan info mingguan seputar pendaftaran, kegiatan, dan beasiswa terbaru eksklusif via email.
+                </p>
+                <form className="max-w-lg mx-auto flex items-center gap-2 bg-card p-2 rounded-full border shadow-sm">
+                    <Mail className="ml-4 text-muted-foreground" />
+                    <Input 
+                        type="email" 
+                        placeholder="Alamat Email Kamu..." 
+                        className="flex-grow bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    />
+                    <Button type="submit" size="lg" className="rounded-full font-bold px-8">
+                        SUBSCRIBE
+                    </Button>
+                </form>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              <ImpactStat value="45+" label="PROKER / TAHUN" />
-              <ImpactStat value="1.2K" label="SISWA TERLIBAT" />
-              <ImpactStat value="4" label="PERIODE" />
-            </div>
-          </div>
         </section>
+
 
         {/* FAQ Section */}
         <section>
@@ -388,7 +384,7 @@ export default function LandingPage() {
                     <Accordion type="single" collapsible className="w-full space-y-4">
                         {faqItems.map((item) => (
                              <AccordionItem key={item.id} value={item.id} className="group bg-card border-none rounded-2xl shadow-sm data-[state=open]:border data-[state=open]:border-primary/50">
-                                <AccordionTrigger className="p-6 font-bold text-sm uppercase tracking-wider hover:no-underline text-left data-[state=open]:text-primary [&>svg]:hidden">
+                                <AccordionTrigger className="p-6 font-bold text-sm uppercase tracking-wider hover:no-underline text-left data-[state=open]:text-primary">
                                     {item.question}
                                     <span className="ml-auto shrink-0 transition-transform duration-200 group-data-[state=closed]:block hidden italic text-primary">↓</span>
                                     <span className="ml-auto shrink-0 transition-transform duration-200 group-data-[state=open]:block hidden italic text-primary">↑</span>
