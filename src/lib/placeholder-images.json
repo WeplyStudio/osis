@@ -71,6 +71,36 @@
       "description": "Students celebrating on graduation day.",
       "imageUrl": "https://images.unsplash.com/photo-1719408937878-eebc1af92f70?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxncmFkdWF0aW9uJTIwc3R1ZGVudHN8ZW58MHx8fHwxNzY2NzU0ODUwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "graduation students"
+    },
+    {
+      "id": "team1",
+      "description": "A portrait of a confident student leader.",
+      "imageUrl": "https://images.unsplash.com/photo-1550578687-19a3f534ad2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzdHVkZW50JTIwbGVhZGVyfGVufDB8fHx8MTc2Njc1NTQ3NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "student leader"
+    },
+    {
+      "id": "team2",
+      "description": "A portrait of a friendly student council member.",
+      "imageUrl": "https://images.unsplash.com/photo-1574758324765-a29c77fb9c91?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzdHVkZW50JTIwY291bmNpbHxlbnwwfHx8fDE3NjY3NTU0NzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "student council"
+    },
+    {
+      "id": "team3",
+      "description": "A portrait of an organized and diligent student.",
+      "imageUrl": "https://images.unsplash.com/photo-1719954327379-2cdda340faa6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkaWxpZ2VudCUyMHN0dWRlbnR8ZW58MHx8fHwxNzY2NzU1NDc0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "diligent student"
+    },
+    {
+      "id": "team4",
+      "description": "A portrait of a trustworthy and smart student.",
+      "imageUrl": "https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzbWFydCUyMHN0dWRlbnR8ZW58MHx8fHwxNzY2NzU1NDc1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "smart student"
+    },
+    {
+      "id": "team5",
+      "description": "A portrait of a creative and energetic student.",
+      "imageUrl": "https://images.unsplash.com/photo-1576344671262-e7d3697ac226?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjcmVhdGl2ZSUyMHN0dWRlbnR8ZW58MHx8fHwxNzY2NzU1NDc0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "creative student"
     }
   ]
 }

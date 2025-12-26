@@ -17,3 +17,18 @@ export type Event = {
   location: string;
   image: string;
 };
+
+export type TeamMember = {
+  id: string;
+  name: string;
+  role: string;
+  image: string;
+  bgColor: string;
+};
+
+export type VisionMission = {
+    icon: LucideIcon;
+    title: string;
+    description: string;
+    color: string;
+};
