@@ -364,7 +364,7 @@ export default function LandingPage() {
         <section>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                 <div className="lg:col-span-1">
-                    <h2 className="font-headline text-5xl font-extrabold tracking-tight text-foreground">
+                    <h2 className="font-body text-5xl font-extrabold tracking-tight text-foreground italic">
                         FAQ<br/><span className="text-primary">COMMON GROUND.</span>
                     </h2>
                     <p className="mt-4 text-muted-foreground">
