@@ -19,11 +19,16 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
-  <div className={`rounded-3xl border-2 border-b-8 p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl flex flex-col bg-card/80 border-border/30`}>
-    <div className="mb-4 text-primary drop-shadow-md">{icon}</div>
-    <h3 className="font-headline text-2xl font-bold text-white mb-2 drop-shadow-md">{title}</h3>
-    <p className="text-white/80 flex-grow text-sm">{description}</p>
-  </div>
+    <div className="relative group overflow-hidden rounded-3xl p-6 bg-card/80 border border-border/30 shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="relative z-10 flex flex-col h-full">
+            <div className="mb-4 text-primary drop-shadow-lg">{icon}</div>
+            <h3 className="font-headline text-2xl font-bold text-white mb-2 drop-shadow-md">{title}</h3>
+            <div className="absolute inset-0 p-6 flex items-center justify-center bg-card/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl">
+                <p className="text-white/90 text-center text-sm font-medium">{description}</p>
+            </div>
+        </div>
+    </div>
 );
 
 
@@ -132,7 +137,7 @@ export default function LandingPage() {
         </section>
 
         {/* Vision Section */}
-        <section className="relative py-12 rounded-3xl stacked-card">
+        <section className="relative py-12 rounded-[2rem] border-t-2 border-l-2 border-r-2 border-border/60 bg-card/50 stacked-card">
             <SectionTitle>Visi <span className="text-primary">Kami</span></SectionTitle>
             <div className="relative max-w-2xl mx-auto">
                 <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-border/30 transform -translate-x-1/2 hidden md:block">
@@ -153,7 +158,7 @@ export default function LandingPage() {
         </section>
 
         {/* Mission Section */}
-        <section className="relative py-12 rounded-3xl stacked-card">
+        <section className="relative py-12 rounded-[2rem] border-t-2 border-l-2 border-r-2 border-border/60 stacked-card">
             <SectionTitle>Misi <span className="text-primary">Kami</span></SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-8 max-w-5xl mx-auto">
                 <MissionCard {...mission[0]} className="md:col-span-2"/>
@@ -238,3 +243,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
