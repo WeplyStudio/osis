@@ -281,7 +281,7 @@ export default function LandingPage() {
                     </div>
                 </div>
                 <div className="bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 flex flex-col justify-center">
-                    <h3 className="font-body text-3xl font-extrabold tracking-tight mb-6">Kenapa Harus Bersuara?</h3>
+                    <h3 className="font-body text-3xl font-extrabold tracking-tight mb-6 italic">Kenapa Harus Bersuara?</h3>
                     <div className="space-y-5">
                         <WhySpeakUpItem number={1} text="Aspirasi kamu dibaca langsung oleh Ketua Umum & Sekbid terkait." />
                         <WhySpeakUpItem number={2} text="Transparansi penuh: Laporan tindak lanjut akan dipublikasikan." />
@@ -407,7 +407,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
-
-    
