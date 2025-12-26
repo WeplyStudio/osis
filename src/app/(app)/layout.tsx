@@ -24,7 +24,6 @@ const OasisLogo = () => (
 const navItems = [
     { href: '/', icon: Home, label: 'Beranda' },
     { href: '/#divisions', icon: Users, label: 'Divisi' },
-    { href: '/#programs', icon: Briefcase, label: 'Program' },
     { href: '/#about', icon: Info, label: 'Tentang' },
 ];
 
