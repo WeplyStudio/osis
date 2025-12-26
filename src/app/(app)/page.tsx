@@ -134,8 +134,8 @@ const DivisionTabs = () => {
     );
 };
 
-const AspirationCard = ({ title, description, status, statusVariant }: { title: string; description: string; status: string; statusVariant: "default" | "secondary" | "outline" | "destructive" | null | undefined }) => (
-    <Card className="hover:bg-accent/50 transition-colors duration-200 cursor-pointer">
+const AspirationCard = ({ title, description, status, statusVariant, ...props }: { title: string; description: string; status: string; statusVariant: "default" | "secondary" | "outline" | "destructive" | null | undefined, [key: string]: any }) => (
+    <Card className="hover:bg-accent/50 transition-colors duration-200 cursor-pointer" {...props}>
         <CardContent className="p-6 flex items-center justify-between">
             <div>
                 <h4 className="font-bold text-lg text-foreground">{title}</h4>
@@ -435,3 +435,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
