@@ -5,7 +5,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { Gamepad2, Rocket, Trophy, ArrowRight, Star, Users, Briefcase, Mic, Award, MessageSquare, PlusCircle, CheckCircle, Search, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages } from 'lucide-react';
+import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -19,28 +19,26 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
-    <div className="relative group overflow-hidden rounded-3xl p-6 bg-card/80 border border-border/30 shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+    <div className="relative group overflow-hidden rounded-3xl p-6 bg-card/80 border border-border/30 shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 h-full flex flex-col">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <div className="relative z-10 flex flex-col h-full">
+        <div className="relative z-10">
             <div className="mb-4 text-primary drop-shadow-lg">{icon}</div>
             <h3 className="font-headline text-2xl font-bold text-white mb-2 drop-shadow-md">{title}</h3>
-            <div className="absolute inset-0 p-6 flex items-center justify-center bg-card/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl">
-                <p className="text-white/90 text-center text-sm font-medium">{description}</p>
-            </div>
+            <p className="text-white/70 text-sm font-medium">{description}</p>
         </div>
     </div>
 );
 
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-  <h2 className={`font-headline text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-white ${className}`}
+  <h2 className={cn(`font-headline text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-white`, className)}
       style={{textShadow: '0 4px 8px rgba(0,0,0,0.3)'}}>
     {children}
   </h2>
 );
 
 const VisionCard = ({ icon: Icon, title, description, color, align = 'left' }: { icon: React.ElementType, title: string, description: string, color: string, align?: 'left' | 'right' }) => (
-    <div className={`relative z-10 w-full md:w-2/5 ${align === 'left' ? 'self-start' : 'self-end'}`}>
+    <div className={`relative z-10 w-full md:w-3/4 lg:w-3/5 ${align === 'left' ? 'self-start' : 'self-end'}`}>
         <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-b-8 border-border/60 flex items-center gap-6 transition-transform duration-300 hover:-translate-y-2">
             <div className={`flex-shrink-0 p-4 rounded-full bg-background shadow-inner`}>
                 <Icon className={`w-12 h-12 ${color}`} strokeWidth={2.5}/>
@@ -139,7 +137,7 @@ export default function LandingPage() {
         {/* Vision Section */}
         <section className="relative py-12">
             <SectionTitle>Visi <span className="text-primary">Kami</span></SectionTitle>
-            <div className="relative max-w-2xl mx-auto">
+            <div className="relative max-w-4xl mx-auto">
                 <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-border/30 transform -translate-x-1/2 hidden md:block">
                     <svg width="100%" height="100%" className="stroke-current text-border/50">
                         <line x1="50%" y1="0" x2="50%" y2="100%" strokeWidth="2" strokeDasharray="8 8"/>
@@ -170,7 +168,7 @@ export default function LandingPage() {
         {/* Divisions Section */}
         <section className="text-center">
            <SectionTitle>Divisi <span className="text-primary">Kami</span></SectionTitle>
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               <FeatureCard 
                 icon={<Heart size={40} />}
                 title="Keimanan"
@@ -243,3 +241,4 @@ export default function LandingPage() {
     </div>
   );
 }
+
