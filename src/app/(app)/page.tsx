@@ -76,7 +76,7 @@ export default function LandingPage() {
           </div>
           <h1 className="font-headline text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 text-white"
               style={{textShadow: '0 4px 12px rgba(0,0,0,0.4)'}}>
-            Selamat Datang di <span className="text-primary">OASISverse</span>!
+            Selamat Datang di <span className="text-primary">OSIS Kigra</span>!
           </h1>
           <p className="max-w-3xl mx-auto text-lg md:text-xl text-white/80 mb-10">
             Pusat semua kegiatan, acara seru, dan ide-ide cemerlang OSIS. Ayo buat kehidupan sekolah lebih berwarna dan tak terlupakan!
@@ -95,9 +95,9 @@ export default function LandingPage() {
                <Image src="https://picsum.photos/seed/101/600/600" alt="About OSIS" fill className="object-cover" data-ai-hint="students collaboration" />
             </div>
             <div className="text-center md:text-left">
-              <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-white">Tentang <span className="text-primary">OASISverse</span></h2>
+              <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-white">Tentang <span className="text-primary">OSIS Kigra</span></h2>
               <p className="text-lg text-white/80 mb-6">
-                OASISverse adalah wadah digital resmi Organisasi Siswa Intra Sekolah (OSIS) di sekolah kita. Kami ada untuk mewujudkan aspirasi, kreativitas, dan semangat seluruh siswa. Dari acara heboh hingga program pengembangan diri, kami berkomitmen untuk menciptakan pengalaman sekolah yang lebih dari sekadar belajar di kelas.
+                OSIS Kigra adalah wadah digital resmi Organisasi Siswa Intra Sekolah (OSIS) di sekolah kita. Kami ada untuk mewujudkan aspirasi, kreativitas, dan semangat seluruh siswa. Dari acara heboh hingga program pengembangan diri, kami berkomitmen untuk menciptakan pengalaman sekolah yang lebih dari sekadar belajar di kelas.
               </p>
                <Button asChild size="lg" className="font-bold text-lg py-6 px-10 rounded-xl shadow-lg transition-transform hover:scale-105 border-2 border-b-4 border-yellow-600">
                 <Link href="/events">

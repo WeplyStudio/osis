@@ -32,7 +32,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-3">
               <OasisLogo />
-              <h1 className="text-xl font-headline font-bold text-foreground">OASISverse</h1>
+              <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
             </Link>
           </div>
 
