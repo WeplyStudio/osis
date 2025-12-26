@@ -252,7 +252,7 @@ export default function LandingPage() {
         {/* FAQ Section */}
         <section>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-16 items-center">
-                <div className="lg:col-span-1">
+                <div className="lg:col-span-1 text-left">
                     <h2 className="font-headline text-5xl font-extrabold tracking-tight text-foreground">Masih Penasaran?</h2>
                     <p className="mt-4 text-muted-foreground">Temukan jawaban atas pertanyaan umum mengenai OSIS dan kehidupan sekolah di sini.</p>
                 </div>
@@ -260,10 +260,10 @@ export default function LandingPage() {
                     <Accordion type="single" collapsible className="w-full space-y-4">
                         {faqItems.map((item) => (
                              <AccordionItem key={item.id} value={item.id} className="bg-card border-none rounded-2xl shadow-sm">
-                                <AccordionTrigger className="p-6 font-bold text-base hover:no-underline">
+                                <AccordionTrigger className="p-6 font-bold text-base hover:no-underline text-left">
                                     {item.question}
                                 </AccordionTrigger>
-                                <AccordionContent className="p-6 pt-0 text-muted-foreground">
+                                <AccordionContent className="p-6 pt-0 text-muted-foreground text-left">
                                     {item.answer}
                                 </AccordionContent>
                             </AccordionItem>
@@ -277,5 +277,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
