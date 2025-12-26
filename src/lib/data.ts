@@ -1,3 +1,4 @@
+
 import type { Announcement, Event, TeamMember, VisionMission } from './types';
 import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem } from 'lucide-react';
 import { PlaceHolderImages } from './placeholder-images';
@@ -57,40 +58,40 @@ export const events: Event[] = [
 ];
 
 export const teamMembers: TeamMember[] = [
-  {
+    {
     id: '1',
     name: 'Budi Dora',
     role: 'Ketua OSIS',
-    image: PlaceHolderImages.find(p => p.id === "team1")?.imageUrl || '',
-    bgColor: 'bg-blue-500',
+    image: PlaceHolderImages.find(p => p.id === 'team1')?.imageUrl || 'https://picsum.photos/seed/1/400/300',
+    bgColor: ''
   },
   {
     id: '2',
     name: 'Siti Wati',
     role: 'Wakil Ketua OSIS',
-    image: PlaceHolderImages.find(p => p.id === "team2")?.imageUrl || '',
-    bgColor: 'bg-green-500',
+    image: PlaceHolderImages.find(p => p.id === 'team2')?.imageUrl || 'https://picsum.photos/seed/2/400/300',
+    bgColor: ''
   },
   {
     id: '3',
     name: 'Ahmad Yani',
     role: 'Sekretaris',
-    image: PlaceHolderImages.find(p => p.id === "team3")?.imageUrl || '',
-    bgColor: 'bg-yellow-500',
+    image: PlaceHolderImages.find(p => p.id === 'team3')?.imageUrl || 'https://picsum.photos/seed/3/400/300',
+    bgColor: ''
   },
   {
     id: '4',
     name: 'Rina Rini',
     role: 'Bendahara',
-    image: PlaceHolderImages.find(p => p.id === "team4")?.imageUrl || '',
-    bgColor: 'bg-purple-500',
+    image: PlaceHolderImages.find(p => p.id === 'team4')?.imageUrl || 'https://picsum.photos/seed/4/400/300',
+    bgColor: ''
   },
   {
     id: '5',
     name: 'Joko Purnomo',
     role: 'Koordinator Acara',
-    image: PlaceHolderImages.find(p => p.id === "team5")?.imageUrl || '',
-    bgColor: 'bg-pink-500',
+    image: PlaceHolderImages.find(p => p.id === 'team5')?.imageUrl || 'https://picsum.photos/seed/5/400/300',
+    bgColor: ''
   },
 ];
 
@@ -135,3 +136,5 @@ export const mission: VisionMission[] = [
         color: "text-orange-400",
     }
 ];
+
+    

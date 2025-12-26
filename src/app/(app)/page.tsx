@@ -17,11 +17,11 @@ import { teamMembers, vision, mission } from '@/lib/data';
 import Image from 'next/image';
 
 const FeatureCard = ({ icon, title, description, buttonText, href, className }: { icon: React.ReactNode, title: string, description: string, buttonText: string, href: string, className?: string }) => (
-  <div className={`rounded-3xl border-4 border-b-8 p-6 shadow-lg transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl ${className} flex flex-col`}>
-    <div className="mb-4 text-white drop-shadow-md">{icon}</div>
+  <div className={`rounded-3xl border-2 border-b-8 p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl ${className} flex flex-col bg-card/80`}>
+    <div className="mb-4 text-primary drop-shadow-md">{icon}</div>
     <h3 className="font-headline text-3xl font-bold text-white mb-2 drop-shadow-md">{title}</h3>
     <p className="text-white/80 flex-grow mb-6">{description}</p>
-    <Button asChild size="lg" className="mt-auto w-full bg-white text-black hover:bg-gray-200 font-bold text-lg py-6 rounded-xl shadow-md transition-transform hover:scale-105">
+    <Button asChild size="lg" className="mt-auto w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg py-6 rounded-xl shadow-md transition-transform hover:scale-105 border-2 border-b-4 border-yellow-600">
       <Link href={href}>
         {buttonText}
       </Link>
@@ -37,8 +37,8 @@ const SectionTitle = ({ children, className }: { children: React.ReactNode, clas
 );
 
 const VisionMissionCard = ({ icon: Icon, title, description, color }: { icon: React.ElementType, title: string, description: string, color: string }) => (
-    <div className="bg-card/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-border/30 flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-2">
-        <div className={`mb-4 p-4 rounded-full bg-card shadow-inner`}>
+    <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-b-8 border-border/60 flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-2">
+        <div className={`mb-4 p-4 rounded-full bg-background shadow-inner`}>
             <Icon className={`w-12 h-12 ${color}`} strokeWidth={2.5}/>
         </div>
         <h3 className="font-headline text-2xl font-bold text-white mb-2">{title}</h3>
@@ -53,16 +53,16 @@ export default function LandingPage() {
       <main className="container mx-auto px-4 py-16 md:py-24 space-y-24 md:space-y-32">
         {/* Hero Section */}
         <section className="text-center">
-          <div className="inline-block bg-secondary rounded-full px-6 py-2 mb-4">
-              <p className="font-bold text-secondary-foreground flex items-center gap-2">
+          <div className="inline-block bg-card/80 rounded-full px-6 py-2 mb-4 border-2 border-border/30">
+              <p className="font-bold text-primary flex items-center gap-2">
                 <Star className="w-5 h-5 fill-current" /> Platform OSIS Terbaik
               </p>
           </div>
-          <h1 className="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 text-white"
-              style={{textShadow: '0 4px 8px rgba(0,0,0,0.3)'}}>
+          <h1 className="font-headline text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 text-white"
+              style={{textShadow: '0 4px 12px rgba(0,0,0,0.4)'}}>
             Selamat Datang di <span className="text-primary">OASISverse</span>!
           </h1>
-          <p className="max-w-3xl mx-auto text-lg md:text-xl text-white/70 mb-10">
+          <p className="max-w-3xl mx-auto text-lg md:text-xl text-white/80 mb-10">
             Pusat semua kegiatan, acara seru, dan ide-ide cemerlang OSIS. Ayo buat kehidupan sekolah lebih berwarna dan tak terlupakan!
           </p>
           <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl py-8 px-12 rounded-2xl border-2 border-b-8 border-yellow-600 shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
@@ -75,15 +75,15 @@ export default function LandingPage() {
         {/* About Us Section */}
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-            <div className="relative aspect-square md:aspect-auto md:h-full rounded-3xl overflow-hidden shadow-2xl border-4 border-purple-500">
+            <div className="relative aspect-square md:aspect-auto md:h-full rounded-3xl overflow-hidden shadow-2xl border-4 border-border/50">
                <Image src="https://picsum.photos/seed/101/600/600" alt="About OSIS" fill className="object-cover" data-ai-hint="students collaboration" />
             </div>
             <div className="text-center md:text-left">
-              <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-white">Tentang <span className="text-secondary">OASISverse</span></h2>
+              <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-white">Tentang <span className="text-primary">OASISverse</span></h2>
               <p className="text-lg text-white/80 mb-6">
                 OASISverse adalah wadah digital resmi Organisasi Siswa Intra Sekolah (OSIS) di sekolah kita. Kami ada untuk mewujudkan aspirasi, kreativitas, dan semangat seluruh siswa. Dari acara heboh hingga program pengembangan diri, kami berkomitmen untuk menciptakan pengalaman sekolah yang lebih dari sekadar belajar di kelas.
               </p>
-              <Button asChild size="lg" variant="secondary" className="font-bold text-lg py-6 px-10 rounded-xl shadow-lg transition-transform hover:scale-105">
+               <Button asChild size="lg" className="font-bold text-lg py-6 px-10 rounded-xl shadow-lg transition-transform hover:scale-105 border-2 border-b-4 border-yellow-600">
                 <Link href="/events">
                   Lihat Acara Kami
                 </Link>
@@ -100,47 +100,46 @@ export default function LandingPage() {
                 <CarouselContent className="-ml-4">
                     {teamMembers.map(member => (
                         <CarouselItem key={member.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                            <div className="p-1">
-                                <Card className={`overflow-hidden rounded-3xl border-4 border-b-8 shadow-lg group transition-transform duration-300 hover:-translate-y-2 ${member.bgColor}`}>
-                                    <CardContent className="relative p-0 aspect-square flex flex-col justify-end">
+                            <Card className="rounded-3xl overflow-hidden bg-card/80 border-2 border-border/30 shadow-lg group transition-transform duration-300 hover:-translate-y-2">
+                                <CardContent className="p-0">
+                                    <div className="aspect-[4/3] relative">
                                         <Image src={member.image} alt={member.name} fill className="object-cover object-top transition-transform duration-500 group-hover:scale-110" />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                                        <div className="relative p-6 text-white">
-                                            <h3 className="font-headline text-3xl font-bold drop-shadow-lg">{member.name}</h3>
-                                            <p className="text-lg font-medium text-primary drop-shadow-lg">{member.role}</p>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </div>
+                                    </div>
+                                    <div className="p-4">
+                                        <h3 className="font-headline text-2xl font-bold text-white">{member.name}</h3>
+                                        <p className="text-lg font-medium text-primary">{member.role}</p>
+                                    </div>
+                                </CardContent>
+                            </Card>
                         </CarouselItem>
                     ))}
                 </CarouselContent>
-                <CarouselPrevious className="hidden md:flex absolute left-[-50px] top-1/2 -translate-y-1/2 h-14 w-14 bg-white/20 hover:bg-white/30 text-white border-white/30 backdrop-blur-sm" />
-                <CarouselNext className="hidden md:flex absolute right-[-50px] top-1/2 -translate-y-1/2 h-14 w-14 bg-white/20 hover:bg-white/30 text-white border-white/30 backdrop-blur-sm" />
+                <CarouselPrevious className="hidden md:flex absolute left-[-60px] top-1/2 -translate-y-1/2 h-14 w-14 bg-card/80 hover:bg-card text-white border-2 border-border/30 backdrop-blur-sm rounded-full" />
+                <CarouselNext className="hidden md:flex absolute right-[-60px] top-1/2 -translate-y-1/2 h-14 w-14 bg-card/80 hover:bg-card text-white border-2 border-border/30 backdrop-blur-sm rounded-full" />
             </Carousel>
         </section>
 
         {/* Vision & Mission Section */}
         <section>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-              <div className="text-center">
-                  <SectionTitle>Visi <span className="text-green-400">Kami</span></SectionTitle>
-                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-8">
-                      {vision.map((item) => <VisionMissionCard key={item.title} {...item} />)}
-                  </div>
-              </div>
-              <div className="text-center">
-                  <SectionTitle>Misi <span className="text-pink-400">Kami</span></SectionTitle>
-                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-8">
-                      {mission.map((item) => <VisionMissionCard key={item.title} {...item} />)}
-                  </div>
-              </div>
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                <div>
+                    <SectionTitle>Visi <span className="text-primary">Kami</span></SectionTitle>
+                    <div className="grid grid-cols-1 gap-8">
+                        {vision.map((item) => <VisionMissionCard key={item.title} {...item} />)}
+                    </div>
+                </div>
+                <div>
+                    <SectionTitle>Misi <span className="text-primary">Kami</span></SectionTitle>
+                    <div className="grid grid-cols-1 gap-8">
+                        {mission.map((item) => <VisionMissionCard key={item.title} {...item} />)}
+                    </div>
+                </div>
+            </div>
         </section>
 
         {/* Featured Programs Section */}
         <section className="text-center">
-           <SectionTitle>Program <span className="text-secondary">Unggulan</span></SectionTitle>
+           <SectionTitle>Program <span className="text-primary">Unggulan</span></SectionTitle>
            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <FeatureCard 
                 icon={<Gamepad2 size={48} />}
@@ -148,7 +147,7 @@ export default function LandingPage() {
                 description="Jangan lewatkan acara-acara paling heboh dari OSIS. Mulai dari festival, kompetisi, sampai acara amal!"
                 buttonText="Lihat Semua Acara"
                 href="/events"
-                className="border-blue-500 bg-blue-600 border-b-blue-800"
+                className="border-border/30"
               />
               <FeatureCard 
                 icon={<Rocket size={48} />}
@@ -156,7 +155,7 @@ export default function LandingPage() {
                 description="Punya ide brilian untuk mengubah sekolah? Sumbangkan idemu dan kita wujudkan bersama OSIS!"
                 buttonText="Sumbang Ide Kamu"
                 href="/ideas"
-                className="border-purple-500 bg-purple-600 border-b-purple-800"
+                className="border-border/30"
               />
               <FeatureCard 
                 icon={<Trophy size={48} />}
@@ -164,30 +163,30 @@ export default function LandingPage() {
                 description="Lihat momen-momen terbaik dan prestasi gemilang yang telah diraih oleh siswa-siswi kita."
                 buttonText="Jelajahi Galeri"
                 href="/gallery"
-                className="border-green-500 bg-green-600 border-b-green-800"
+                className="border-border/30"
               />
            </div>
         </section>
 
         {/* Student Voices Section */}
         <section>
-          <SectionTitle>Suara <span className="text-yellow-400">Siswa</span></SectionTitle>
+          <SectionTitle>Suara <span className="text-primary">Siswa</span></SectionTitle>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="bg-card/80 p-6 rounded-2xl shadow-lg border-2 border-border/30">
+            <Card className="bg-card/90 p-6 rounded-2xl shadow-lg border-2 border-b-8 border-border/60">
               <CardContent className="p-0">
                 <MessageSquare className="w-8 h-8 text-primary mb-4"/>
                 <p className="text-white/90 mb-4 italic">"Acara pentas seni kemarin seru banget! Nggak nyangka sekolah kita bisa sekeren itu."</p>
                 <p className="font-bold text-white">- Rika, Kelas XI-A</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/80 p-6 rounded-2xl shadow-lg border-2 border-border/30">
+            <Card className="bg-card/90 p-6 rounded-2xl shadow-lg border-2 border-b-8 border-border/60">
               <CardContent className="p-0">
                  <MessageSquare className="w-8 h-8 text-primary mb-4"/>
                 <p className="text-white/90 mb-4 italic">"Berkat OSIS, usulan soal tempat parkir sepeda akhirnya didengar. Terima kasih banyak!"</p>
                 <p className="font-bold text-white">- Eko, Kelas X-C</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/80 p-6 rounded-2xl shadow-lg border-2 border-border/30">
+            <Card className="bg-card/90 p-6 rounded-2xl shadow-lg border-2 border-b-8 border-border/60">
               <CardContent className="p-0">
                  <MessageSquare className="w-8 h-8 text-primary mb-4"/>
                 <p className="text-white/90 mb-4 italic">"Workshop public speaking dari OSIS ngebantu aku jadi lebih percaya diri. Keren!"</p>
@@ -198,14 +197,14 @@ export default function LandingPage() {
         </section>
 
         {/* Join Us Section */}
-        <section className="text-center bg-card/80 rounded-3xl p-8 md:p-12 border-4 border-primary border-b-8 shadow-2xl">
+        <section className="text-center bg-card/80 rounded-3xl p-8 md:p-12 border-2 border-b-8 border-primary shadow-2xl">
           <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tighter mb-4 text-white">
             Ayo Jadi Bagian dari <span className="text-primary">Perubahan</span>!
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-white/80 mb-8">
             Punya semangat untuk memajukan sekolah? Ingin belajar berorganisasi dan bikin acara keren? Tunggu apa lagi? Gabung bersama kami di OSIS!
           </p>
-          <Button size="lg" className="bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold text-xl py-8 px-12 rounded-2xl border-2 border-b-8 border-pink-700 shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
+          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl py-8 px-12 rounded-2xl border-2 border-b-8 border-yellow-600 shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
               Daftar Sekarang <PlusCircle className="ml-2 h-6 w-6" />
           </Button>
         </section>
@@ -214,3 +213,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
