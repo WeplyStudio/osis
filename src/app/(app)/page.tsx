@@ -149,11 +149,23 @@ export default function LandingPage() {
             </div>
             <h1 className="font-headline text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 text-foreground">
                 Inovasi Digital<br/>
-                <span className="text-primary">Satu Suara SMANSA.</span>
+                <span className="text-primary">Satu Suara Kigra.</span>
             </h1>
             <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
-                Wadah kolaborasi inklusif bagi seluruh siswa SMANSA untuk berkarya, berinovasi, dan membawa perubahan positif bagi sekolah dan masyarakat.
+                Wadah kolaborasi inklusif bagi seluruh siswa Kigra untuk berkarya, berinovasi, dan membawa perubahan positif bagi sekolah dan masyarakat.
             </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Button asChild size="lg" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
+                <Link href="#">
+                  Mulai Berkontribusi <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
+                <Link href="/events">
+                  Lihat Agenda
+                </Link>
+              </Button>
+            </div>
         </section>
 
         {/* About Us Section */}
@@ -301,3 +313,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
