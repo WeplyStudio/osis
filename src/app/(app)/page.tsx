@@ -151,15 +151,15 @@ export default function LandingPage() {
         {/* Our Team Section */}
         <section>
           <SectionTitle>Tim <span className="text-primary">Kami</span></SectionTitle>
-          <Carousel opts={{ loop: true }} className="w-full max-w-5xl mx-auto">
+          <Carousel opts={{ loop: true }} className="w-full max-w-6xl mx-auto">
             <CarouselContent>
               {teamMembers.map((member) => (
                 <CarouselItem key={member.id}>
                   <Card className="bg-card/80 backdrop-blur-sm shadow-xl rounded-3xl overflow-hidden border">
                     <CardContent className="p-6 md:p-10">
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 items-center">
-                        <div className="md:col-span-1 flex justify-center">
-                          <div className="relative aspect-square w-48 h-48 md:w-full md:h-full rounded-2xl overflow-hidden shadow-lg border">
+                      <div className="flex flex-col md:flex-row md:gap-10 items-center">
+                        <div className="md:w-1/3 flex-shrink-0 mb-6 md:mb-0">
+                          <div className="relative aspect-square w-48 h-48 md:w-full md:h-auto rounded-2xl overflow-hidden shadow-lg border mx-auto">
                             <Image
                               src={member.image}
                               alt={member.name}
@@ -168,7 +168,7 @@ export default function LandingPage() {
                             />
                           </div>
                         </div>
-                        <div className="md:col-span-2 text-center md:text-left">
+                        <div className="md:w-2/3 text-center md:text-left">
                           <p className="text-lg md:text-xl text-muted-foreground italic mb-6">
                             &quot;{member.quote}&quot;
                           </p>
@@ -219,5 +219,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
