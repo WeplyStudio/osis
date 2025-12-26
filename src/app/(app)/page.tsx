@@ -179,10 +179,10 @@ export default function LandingPage() {
         {/* Mission Section */}
         <section>
             <SectionTitle>Misi <span className="text-primary">Kami</span></SectionTitle>
-            <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-8 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                 <MissionCard {...mission[0]} className="md:col-span-2"/>
-                <MissionCard {...mission[1]} className="md:row-start-2"/>
-                <MissionCard {...mission[2]} className="md:col-start-2 md:row-start-2"/>
+                <MissionCard {...mission[1]} />
+                <MissionCard {...mission[2]} />
             </div>
         </section>
 
@@ -262,4 +262,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
