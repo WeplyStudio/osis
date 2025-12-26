@@ -225,7 +225,7 @@ export default function LandingPage() {
                 Membangun Karakter, <br/><span className="text-primary">Mewujudkan Perubahan.</span>
               </h3>
               <p className="mt-4 text-muted-foreground">
-                Didirikan sejak tahun 1990, OSIS Kigra telah menjadi wadah bagi ribuan siswa untuk mengasah kepemimpinan. Kami percaya bahwa setiap suara siswa adalah aset berharga bagi kemajuan sekolah.
+                Didirikan sejak tahun 2022, OSIS Kigra telah menjadi wadah bagi ribuan siswa untuk mengasah kepemimpinan. Kami percaya bahwa setiap suara siswa adalah aset berharga bagi kemajuan sekolah.
               </p>
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <Card className="bg-card/80 border-border/80 shadow-sm">
