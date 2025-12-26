@@ -57,7 +57,7 @@ const DivisionAccordion = () => {
         <div className="w-full">
             {/* Desktop Horizontal Accordion */}
             <div className="hidden md:flex w-full h-[450px] gap-4">
-                {divisions.map((division, index) => (
+                {divisions.slice(0, 5).map((division, index) => (
                     <div
                         key={division.id}
                         className={cn(
@@ -89,6 +89,40 @@ const DivisionAccordion = () => {
                     </div>
                 ))}
             </div>
+            <div className="hidden md:flex w-full h-[450px] gap-4 mt-4">
+                {divisions.slice(5).map((division, index) => (
+                    <div
+                        key={division.id}
+                        className={cn(
+                            "relative rounded-3xl overflow-hidden transition-all duration-700 ease-in-out cursor-pointer shadow-xl border-4 border-transparent",
+                            active === index + 5 ? "flex-[5] border-primary" : "flex-[1]"
+                        )}
+                        onClick={() => setActive(index + 5)}
+                        onMouseEnter={() => setActive(index + 5)}
+                    >
+                        <Image
+                            src={division.image}
+                            alt={division.title}
+                            fill
+                            className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/0" />
+                        <div className="relative z-10 p-6 flex flex-col justify-end h-full text-white">
+                             <div className="absolute top-6 left-6 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">
+                                {String(index + 6).padStart(2, '0')}
+                            </div>
+                            <div className={cn("transition-all duration-500", active === index + 5 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+                                <h3 className="font-headline text-3xl font-bold mb-2">{division.title}</h3>
+                                <p className="text-white/90">{division.description}</p>
+                            </div>
+                             <div className={cn("absolute bottom-6 left-6 transition-all duration-500", active === index + 5 ? "opacity-0 -translate-y-4" : "opacity-100")}>
+                                <h3 className="font-headline text-2xl font-bold [writing-mode:vertical-rl] rotate-180 whitespace-nowrap">{division.title}</h3>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
 
             {/* Mobile Vertical Accordion */}
             <div className="block md:hidden space-y-4">
