@@ -114,8 +114,8 @@ const DivisionTabs = () => {
 
 export default function LandingPage() {
   return (
-    <div className="w-full bg-background text-foreground min-h-screen">
-      <main className="container mx-auto px-4 py-16 md:py-24 space-y-24 md:space-y-32">
+    <div className="w-full bg-background text-foreground min-h-screen pt-24 md:pt-32">
+      <main className="container mx-auto px-4 space-y-24 md:space-y-32">
         {/* Hero Section */}
         <section className="text-center">
           <div className="inline-block bg-card rounded-full px-6 py-2 mb-4 border">

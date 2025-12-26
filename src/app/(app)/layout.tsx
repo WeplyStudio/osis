@@ -9,6 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const OasisLogo = () => (
     <div className="p-2 bg-primary rounded-lg shadow-md">
@@ -19,16 +21,32 @@ const OasisLogo = () => (
 );
 
 const navItems = [
-    { href: '/', icon: Home, label: 'Dashboard' },
-    { href: '/events', icon: Calendar, label: 'Events' },
-    { href: '/gallery', icon: GalleryHorizontal, label: 'Gallery' },
-    { href: '/ideas', icon: Lightbulb, label: 'Suggest Idea' },
+    { href: '/', icon: Home, label: 'Beranda' },
+    { href: '/events', icon: Calendar, label: 'Divisi' },
+    { href: '/gallery', icon: GalleryHorizontal, label: 'Program' },
+    { href: '/ideas', icon: Lightbulb, label: 'Tentang' },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
-        <header className="flex items-center justify-between p-4 border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+        <header className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out",
+          "flex items-center justify-between",
+          scrolled 
+            ? 'top-4 left-1/2 -translate-x-1/2 w-full max-w-4xl bg-card/80 backdrop-blur-sm rounded-full shadow-lg border p-2'
+            : 'w-full p-4 bg-transparent'
+        )}>
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-3">
               <OasisLogo />
@@ -39,8 +57,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <nav className="hidden md:flex items-center gap-2">
             {navItems.map(item => (
                 <Button key={item.href} asChild variant="ghost">
-                    <Link href={item.href} className="flex items-center gap-2">
-                        <item.icon className="w-4 h-4" />
+                    <Link href={item.href}>
                         {item.label}
                     </Link>
                 </Button>
@@ -48,6 +65,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </nav>
           
           <div className="flex items-center gap-4">
+            <Button asChild className="hidden md:flex rounded-full font-bold px-6">
+                <Link href="#">Kontak</Link>
+            </Button>
             <div className="md:hidden">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -56,7 +76,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {navItems.map((item) => (
+                  {[...navItems, {href: "#", label: "Kontak", icon: Home}].map((item) => (
                     <DropdownMenuItem key={item.href} asChild>
                        <Link href={item.href} className="flex items-center gap-2">
                          <item.icon className="w-4 h-4" />
@@ -69,7 +89,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </header>
-        <main className="flex-1 p-6 md:p-8">
+        <main className="flex-1">
           {children}
         </main>
     </div>
