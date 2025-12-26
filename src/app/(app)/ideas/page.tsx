@@ -95,7 +95,7 @@ export default function IdeasPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" disabled={isLoading} className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
+                <Button type="submit" disabled={isLoading} className="w-full font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -116,7 +116,7 @@ export default function IdeasPage() {
         <div className="mt-4 sticky top-24">
           {isLoading && (
             <Card className="flex flex-col items-center justify-center p-12 text-center border-dashed shadow-none bg-card/80">
-                <Loader2 className="w-12 h-12 text-accent animate-spin mb-4" />
+                <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
                 <p className="font-semibold text-lg font-headline">AI is thinking...</p>
                 <p className="text-muted-foreground">Analyzing your brilliant idea!</p>
             </Card>
@@ -140,7 +140,7 @@ export default function IdeasPage() {
                         <p className="text-muted-foreground text-sm">{analysis.feasibility}</p>
                     </div>
                      <div>
-                        <h3 className="flex items-center gap-2 font-semibold mb-2 text-base"><Star className="text-accent w-5 h-5 fill-accent"/> Popularity</h3>
+                        <h3 className="flex items-center gap-2 font-semibold mb-2 text-base"><Star className="text-yellow-500 w-5 h-5 fill-yellow-500"/> Popularity</h3>
                         <p className="text-muted-foreground text-sm">{analysis.popularity}</p>
                     </div>
                      <div>
