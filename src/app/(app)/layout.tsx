@@ -1,7 +1,6 @@
 'use client';
 
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Home, Calendar, GalleryHorizontal, Lightbulb, Menu } from "lucide-react";
 import {
   DropdownMenu,
@@ -49,10 +48,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </nav>
           
           <div className="flex items-center gap-4">
-            <Avatar className="border-2 border-primary">
-              <AvatarImage src="https://picsum.photos/seed/user/40/40" alt="User avatar" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
             <div className="md:hidden">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -74,7 +69,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </header>
-        <main className="flex-1">
+        <main className="flex-1 p-6 md:p-8">
           {children}
         </main>
     </div>
