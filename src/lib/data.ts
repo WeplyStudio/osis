@@ -1,6 +1,6 @@
-import type { Announcement, TeamMember, VisionMission, Division, NewsArticle, FaqItem } from './types';
+import type { Announcement, VisionMission, Division, NewsArticle, FaqItem } from './types';
 import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Calendar, ClipboardCheck } from 'lucide-react';
-import db from './database.json';
+
 
 export const announcements: Announcement[] = [
   {
@@ -25,9 +25,6 @@ export const announcements: Announcement[] = [
     icon: Megaphone,
   },
 ];
-
-export const teamMembers: TeamMember[] = db.teamMembers;
-export const aboutUsImage = db.aboutUsImage;
 
 export const vision: VisionMission[] = [
     {
@@ -195,4 +192,5 @@ export const faqItems: FaqItem[] = [
     answer: "Kami sangat terbuka untuk kerjasama dan sponsorship. Anda dapat menghubungi kami melalui halaman Kontak atau mengirimkan proposal langsung ke email OSIS yang tertera di bagian footer."
   }
 ];
+    
     

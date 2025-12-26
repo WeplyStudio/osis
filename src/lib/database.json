@@ -2,9 +2,9 @@
   "teamMembers": [
     {
       "id": "1",
-      "name": "Budi Dora",
+      "name": "Agung",
       "role": "Ketua OSIS",
-      "image": "https://picsum.photos/seed/1/400/300",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRi6ETRiELnMur-2Djwm7mYL0T1UMEGUai4-Q&s",
       "bgColor": "",
       "quote": "Harapannya, OSIS SMA Negeri 6 Jakarta dapat menjadi organisasi yang berperan aktif dalam pengembangan potensi minat dan bakat siswa/i. Progresif, kreatif, komunikatif, serta memiliki profesionalitas."
     },
@@ -54,5 +54,3 @@
     "hint": "students collaboration"
   }
 }
-
-    
