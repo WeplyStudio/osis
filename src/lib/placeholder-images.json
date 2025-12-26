@@ -1,3 +1,76 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "A vibrant, abstract image representing fun and community.",
+      "imageUrl": "https://images.unsplash.com/photo-1541661538396-53ba2d051eed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxhYnN0cmFjdCUyMGNvbG9yZnVsfGVufDB8fHx8MTc2NjY5OTk4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract colorful"
+    },
+    {
+      "id": "event1",
+      "description": "A picture of a school festival.",
+      "imageUrl": "https://images.unsplash.com/photo-1557750674-5e01bafc85c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmZXN0aXZhbCUyMGNvbmNlcnR8ZW58MHx8fHwxNzY2NzU0ODUwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "festival concert"
+    },
+    {
+      "id": "event2",
+      "description": "A picture of a music and arts night.",
+      "imageUrl": "https://images.unsplash.com/photo-1580207762145-0ef778b47468?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtdXNpYyUyMGFydHxlbnwwfHx8fDE3NjY3NTQ4NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "music art"
+    },
+    {
+      "id": "event3",
+      "description": "A picture of a tech symposium.",
+      "imageUrl": "https://images.unsplash.com/photo-1700936655767-7049129f1995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0ZWNobm9sb2d5JTIwY29uZmVyZW5jZXxlbnwwfHx8fDE3NjY2NzMzODZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "technology conference"
+    },
+    {
+      "id": "gallery1",
+      "description": "Students having fun at an event.",
+      "imageUrl": "https://images.unsplash.com/photo-1620969910995-4bbe4eaa32c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzdHVkZW50cyUyMGZ1bnxlbnwwfHx8fDE3NjY3NTQ4NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "students fun"
+    },
+    {
+      "id": "gallery2",
+      "description": "A group photo of students.",
+      "imageUrl": "https://images.unsplash.com/photo-1763705860985-d44c11c58178?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzdHVkZW50cyUyMGdyb3VwfGVufDB8fHx8MTc2Njc1NDg1MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "students group"
+    },
+    {
+      "id": "gallery3",
+      "description": "Students receiving an award.",
+      "imageUrl": "https://images.unsplash.com/photo-1764874299025-d8b2251f307d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YXdhcmQlMjBjZXJlbW9ueXxlbnwwfHx8fDE3NjY3MTg2ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "award ceremony"
+    },
+    {
+      "id": "gallery4",
+      "description": "Students participating in sports day.",
+      "imageUrl": "https://images.unsplash.com/photo-1533773652712-76b0f283e0cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzcG9ydHMlMjBzdHVkZW50c3xlbnwwfHx8fDE3NjY3NTQ4NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sports students"
+    },
+    {
+      "id": "gallery5",
+      "description": "An interactive classroom activity.",
+      "imageUrl": "https://images.unsplash.com/photo-1758270704384-9df36d94a29d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjbGFzc3Jvb20lMjBzdHVkZW50c3xlbnwwfHx8fDE3NjY3MTEzNzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "classroom students"
+    },
+    {
+      "id": "gallery6",
+      "description": "Students working on an art project.",
+      "imageUrl": "https://images.unsplash.com/photo-1758522274945-7f000385a3dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhcnQlMjBzdHVkZW50c3xlbnwwfHx8fDE3NjY3NTQ4NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "art students"
+    },
+    {
+      "id": "gallery7",
+      "description": "A project at the science fair.",
+      "imageUrl": "https://images.unsplash.com/photo-1764192736615-02dad1afc2a3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzY2llbmNlJTIwZmFpcnxlbnwwfHx8fDE3NjY3MzI3NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "science fair"
+    },
+    {
+      "id": "gallery8",
+      "description": "Students celebrating on graduation day.",
+      "imageUrl": "https://images.unsplash.com/photo-1719408937878-eebc1af92f70?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxncmFkdWF0aW9uJTIwc3R1ZGVudHN8ZW58MHx8fHwxNzY2NzU0ODUwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "graduation students"
+    }
+  ]
 }
