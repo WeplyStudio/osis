@@ -46,7 +46,7 @@ export const teamMembers: TeamMember[] = [
   {
     id: '3',
     name: 'Ahmad Yani',
-    role: 'Sekretaris',
+    role: 'Sekretaris 1',
     image: PlaceHolderImages.find(p => p.id === 'team3')?.imageUrl || 'https://picsum.photos/seed/3/400/300',
     bgColor: '',
     quote: 'Administrasi yang rapi adalah kunci kelancaran organisasi. Saya berkomitmen untuk memastikan semua program OSIS berjalan dengan teratur dan terdokumentasi dengan baik.'
@@ -54,7 +54,7 @@ export const teamMembers: TeamMember[] = [
   {
     id: '4',
     name: 'Rina Rini',
-    role: 'Bendahara',
+    role: 'Bendahara 1',
     image: PlaceHolderImages.find(p => p.id === 'team4')?.imageUrl || 'https://picsum.photos/seed/4/400/300',
     bgColor: '',
     quote: 'Transparansi dan pengelolaan keuangan yang bertanggung jawab adalah prioritas saya untuk mendukung semua kegiatan positif yang diselenggarakan oleh OSIS.'
@@ -62,11 +62,19 @@ export const teamMembers: TeamMember[] = [
   {
     id: '5',
     name: 'Joko Purnomo',
-    role: 'Koordinator Acara',
+    role: 'Sekretaris 2',
     image: PlaceHolderImages.find(p => p.id === 'team5')?.imageUrl || 'https://picsum.photos/seed/5/400/300',
     bgColor: '',
-    quote: 'Saya siap menghadirkan acara-acara yang tidak hanya seru, tetapi juga mendidik dan berkesan. Mari buat setiap momen di sekolah menjadi tak terlupakan!'
+    quote: 'Saya siap membantu memastikan semua notulensi dan surat-menyurat terdokumentasi dengan akurat untuk kelancaran program kerja.'
   },
+   {
+    id: '6',
+    name: 'Dewi Lestari',
+    role: 'Bendahara 2',
+    image: PlaceHolderImages.find(p => p.id === 'gallery1')?.imageUrl || 'https://picsum.photos/seed/6/400/300',
+    bgColor: '',
+    quote: 'Dengan pengelolaan dana yang cermat, kita bisa mewujudkan lebih banyak inisiatif kreatif dari siswa untuk siswa.'
+  }
 ];
 
 export const vision: VisionMission[] = [
