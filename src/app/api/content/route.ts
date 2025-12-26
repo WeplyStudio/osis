@@ -9,7 +9,6 @@ async function readDb() {
         const data = await fs.readFile(dbPath, 'utf-8');
         return JSON.parse(data);
     } catch (error) {
-        // If file doesn't exist, handle appropriately
         console.error("Could not read database file:", error);
         return { teamMembers: [], aboutUsImage: {} };
     }
@@ -34,15 +33,16 @@ export async function POST(request: Request) {
             if (memberIndex === -1) {
                 return NextResponse.json({ message: 'Anggota tim tidak ditemukan' }, { status: 404 });
             }
-
-            if (url) {
-                db.teamMembers[memberIndex].image = url;
-            }
+            
+            // Only update fields if they are provided in the request
             if (name) {
                 db.teamMembers[memberIndex].name = name;
             }
             if (quote) {
                 db.teamMembers[memberIndex].quote = quote;
+            }
+            if (url) {
+                db.teamMembers[memberIndex].image = url;
             }
 
         } else if (type === 'aboutUsImage') {
