@@ -197,34 +197,6 @@ export default function LandingPage() {
            </div>
         </section>
 
-        {/* Student Voices Section */}
-        <section>
-          <SectionTitle>Suara <span className="text-primary">Siswa</span></SectionTitle>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="bg-card/90 p-6 rounded-2xl shadow-lg border-2 border-b-8 border-border/60">
-              <CardContent className="p-0">
-                <MessageSquare className="w-8 h-8 text-primary mb-4"/>
-                <p className="text-white/90 mb-4 italic">"Acara pentas seni kemarin seru banget! Nggak nyangka sekolah kita bisa sekeren itu."</p>
-                <p className="font-bold text-white">- Rika, Kelas XI-A</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/90 p-6 rounded-2xl shadow-lg border-2 border-b-8 border-border/60">
-              <CardContent className="p-0">
-                 <MessageSquare className="w-8 h-8 text-primary mb-4"/>
-                <p className="text-white/90 mb-4 italic">"Berkat OSIS, usulan soal tempat parkir sepeda akhirnya didengar. Terima kasih banyak!"</p>
-                <p className="font-bold text-white">- Eko, Kelas X-C</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/90 p-6 rounded-2xl shadow-lg border-2 border-b-8 border-border/60">
-              <CardContent className="p-0">
-                 <MessageSquare className="w-8 h-8 text-primary mb-4"/>
-                <p className="text-white/90 mb-4 italic">"Workshop public speaking dari OSIS ngebantu aku jadi lebih percaya diri. Keren!"</p>
-                <p className="font-bold text-white">- Fitri, Kelas XII-B</p>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
         {/* Join Us Section */}
         <section className="text-center bg-card/80 rounded-3xl p-8 md:p-12 border-2 border-b-8 border-primary shadow-2xl">
           <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tighter mb-4 text-white">
