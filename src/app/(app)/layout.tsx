@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { Home, Calendar, GalleryHorizontal, Lightbulb, Menu } from "lucide-react";
+import { Facebook, Twitter, Instagram, Home, Calendar, GalleryHorizontal, Lightbulb, Menu, Mail, Phone } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +26,62 @@ const navItems = [
     { href: '/gallery', icon: GalleryHorizontal, label: 'Program' },
     { href: '/ideas', icon: Lightbulb, label: 'Tentang' },
 ];
+
+const AppFooter = () => (
+    <footer className="bg-card text-card-foreground border-t">
+        <div className="container mx-auto px-4 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="col-span-1 md:col-span-2 lg:col-span-1">
+                    <Link href="/" className="flex items-center gap-3 mb-4">
+                      <OasisLogo />
+                      <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
+                    </Link>
+                    <p className="text-muted-foreground text-sm max-w-xs">
+                        Organisasi Siswa Intra Sekolah. Berkomitmen menciptakan lingkungan sekolah yang inklusif dan inovatif.
+                    </p>
+                </div>
+                <div>
+                    <h3 className="font-headline text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Navigasi</h3>
+                    <ul className="space-y-3">
+                        {navItems.map(item => (
+                             <li key={item.label}>
+                                <Link href={item.href} className="text-sm text-foreground hover:text-primary transition-colors">
+                                    {item.label}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                 <div>
+                    <h3 className="font-headline text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Dukungan</h3>
+                    <ul className="space-y-3">
+                        <li><Link href="#" className="text-sm text-foreground hover:text-primary transition-colors">Aspirasi</Link></li>
+                        <li><Link href="#" className="text-sm text-foreground hover:text-primary transition-colors">Sponsor</Link></li>
+                        <li><Link href="#" className="text-sm text-foreground hover:text-primary transition-colors">Kontak</Link></li>
+                    </ul>
+                </div>
+                <div>
+                     <h3 className="font-headline text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Ikuti Kami</h3>
+                     <div className="flex items-center gap-3">
+                        <Button asChild variant="outline" size="icon" className="rounded-lg">
+                            <Link href="#"><Facebook className="w-5 h-5" /></Link>
+                        </Button>
+                        <Button asChild variant="outline" size="icon" className="rounded-lg">
+                            <Link href="#"><Twitter className="w-5 h-5" /></Link>
+                        </Button>
+                         <Button asChild variant="outline" size="icon" className="rounded-lg">
+                            <Link href="#"><Instagram className="w-5 h-5" /></Link>
+                        </Button>
+                     </div>
+                </div>
+            </div>
+            <div className="border-t mt-8 pt-6 text-center text-xs text-muted-foreground">
+                <p>&copy; {new Date().getFullYear()} OSIS Kigra. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+);
+
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
@@ -76,7 +132,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {[...navItems, {href: "#", label: "Kontak", icon: Home}].map((item) => (
+                  {[...navItems, {href: "#", label: "Kontak", icon: Phone}].map((item) => (
                     <DropdownMenuItem key={item.href} asChild>
                        <Link href={item.href} className="flex items-center gap-2">
                          <item.icon className="w-4 h-4" />
@@ -92,6 +148,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1">
           {children}
         </main>
+        <AppFooter />
     </div>
   );
 }
