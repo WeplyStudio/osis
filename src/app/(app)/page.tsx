@@ -87,7 +87,7 @@ const DivisionTabs = () => {
                 {/* Right Content */}
                 <div className="lg:col-span-8 flex flex-col justify-center">
                     {activeDivisionData && (
-                        <div className="flex flex-col">
+                        <div className="flex flex-col text-center">
                             <p className="font-headline text-sm font-bold tracking-wider uppercase text-primary mb-2">DEPARTEMEN DIGITAL</p>
                             <h3 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-3">
                                 {activeDivisionData.title}
@@ -95,7 +95,7 @@ const DivisionTabs = () => {
                             <p className="text-muted-foreground text-lg mb-6">
                                 {activeDivisionData.description}
                             </p>
-                             <div className="mt-auto flex flex-wrap gap-4">
+                             <div className="mt-auto flex flex-wrap gap-4 justify-center">
                                 <Button size="lg" className="font-bold">
                                     <Eye className="mr-2 h-5 w-5"/> Detail Divisi
                                 </Button>
