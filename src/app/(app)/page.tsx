@@ -112,7 +112,7 @@ const DivisionTabs = () => {
                     {activeDivisionData && (
                         <div className="flex flex-col text-center lg:text-left">
                             <p className="font-body text-sm font-bold tracking-wider uppercase text-primary mb-2">{activeDivisionData.department}</p>
-                            <h3 className="font-body text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-3">
+                            <h3 className="font-body text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-3 italic uppercase">
                                 {activeDivisionData.title}
                             </h3>
                             <p className="text-muted-foreground text-lg mb-6">
@@ -407,3 +407,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
