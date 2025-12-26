@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search } from 'lucide-react';
+import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search, CheckCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -12,7 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { teamMembers, vision, mission, divisions } from '@/lib/data';
+import { teamMembers, divisions } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -22,30 +22,6 @@ const SectionTitle = ({ children, className }: { children: React.ReactNode, clas
   <h2 className={cn(`font-headline text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-foreground`, className)}>
     {children}
   </h2>
-);
-
-const VisionCard = ({ icon: Icon, title, description, color, align = 'left' }: { icon: React.ElementType, title: string, description: string, color: string, align?: 'left' | 'right' }) => (
-    <div className={`relative z-10 w-full md:w-3/4 lg:w-3/5 ${align === 'left' ? 'self-start' : 'self-end'}`}>
-        <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border flex items-center gap-6 transition-transform duration-300 hover:-translate-y-2">
-            <div className={`flex-shrink-0 p-4 rounded-full bg-background shadow-inner`}>
-                <Icon className={`w-12 h-12 ${color}`} strokeWidth={2.5}/>
-            </div>
-            <div>
-                <h3 className="font-headline text-2xl font-bold text-foreground mb-1">{title}</h3>
-                <p className="text-muted-foreground">{description}</p>
-            </div>
-        </div>
-    </div>
-);
-
-const MissionCard = ({ icon: Icon, title, description, color, className }: { icon: React.ElementType, title: string, description: string, color: string, className?: string }) => (
-    <div className={cn("bg-card/90 backdrop-blur-sm rounded-3xl p-6 shadow-lg border flex flex-col items-start text-left transition-transform duration-300 hover:-translate-y-2 h-full", className)}>
-        <div className={`mb-4 p-4 rounded-full bg-background shadow-inner`}>
-            <Icon className={`w-10 h-10 ${color}`} strokeWidth={2.5}/>
-        </div>
-        <h3 className="font-headline text-xl font-bold text-foreground mb-2">{title}</h3>
-        <p className="text-muted-foreground text-sm flex-grow">{description}</p>
-    </div>
 );
 
 const DivisionTabs = () => {
@@ -138,20 +114,35 @@ export default function LandingPage() {
 
         {/* About Us Section */}
         <section>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-            <div className="relative aspect-square md:aspect-auto md:h-full rounded-3xl overflow-hidden shadow-2xl border">
-               <Image src="https://picsum.photos/seed/101/600/600" alt="About OSIS" fill className="object-cover" data-ai-hint="students collaboration" />
-            </div>
-            <div className="text-center md:text-left">
-              <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-foreground">Tentang <span className="text-primary">OSIS Kigra</span></h2>
-              <p className="text-lg text-muted-foreground mb-6">
-                OSIS Kigra adalah wadah digital resmi Organisasi Siswa Intra Sekolah (OSIS) di sekolah kita. Kami ada untuk mewujudkan aspirasi, kreativitas, dan semangat seluruh siswa. Dari acara heboh hingga program pengembangan diri, kami berkomitmen untuk menciptakan pengalaman sekolah yang lebih dari sekadar belajar di kelas.
+          <div className="text-center mb-12">
+            <p className="font-headline text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
+            <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">Tentang Kami</h2>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            <div className="order-2 lg:order-1">
+              <h3 className="font-headline text-3xl font-bold tracking-tight text-foreground">
+                Membangun Karakter, <br/><span className="text-primary">Mewujudkan Perubahan.</span>
+              </h3>
+              <p className="mt-4 text-muted-foreground">
+                Didirikan sejak tahun 1990, OSIS Kigra telah menjadi wadah bagi ribuan siswa untuk mengasah kepemimpinan. Kami percaya bahwa setiap suara siswa adalah aset berharga bagi kemajuan sekolah.
               </p>
-               <Button asChild size="lg" className="font-bold text-lg py-6 px-10 rounded-xl shadow-lg transition-transform hover:scale-105">
-                <Link href="/events">
-                  Lihat Acara Kami
-                </Link>
-              </Button>
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <Card className="bg-card/80 border-border/80 shadow-sm">
+                  <CardContent className="p-6">
+                    <h4 className="font-headline text-lg font-bold text-primary mb-2">Visi</h4>
+                    <p className="text-sm text-muted-foreground">Menjadi barometer organisasi sekolah yang religius, kreatif, dan mandiri.</p>
+                  </CardContent>
+                </Card>
+                <Card className="bg-card/80 border-border/80 shadow-sm">
+                  <CardContent className="p-6">
+                    <h4 className="font-headline text-lg font-bold text-primary mb-2">Misi</h4>
+                    <p className="text-sm text-muted-foreground">Mengoptimalkan minat bakat melalui program kerja inovatif.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2 relative aspect-video lg:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border">
+              <Image src="https://picsum.photos/seed/101/800/600" alt="About OSIS" fill className="object-cover" data-ai-hint="students collaboration" />
             </div>
           </div>
         </section>
@@ -203,34 +194,6 @@ export default function LandingPage() {
           </Carousel>
         </section>
 
-        {/* Vision Section */}
-        <section>
-            <SectionTitle>Visi <span className="text-primary">Kami</span></SectionTitle>
-            <div className="relative max-w-4xl mx-auto">
-                <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border hidden md:block">
-                </div>
-                <div className="space-y-12 md:space-y-12 flex flex-col items-center">
-                    {vision.map((item, index) => (
-                        <VisionCard 
-                            key={item.title} 
-                            {...item} 
-                            align={index % 2 === 0 ? 'left' : 'right'} 
-                        />
-                    ))}
-                </div>
-            </div>
-        </section>
-
-        {/* Mission Section */}
-        <section>
-            <SectionTitle>Misi <span className="text-primary">Kami</span></SectionTitle>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <MissionCard {...mission[0]} className="md:col-span-2"/>
-                <MissionCard {...mission[1]} />
-                <MissionCard {...mission[2]} />
-            </div>
-        </section>
-
         {/* Divisions Section */}
         <section className="text-center">
            <SectionTitle>Divisi <span className="text-primary">Kami</span></SectionTitle>
@@ -256,3 +219,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
