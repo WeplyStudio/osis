@@ -162,7 +162,7 @@ export default function LandingPage() {
             <CarouselContent>
               {teamMembers.map((member) => (
                 <CarouselItem key={member.id}>
-                  <Card className="bg-card/80 backdrop-blur-sm shadow-xl rounded-3xl overflow-hidden border">
+                  <Card className="bg-card/80 backdrop-blur-sm rounded-3xl overflow-hidden border">
                     <CardContent className="p-6 md:p-10">
                       <div className="flex flex-col md:flex-row md:gap-10 items-center">
                         <div className="md:w-1/3 flex-shrink-0 mb-6 md:mb-0">
