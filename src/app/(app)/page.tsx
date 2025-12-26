@@ -5,7 +5,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { Gamepad2, Rocket, Trophy, ArrowRight, Star, Users, Briefcase, Mic, Award, MessageSquare, PlusCircle, CheckCircle } from 'lucide-react';
+import { Gamepad2, Rocket, Trophy, ArrowRight, Star, Users, Briefcase, Mic, Award, MessageSquare, PlusCircle, CheckCircle, Search } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -228,13 +228,15 @@ export default function LandingPage() {
         {/* Join Us Section */}
         <section className="text-center bg-card/80 rounded-3xl p-8 md:p-12 border-2 border-b-8 border-primary shadow-2xl">
           <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tighter mb-4 text-white">
-            Ayo Jadi Bagian dari <span className="text-primary">Perubahan</span>!
+            Jelajahi Dunia <span className="text-primary">OSIS Kigra</span>!
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-white/80 mb-8">
-            Punya semangat untuk memajukan sekolah? Ingin belajar berorganisasi dan bikin acara keren? Tunggu apa lagi? Gabung bersama kami di OSIS!
+            Lihat semua kegiatan, acara, dan informasi terbaru dari OSIS Kigra. Jadilah bagian dari keseruan di sekolah!
           </p>
-          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl py-8 px-8 md:px-12 rounded-2xl border-2 border-b-8 border-yellow-600 shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
-              Daftar Sekarang <PlusCircle className="ml-2 h-6 w-6" />
+          <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl py-8 px-8 rounded-2xl border-2 border-b-8 border-yellow-600 shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
+              <Link href="/events">
+                Jelajahi <Search className="ml-2 h-6 w-6" />
+              </Link>
           </Button>
         </section>
 
