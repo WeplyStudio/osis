@@ -18,12 +18,22 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { teamMembers, divisions, newsArticles, programs } from '@/lib/data';
+import { teamMembers, divisions, newsArticles } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -31,6 +41,35 @@ const SectionTitle = ({ children, className }: { children: React.ReactNode, clas
     {children}
   </h2>
 );
+
+const AspirationDialog = ({ title, children }: { title: string, children: React.ReactNode }) => (
+    <Dialog>
+        <DialogTrigger asChild>
+            {children}
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+                <DialogTitle className="font-headline text-primary tracking-wider uppercase">{title}</DialogTitle>
+                <DialogDescription>
+                    Berikan saran atau kritik kamu secara jelas dan sopan.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+                <Input
+                    id="name"
+                    placeholder="Nama (Opsional/Anonim)"
+                />
+                <Textarea
+                    id="aspiration"
+                    placeholder="Tuliskan aspirasimu di sini..."
+                    className="min-h-[120px]"
+                />
+            </div>
+            <Button type="submit" className="w-full font-bold">KIRIM SEKARANG</Button>
+        </DialogContent>
+    </Dialog>
+);
+
 
 const DivisionTabs = () => {
     const [activeDivision, setActiveDivision] = useState(divisions[0].id);
@@ -95,8 +134,8 @@ const DivisionTabs = () => {
     );
 };
 
-const AspirationCard = ({ title, description, status, statusVariant }: { title: string; description: string; status: string; statusVariant: "default" | "secondary" | "outline" }) => (
-    <Card className="hover:bg-accent/50 transition-colors duration-200">
+const AspirationCard = ({ title, description, status, statusVariant }: { title: string; description: string; status: string; statusVariant: "default" | "secondary" | "outline" | "destructive" | null | undefined }) => (
+    <Card className="hover:bg-accent/50 transition-colors duration-200 cursor-pointer">
         <CardContent className="p-6 flex items-center justify-between">
             <div>
                 <h4 className="font-bold text-lg text-foreground">{title}</h4>
@@ -167,6 +206,28 @@ const NewsCard = ({ article }: { article: (typeof newsArticles)[0] }) => (
 
 
 export default function LandingPage() {
+
+  const aspirationCategories = [
+      {
+          title: "Program Kerja",
+          description: "Evaluasi & ide untuk program kerja OSIS.",
+          status: "DISKUSI AKTIF",
+          statusVariant: "default" as const,
+      },
+      {
+          title: "Kinerja OSIS",
+          description: "Masukan mengenai kinerja pengurus OSIS.",
+          status: "TINDAK LANJUT",
+          statusVariant: "secondary" as const,
+      },
+      {
+          title: "Saran Lainnya",
+          description: "Punya ide atau masukan lain untuk sekolah?",
+          status: "COMING SOON",
+          statusVariant: "outline" as const,
+      }
+  ];
+
   return (
     <div className="w-full bg-background text-foreground min-h-screen pt-24 md:pt-32">
       <main className="container mx-auto px-4 space-y-24 md:space-y-32 pb-24 md:pb-32">
@@ -189,7 +250,7 @@ export default function LandingPage() {
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
-                <Link href="/#programs">
+                <Link href="/#about">
                   Lihat Agenda
                 </Link>
               </Button>
@@ -241,25 +302,17 @@ export default function LandingPage() {
                     <p className="text-muted-foreground mb-8 max-w-lg">
                         OSIS sedang fokus mengevaluasi beberapa hal penting. Pilih salah satu kategori dan berikan masukan terbaikmu untuk sekolah.
                     </p>
-                    <div className="space-y-4">
-                        <AspirationCard 
-                            title="Program Kerja" 
-                            description="Evaluasi & ide untuk program kerja OSIS."
-                            status="DISKUSI AKTIF"
-                            statusVariant="default"
-                        />
-                        <AspirationCard 
-                            title="Kinerja OSIS"
-                            description="Masukan mengenai kinerja pengurus OSIS."
-                            status="TINDAK LANJUT"
-                            statusVariant="secondary"
-                        />
-                         <AspirationCard 
-                            title="Saran Lainnya"
-                            description="Punya ide atau masukan lain untuk sekolah?"
-                            status="COMING SOON"
-                            statusVariant="outline"
-                        />
+                     <div className="space-y-4">
+                        {aspirationCategories.map((cat) => (
+                            <AspirationDialog key={cat.title} title={cat.title}>
+                                <AspirationCard
+                                    title={cat.title}
+                                    description={cat.description}
+                                    status={cat.status}
+                                    statusVariant={cat.statusVariant}
+                                />
+                            </AspirationDialog>
+                        ))}
                     </div>
                 </div>
                 <div className="bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 flex flex-col justify-center">
@@ -382,3 +435,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    

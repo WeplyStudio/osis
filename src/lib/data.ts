@@ -1,4 +1,4 @@
-import type { Announcement, TeamMember, VisionMission, Division, NewsArticle, Program } from './types';
+import type { Announcement, TeamMember, VisionMission, Division, NewsArticle } from './types';
 import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Calendar, ClipboardCheck } from 'lucide-react';
 import { PlaceHolderImages } from './placeholder-images';
 
@@ -25,41 +25,6 @@ export const announcements: Announcement[] = [
     icon: Megaphone,
   },
 ];
-
-export const programs: Program[] = [
-  {
-    id: '1',
-    title: 'Kegiatan Badminton',
-    description: 'Turnamen badminton antar kelas untuk memperebutkan piala bergengsi sekolah.',
-    date: '11 Oktober 2025',
-    type: 'event',
-    image: 'https://picsum.photos/seed/prog1/800/600',
-  },
-  {
-    id: '2',
-    title: 'MPLS 2025',
-    date: '21 Juni 2025',
-    type: 'event',
-    icon: Calendar,
-  },
-  {
-    id: '3',
-    title: 'Lomba Poster & Video 17an',
-    description: 'Tunjukkan kreativitasmu dalam merayakan kemerdekaan Indonesia!',
-    date: '5 Agustus 2025',
-    type: 'competition',
-    status: 60,
-  },
-    {
-    id: '4',
-    title: 'Lihat Semua Program',
-    description: 'Temukan lebih banyak kegiatan dan acara yang akan datang.',
-    date: '',
-    type: 'registration',
-    icon: ClipboardCheck,
-  },
-];
-
 
 export const teamMembers: TeamMember[] = [
     {
@@ -242,3 +207,5 @@ export const newsArticles: NewsArticle[] = [
     imageHint: 'student voting election'
   },
 ];
+
+    

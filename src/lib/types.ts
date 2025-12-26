@@ -40,13 +40,4 @@ export type NewsArticle = {
   imageHint: string;
 };
 
-export type Program = {
-  id: string;
-  title: string;
-  description?: string;
-  date: string;
-  type: 'event' | 'competition' | 'registration';
-  status?: number;
-  image?: string;
-  icon?: LucideIcon;
-}
+    
