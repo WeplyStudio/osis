@@ -18,7 +18,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { teamMembers, divisions, newsArticles } from '@/lib/data';
+import { teamMembers, divisions } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -184,26 +184,6 @@ const faqItems = [
     answer: "Bergabung dengan OSIS memberikan banyak sekali manfaat! Kamu akan belajar tentang kepemimpinan, kerja sama tim, manajemen waktu, dan cara berkomunikasi yang efektif. Selain itu, ini adalah kesempatan emas untuk memperluas jaringan pertemanan dan membuat perubahan positif di lingkungan sekolah."
   }
 ];
-
-const NewsCard = ({ article }: { article: (typeof newsArticles)[0] }) => (
-    <div className="group">
-        <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden mb-4 shadow-lg group-hover:shadow-2xl transition-shadow duration-300">
-            <Image
-                src={article.image}
-                alt={article.title}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                data-ai-hint={article.imageHint}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
-            />
-        </div>
-        <p className="font-headline text-sm font-bold tracking-wider uppercase text-primary mb-2">{article.category}</p>
-        <h3 className="font-headline text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-200">
-            <Link href="#">{article.title}</Link>
-        </h3>
-    </div>
-);
-
 
 export default function LandingPage() {
 
@@ -397,16 +377,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* News Section */}
-        <section>
-            <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-foreground mb-12">Pojok Berita</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {newsArticles.map(article => (
-                    <NewsCard key={article.id} article={article} />
-                ))}
-            </div>
-        </section>
-
         {/* FAQ Section */}
         <section>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-16 items-center">
@@ -435,5 +405,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
