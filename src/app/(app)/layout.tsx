@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Home, Calendar, GalleryHorizontal, Lightbulb, Menu, Mail, Phone } from "lucide-react";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -125,23 +125,34 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <Link href="#">Kontak</Link>
             </Button>
             <div className="md:hidden">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+              <Sheet>
+                <SheetTrigger asChild>
                   <Button variant="ghost" size="icon">
                     <Menu />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {[...navItems, {href: "#", label: "Kontak", icon: Phone}].map((item) => (
-                    <DropdownMenuItem key={item.href} asChild>
-                       <Link href={item.href} className="flex items-center gap-2">
-                         <item.icon className="w-4 h-4" />
-                         {item.label}
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-[300px]">
+                   <SheetHeader className="mb-8">
+                     <Link href="/" className="flex items-center gap-3">
+                        <OasisLogo />
+                        <h1 className="text-xl font-headline font-bold text-foreground">OSIS Kigra</h1>
+                    </Link>
+                  </SheetHeader>
+                  <div className="flex flex-col h-full">
+                    <nav className="flex flex-col gap-3 flex-grow">
+                      {navItems.map((item) => (
+                        <Link key={item.href} href={item.href} className="flex items-center gap-4 p-3 rounded-lg text-lg font-medium hover:bg-accent transition-colors">
+                           <item.icon className="w-6 h-6" />
+                           {item.label}
+                        </Link>
+                      ))}
+                    </nav>
+                     <Button asChild className="mt-auto w-full font-bold text-lg py-6 rounded-full shadow-lg">
+                        <Link href="#"><Phone className="mr-2 h-5 w-5"/>Kontak</Link>
+                    </Button>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </header>
