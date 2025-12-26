@@ -111,7 +111,7 @@ const DivisionTabs = () => {
                 <div className="lg:col-span-8 flex flex-col justify-center">
                     {activeDivisionData && (
                         <div className="flex flex-col text-center lg:text-left">
-                            <p className="font-headline text-sm font-bold tracking-wider uppercase text-primary mb-2">DEPARTEMEN DIGITAL</p>
+                            <p className="font-headline text-sm font-bold tracking-wider uppercase text-primary mb-2">{activeDivisionData.department}</p>
                             <h3 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-3">
                                 {activeDivisionData.title}
                             </h3>

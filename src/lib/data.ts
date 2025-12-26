@@ -115,6 +115,7 @@ export const divisions: Division[] = [
   {
     id: '1',
     title: 'Keimanan',
+    department: 'DEPARTEMEN KEROHANIAN',
     description: 'Membentuk karakter spiritual dan moral siswa melalui kegiatan keagamaan yang mendalam.',
     icon: Heart,
     image: 'https://picsum.photos/seed/div1/800/600',
@@ -122,6 +123,7 @@ export const divisions: Division[] = [
   {
     id: '2',
     title: 'Budi Pekerti',
+    department: 'DEPARTEMEN ETIKA',
     description: 'Mengembangkan sopan santun, etika luhur, dan rasa saling menghargai di lingkungan sekolah.',
     icon: Shield,
     image: 'https://picsum.photos/seed/div2/800/600',
@@ -129,6 +131,7 @@ export const divisions: Division[] = [
   {
     id: '3',
     title: 'Kepribadian Unggul',
+    department: 'DEPARTEMEN KEPEMIMPINAN',
     description: 'Membangun jiwa kepemimpinan, kemandirian, dan rasa percaya diri siswa.',
     icon: Sparkles,
     image: 'https://picsum.photos/seed/div3/800/600',
@@ -136,6 +139,7 @@ export const divisions: Division[] = [
   {
     id: '4',
     title: 'Akademik',
+    department: 'DEPARTEMEN PENDIDIKAN',
     description: 'Meningkatkan prestasi akademik dan memperluas wawasan keilmuan melalui program-program berkualitas.',
     icon: Brain,
     image: 'https://picsum.photos/seed/div4/800/600',
@@ -143,6 +147,7 @@ export const divisions: Division[] = [
   {
     id: '5',
     title: 'Politik',
+    department: 'DEPARTEMEN KEWARGANEGARAAN',
     description: 'Memberikan pendidikan demokrasi, kesadaran berbangsa, dan pemahaman politik yang sehat.',
     icon: Landmark,
     image: 'https://picsum.photos/seed/div5/800/600',
@@ -150,6 +155,7 @@ export const divisions: Division[] = [
   {
     id: '6',
     title: 'Kreativitas',
+    department: 'DEPARTEMEN SENI',
     description: 'Mewadahi dan mengembangkan bakat seni, keterampilan, dan daya cipta siswa.',
     icon: Palette,
     image: 'https://picsum.photos/seed/div6/800/600',
@@ -157,6 +163,7 @@ export const divisions: Division[] = [
   {
     id: '7',
     title: 'Olahraga',
+    department: 'DEPARTEMEN JASMANI',
     description: 'Mendukung kesehatan jasmani, semangat sportivitas, dan prestasi di bidang olahraga.',
     icon: Dumbbell,
     image: 'https://picsum.photos/seed/div7/800/600',
@@ -164,6 +171,7 @@ export const divisions: Division[] = [
   {
     id: '8',
     title: 'Sastra & Budaya',
+    department: 'DEPARTEMEN BUDAYA',
     description: 'Melestarikan, mengapresiasi, dan mengembangkan kekayaan sastra dan budaya.',
     icon: BookOpen,
     image: 'https://picsum.photos/seed/div8/800/600',
@@ -171,6 +179,7 @@ export const divisions: Division[] = [
   {
     id: '9',
     title: 'Teknologi',
+    department: 'DEPARTEMEN DIGITAL',
     description: 'Mengembangkan inovasi, literasi digital, dan pemanfaatan teknologi secara positif.',
     icon: Cpu,
     image: 'https://picsum.photos/seed/div9/800/600',
@@ -178,6 +187,7 @@ export const divisions: Division[] = [
   {
     id: '10',
     title: 'Bahasa Inggris',
+    department: 'DEPARTEMEN BAHASA',
     description: 'Meningkatkan kemampuan komunikasi global dan membuka wawasan internasional.',
     icon: Languages,
     image: 'https://picsum.photos/seed/div10/800/600',

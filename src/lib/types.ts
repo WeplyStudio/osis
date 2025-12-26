@@ -27,6 +27,7 @@ export type VisionMission = {
 export type Division = {
     id: string;
     title: string;
+    department: string;
     description: string;
     icon: LucideIcon;
     image: string;
