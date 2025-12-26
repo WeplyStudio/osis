@@ -65,7 +65,7 @@ export default function LandingPage() {
           <p className="max-w-3xl mx-auto text-lg md:text-xl text-white/80 mb-10">
             Pusat semua kegiatan, acara seru, dan ide-ide cemerlang OSIS. Ayo buat kehidupan sekolah lebih berwarna dan tak terlupakan!
           </p>
-          <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl py-8 px-12 rounded-2xl border-2 border-b-8 border-yellow-600 shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
+          <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl py-8 px-8 md:px-12 rounded-2xl border-2 border-b-8 border-yellow-600 shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
             <Link href="/ideas">
               Mulai Berkontribusi <ArrowRight className="ml-2 h-6 w-6" />
             </Link>
@@ -204,7 +204,7 @@ export default function LandingPage() {
           <p className="max-w-2xl mx-auto text-lg text-white/80 mb-8">
             Punya semangat untuk memajukan sekolah? Ingin belajar berorganisasi dan bikin acara keren? Tunggu apa lagi? Gabung bersama kami di OSIS!
           </p>
-          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl py-8 px-12 rounded-2xl border-2 border-b-8 border-yellow-600 shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
+          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-xl py-8 px-8 md:px-12 rounded-2xl border-2 border-b-8 border-yellow-600 shadow-lg transition-transform hover:scale-105 hover:-translate-y-1">
               Daftar Sekarang <PlusCircle className="ml-2 h-6 w-6" />
           </Button>
         </section>
