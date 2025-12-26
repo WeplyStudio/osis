@@ -321,7 +321,7 @@ export default function LandingPage() {
                               <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div>
-                              <h4 className="font-bold text-foreground text-lg">{member.name}</h4>
+                              <h4 className="font-bold text-foreground text-lg italic uppercase">{member.name}</h4>
                               <p className="text-primary font-medium">{member.role}</p>
                             </div>
                           </div>
@@ -407,5 +407,7 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
