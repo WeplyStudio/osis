@@ -22,7 +22,7 @@ async function writeDb(data: any) {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { type, id, url, name } = body;
+        const { type, id, url, name, quote } = body;
 
         const db = await readDb();
 
@@ -40,6 +40,9 @@ export async function POST(request: Request) {
             }
             if (name) {
                 db.teamMembers[memberIndex].name = name;
+            }
+            if (quote) {
+                db.teamMembers[memberIndex].quote = quote;
             }
 
         } else if (type === 'aboutUsImage') {

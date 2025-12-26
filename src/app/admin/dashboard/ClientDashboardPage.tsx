@@ -9,20 +9,22 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, Image as ImageIcon, Users, LogOut, BarChart3, Home, Loader2, Save } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 
 const TeamMemberCard = ({ member }: { member: any }) => {
   const [newName, setNewName] = React.useState(member.name);
+  const [newQuote, setNewQuote] = React.useState(member.quote);
   const [newImageUrl, setNewImageUrl] = React.useState('');
   const [isUpdating, setIsUpdating] = React.useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
   const handleUpdateMember = async () => {
-    if (!newName && !newImageUrl) {
+    if (!newName && !newImageUrl && !newQuote) {
       toast({
         variant: "destructive",
         title: 'Tidak Ada Perubahan',
-        description: 'Harap masukkan nama atau URL gambar baru.',
+        description: 'Harap masukkan nama, kutipan, atau URL gambar baru.',
       });
       return;
     }
@@ -35,6 +37,7 @@ const TeamMemberCard = ({ member }: { member: any }) => {
           type: 'teamMember',
           id: member.id,
           name: newName,
+          quote: newQuote,
           url: newImageUrl,
         }),
       });
@@ -81,6 +84,17 @@ const TeamMemberCard = ({ member }: { member: any }) => {
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 disabled={isUpdating}
+            />
+        </div>
+        <div className="space-y-2">
+            <Label htmlFor={`quote-${member.id}`}>Harapan / Kutipan</Label>
+            <Textarea
+                id={`quote-${member.id}`}
+                placeholder="Tuliskan harapan atau kutipan baru"
+                value={newQuote}
+                onChange={(e) => setNewQuote(e.target.value)}
+                disabled={isUpdating}
+                className="min-h-[100px]"
             />
         </div>
         <div className="space-y-2">
