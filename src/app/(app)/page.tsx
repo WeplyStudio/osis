@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search, CheckCircle, Calendar, ClipboardCheck } from 'lucide-react';
+import { ArrowRight, Star, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Eye, Target, Gem, PartyPopper, Megaphone, GraduationCap, Search, CheckCircle, Calendar, ClipboardCheck, MessageSquare, Lightbulb } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Accordion,
@@ -23,6 +23,7 @@ import Image from 'next/image';
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
 
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -94,6 +95,32 @@ const DivisionTabs = () => {
     );
 };
 
+const AspirationCard = ({ title, description, status, statusVariant }: { title: string; description: string; status: string; statusVariant: "default" | "secondary" | "outline" }) => (
+    <Card className="hover:bg-accent/50 transition-colors duration-200">
+        <CardContent className="p-6 flex items-center justify-between">
+            <div>
+                <h4 className="font-bold text-lg text-foreground">{title}</h4>
+                <p className="text-sm text-muted-foreground">{description}</p>
+            </div>
+            <Badge variant={statusVariant} className="flex-shrink-0">
+                {status}
+            </Badge>
+        </CardContent>
+    </Card>
+);
+
+const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
+    <div className="flex items-start gap-4">
+        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-foreground/20 text-primary-foreground font-bold text-xs flex items-center justify-center">
+            {number}
+        </div>
+        <p className="text-primary-foreground/90 text-sm">
+            {text}
+        </p>
+    </div>
+);
+
+
 const ImpactStat = ({ value, label }: { value: string, label: string }) => (
   <div className="text-center">
     <p className="font-headline text-5xl md:text-7xl font-bold tracking-tighter">{value}</p>
@@ -146,7 +173,7 @@ export default function LandingPage() {
         {/* Hero Section */}
         <section className="text-center">
             <div className="inline-block bg-accent text-accent-foreground rounded-full px-4 py-2 mb-6">
-                <p className="font-bold text-sm tracking-wider uppercase">Empowering Future Leaders</p>
+                <p className="font-bold text-sm tracking-wider uppercase">EMPOWERING FUTURE LEADERS</p>
             </div>
             <h1 className="font-headline text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 text-foreground">
                 Inovasi Digital<br/>
@@ -163,7 +190,7 @@ export default function LandingPage() {
               </Button>
               <Button asChild size="lg" variant="outline" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
                 <Link href="/#programs">
-                  Lihat Program
+                  Lihat Agenda
                 </Link>
               </Button>
             </div>
@@ -202,6 +229,48 @@ export default function LandingPage() {
               <Image src="https://picsum.photos/seed/101/800/600" alt="About OSIS" fill className="object-cover" data-ai-hint="students collaboration" />
             </div>
           </div>
+        </section>
+
+        {/* Aspirasi Section */}
+        <section id="aspirasi">
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                <div>
+                    <h2 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tighter text-foreground mb-4">
+                        Suara Kamu, <br/><span className="text-primary">Perubahan Kita.</span>
+                    </h2>
+                    <p className="text-muted-foreground mb-8 max-w-lg">
+                        OSIS sedang fokus mengevaluasi beberapa hal penting. Pilih salah satu kategori dan berikan masukan terbaikmu untuk sekolah.
+                    </p>
+                    <div className="space-y-4">
+                        <AspirationCard 
+                            title="Program Kerja" 
+                            description="Evaluasi & ide untuk program kerja OSIS."
+                            status="DISKUSI AKTIF"
+                            statusVariant="default"
+                        />
+                        <AspirationCard 
+                            title="Kinerja OSIS"
+                            description="Masukan mengenai kinerja pengurus OSIS."
+                            status="TINDAK LANJUT"
+                            statusVariant="secondary"
+                        />
+                         <AspirationCard 
+                            title="Saran Lainnya"
+                            description="Punya ide atau masukan lain untuk sekolah?"
+                            status="COMING SOON"
+                            statusVariant="outline"
+                        />
+                    </div>
+                </div>
+                <div className="bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 flex flex-col justify-center">
+                    <h3 className="font-headline text-3xl font-extrabold tracking-tight mb-6">Kenapa Harus Bersuara?</h3>
+                    <div className="space-y-5">
+                        <WhySpeakUpItem number={1} text="Aspirasi kamu dibaca langsung oleh Ketua Umum & Sekbid terkait." />
+                        <WhySpeakUpItem number={2} text="Transparansi penuh: Laporan tindak lanjut akan dipublikasikan." />
+                        <WhySpeakUpItem number={3} text="Membangun Kigra yang lebih demokratis dan nyaman bagi kita semua." />
+                    </div>
+                </div>
+             </div>
         </section>
 
         {/* Our Team Section */}
