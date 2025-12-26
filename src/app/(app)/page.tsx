@@ -16,7 +16,6 @@ import { teamMembers, vision, mission, divisions } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -50,108 +49,73 @@ const MissionCard = ({ icon: Icon, title, description, color, className }: { ico
     </div>
 );
 
-const DivisionAccordion = () => {
-    const [active, setActive] = useState(0);
+const DivisionTabs = () => {
+    const [activeDivision, setActiveDivision] = useState(divisions[0].id);
+    const activeDivisionData = divisions.find(d => d.id === activeDivision);
 
     return (
-        <div className="w-full">
-            {/* Desktop Horizontal Accordion */}
-            <div className="hidden md:flex w-full h-[450px] gap-4">
-                {divisions.slice(0, 5).map((division, index) => (
-                    <div
-                        key={division.id}
-                        className={cn(
-                            "relative rounded-3xl overflow-hidden transition-all duration-700 ease-in-out cursor-pointer shadow-xl border-4 border-transparent",
-                            active === index ? "flex-[5] border-primary" : "flex-[1]"
-                        )}
-                        onClick={() => setActive(index)}
-                        onMouseEnter={() => setActive(index)}
-                    >
-                        <Image
-                            src={division.image}
-                            alt={division.title}
-                            fill
-                            className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/0" />
-                        <div className="relative z-10 p-6 flex flex-col justify-end h-full text-white">
-                             <div className="absolute top-6 left-6 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">
-                                {String(index + 1).padStart(2, '0')}
+        <div className="w-full bg-card/80 backdrop-blur-sm rounded-3xl p-6 md:p-10 shadow-xl border-2 border-border/40">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 min-h-[500px]">
+                {/* Left Nav */}
+                <div className="md:col-span-4 lg:col-span-3">
+                    <h3 className="font-headline text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Pilih Divisi</h3>
+                    <div className="flex flex-col space-y-2">
+                        {divisions.map((division, index) => (
+                            <button
+                                key={division.id}
+                                onClick={() => setActiveDivision(division.id)}
+                                className={cn(
+                                    "flex items-center gap-4 p-3 rounded-xl text-left transition-all duration-200",
+                                    activeDivision === division.id
+                                        ? 'bg-primary text-primary-foreground font-bold shadow-lg'
+                                        : 'hover:bg-accent/50'
+                                )}
+                            >
+                                <span className={cn(
+                                    "flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-lg text-sm font-bold",
+                                    activeDivision === division.id
+                                        ? 'bg-primary-foreground/20'
+                                        : 'bg-accent text-accent-foreground'
+                                )}>
+                                    {String(index + 1).padStart(2, '0')}
+                                </span>
+                                <span className="flex-grow">{division.title}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Right Content */}
+                <div className="md:col-span-8 lg:col-span-9 flex flex-col">
+                    {activeDivisionData && (
+                        <div className="flex flex-col flex-grow">
+                             <div className="relative w-full h-64 rounded-2xl overflow-hidden mb-6 shadow-inner border-2 border-border/30">
+                                <Image
+                                    src={activeDivisionData.image}
+                                    alt={activeDivisionData.title}
+                                    fill
+                                    className="object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                             </div>
-                            <div className={cn("transition-all duration-500", active === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-                                <h3 className="font-headline text-3xl font-bold mb-2">{division.title}</h3>
-                                <p className="text-white/90">{division.description}</p>
-                            </div>
-                             <div className={cn("absolute bottom-6 left-6 transition-all duration-500", active === index ? "opacity-0 -translate-y-4" : "opacity-100")}>
-                                <h3 className="font-headline text-2xl font-bold [writing-mode:vertical-rl] rotate-180 whitespace-nowrap">{division.title}</h3>
+                            
+                            <h3 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tighter text-white mb-3">
+                                {activeDivisionData.title}
+                            </h3>
+                            <p className="text-muted-foreground text-lg mb-6 flex-grow">
+                                {activeDivisionData.description}
+                            </p>
+                             <div className="mt-auto flex flex-wrap gap-4">
+                                <Button size="lg" className="font-bold">
+                                    <Eye className="mr-2 h-5 w-5"/> Detail Divisi
+                                </Button>
+                                <Button size="lg" variant="secondary" className="font-bold">
+                                    <Target className="mr-2 h-5 w-5"/> Program Kerja
+                                </Button>
                             </div>
                         </div>
-                    </div>
-                ))}
-            </div>
-            <div className="hidden md:flex w-full h-[450px] gap-4 mt-4">
-                {divisions.slice(5).map((division, index) => (
-                    <div
-                        key={division.id}
-                        className={cn(
-                            "relative rounded-3xl overflow-hidden transition-all duration-700 ease-in-out cursor-pointer shadow-xl border-4 border-transparent",
-                            active === index + 5 ? "flex-[5] border-primary" : "flex-[1]"
-                        )}
-                        onClick={() => setActive(index + 5)}
-                        onMouseEnter={() => setActive(index + 5)}
-                    >
-                        <Image
-                            src={division.image}
-                            alt={division.title}
-                            fill
-                            className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/0" />
-                        <div className="relative z-10 p-6 flex flex-col justify-end h-full text-white">
-                             <div className="absolute top-6 left-6 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">
-                                {String(index + 6).padStart(2, '0')}
-                            </div>
-                            <div className={cn("transition-all duration-500", active === index + 5 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-                                <h3 className="font-headline text-3xl font-bold mb-2">{division.title}</h3>
-                                <p className="text-white/90">{division.description}</p>
-                            </div>
-                             <div className={cn("absolute bottom-6 left-6 transition-all duration-500", active === index + 5 ? "opacity-0 -translate-y-4" : "opacity-100")}>
-                                <h3 className="font-headline text-2xl font-bold [writing-mode:vertical-rl] rotate-180 whitespace-nowrap">{division.title}</h3>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-
-            {/* Mobile Vertical Accordion */}
-            <div className="block md:hidden space-y-4">
-                 <Accordion type="single" collapsible defaultValue="item-0">
-                    {divisions.map((division, index) => (
-                        <AccordionItem value={`item-${index}`} key={division.id} className="bg-card/80 border-border/30 rounded-2xl border overflow-hidden">
-                            <AccordionTrigger className="p-4 text-left hover:no-underline">
-                                 <div className="flex items-center gap-4">
-                                    <div className="bg-primary text-primary-foreground w-8 h-8 rounded-md flex items-center justify-center font-bold">
-                                        {String(index + 1).padStart(2, '0')}
-                                    </div>
-                                    <h3 className="font-headline text-lg font-bold text-white">{division.title}</h3>
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="p-4 pt-0">
-                                <div className="relative h-40 w-full rounded-lg overflow-hidden mb-4">
-                                     <Image
-                                        src={division.image}
-                                        alt={division.title}
-                                        fill
-                                        className="object-cover"
-                                    />
-                                     <div className="absolute inset-0 bg-black/30" />
-                                </div>
-                                <p className="text-muted-foreground text-sm">{division.description}</p>
-                            </AccordionContent>
-                        </AccordionItem>
-                    ))}
-                 </Accordion>
+                    )}
+                </div>
             </div>
         </div>
     );
@@ -284,7 +248,7 @@ export default function LandingPage() {
         {/* Divisions Section */}
         <section className="text-center">
            <SectionTitle>Divisi <span className="text-primary">Kami</span></SectionTitle>
-           <DivisionAccordion />
+           <DivisionTabs />
         </section>
 
         {/* Join Us Section */}
