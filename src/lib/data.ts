@@ -196,9 +196,9 @@ export const faqItems: FaqItem[] = [
 export const teamMembers: TeamMember[] = [
     {
         id: "1",
-        name: "Ahmad Zaky",
+        name: "wahyu",
         role: "Ketua Umum OSIS",
-        image: "https://i.ibb.co/6yvBA0D/Ellipse-3-1.png",
+        image: "https://i.ibb.co/60QsVdq/20251227-001050-0000.png",
         quote: "Bersama kita bisa, bersama kita maju. Mari jadikan OSIS sebagai wadah aspirasi dan kreasi bagi seluruh siswa."
     },
     {
