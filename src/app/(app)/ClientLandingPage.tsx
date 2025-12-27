@@ -535,6 +535,8 @@ export default function ClientLandingPage() {
            </div>
         </section>
 
+        <PeriodMarquee />
+
         {/* Newsletter Section */}
         <section id="newsletter" className="container mx-auto px-4">
             <div className="text-center">
@@ -607,4 +609,5 @@ export default function ClientLandingPage() {
   );
 }
 
+    
     
