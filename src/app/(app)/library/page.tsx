@@ -4,12 +4,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from "@/components/ui/card";
 import { Lock, File, Download, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
 const DOCS_PIN = process.env.NEXT_PUBLIC_DOCS_PIN || '010810';
+const MAX_ATTEMPTS = 3;
+const LOCKOUT_DURATION_MINUTES = 30;
 
 type Document = {
   id: string;
@@ -42,8 +44,6 @@ const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) =
   };
 
   const handleDownload = () => {
-    // In a real app, you would initiate the download here.
-    // For now, it's just a placeholder.
     window.open(doc.fileUrl, '_blank');
   };
 
@@ -70,9 +70,52 @@ const PinWall = ({ onUnlock }: { onUnlock: () => void }) => {
     const { toast } = useToast();
     const pinInputs = useRef<(HTMLInputElement | null)[]>([]);
 
+    const [failedAttempts, setFailedAttempts] = useState(0);
+    const [lockoutUntil, setLockoutUntil] = useState<number | null>(null);
+    const [timeLeft, setTimeLeft] = useState('');
+
     useEffect(() => {
+        const storedAttempts = parseInt(localStorage.getItem('pinFailedAttempts') || '0', 10);
+        setFailedAttempts(storedAttempts);
+
+        const storedLockout = localStorage.getItem('pinLockoutUntil');
+        if (storedLockout) {
+            const lockoutTime = parseInt(storedLockout, 10);
+            if (Date.now() < lockoutTime) {
+                setLockoutUntil(lockoutTime);
+            } else {
+                localStorage.removeItem('pinLockoutUntil');
+                localStorage.removeItem('pinFailedAttempts');
+            }
+        }
+
         pinInputs.current[0]?.focus();
     }, []);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (lockoutUntil) {
+            const updateTimer = () => {
+                const now = Date.now();
+                const remaining = Math.max(0, lockoutUntil - now);
+                if (remaining === 0) {
+                    setLockoutUntil(null);
+                    setFailedAttempts(0);
+                    localStorage.removeItem('pinLockoutUntil');
+                    localStorage.removeItem('pinFailedAttempts');
+                    clearInterval(interval);
+                } else {
+                    const minutes = Math.floor(remaining / 60000);
+                    const seconds = Math.floor((remaining % 60000) / 1000);
+                    setTimeLeft(`${minutes}m ${seconds}s`);
+                }
+            };
+            updateTimer();
+            interval = setInterval(updateTimer, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [lockoutUntil]);
+
 
     const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const { value } = e.target;
@@ -95,6 +138,8 @@ const PinWall = ({ onUnlock }: { onUnlock: () => void }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (lockoutUntil) return;
+
         setIsLoading(true);
         setError(false);
 
@@ -105,19 +150,41 @@ const PinWall = ({ onUnlock }: { onUnlock: () => void }) => {
                 title: "Akses Diberikan",
                 description: "Selamat datang di Digital Library OSIS Kigra.",
             });
+            localStorage.removeItem('pinFailedAttempts');
+            localStorage.removeItem('pinLockoutUntil');
+            setFailedAttempts(0);
             onUnlock();
         } else {
+            const newAttempts = failedAttempts + 1;
+            setFailedAttempts(newAttempts);
+            localStorage.setItem('pinFailedAttempts', newAttempts.toString());
+            
             setError(true);
-            toast({
-                variant: "destructive",
-                title: "PIN Salah",
-                description: "Silakan periksa kembali PIN yang Anda masukkan.",
-            });
+
+            if (newAttempts >= MAX_ATTEMPTS) {
+                const lockoutTime = Date.now() + LOCKOUT_DURATION_MINUTES * 60 * 1000;
+                setLockoutUntil(lockoutTime);
+                localStorage.setItem('pinLockoutUntil', lockoutTime.toString());
+                localStorage.setItem('pinFailedAttempts', '0');
+                toast({
+                    variant: "destructive",
+                    title: "Akses Terkunci",
+                    description: `Anda telah salah memasukkan PIN ${MAX_ATTEMPTS} kali. Coba lagi dalam ${LOCKOUT_DURATION_MINUTES} menit.`,
+                });
+            } else {
+                 toast({
+                    variant: "destructive",
+                    title: "PIN Salah",
+                    description: `Anda memiliki ${MAX_ATTEMPTS - newAttempts} percobaan tersisa.`,
+                });
+            }
             setPin('');
-             pinInputs.current[0]?.focus();
+            pinInputs.current[0]?.focus();
         }
         setIsLoading(false);
     };
+
+    const isLockedOut = !!lockoutUntil;
 
     return (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-background/50 backdrop-blur-md">
@@ -127,7 +194,12 @@ const PinWall = ({ onUnlock }: { onUnlock: () => void }) => {
                         <Lock className="w-8 h-8 text-primary" />
                     </div>
                     <h2 className="text-2xl font-bold text-foreground">Akses Terbatas</h2>
-                    <p className="text-muted-foreground">Masukkan 6 digit PIN untuk membuka dokumen.</p>
+                    <p className="text-muted-foreground">
+                        {isLockedOut 
+                            ? `Formulir terkunci. Coba lagi dalam: ${timeLeft}`
+                            : 'Masukkan 6 digit PIN untuk membuka dokumen.'
+                        }
+                    </p>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className={cn("flex justify-center gap-2 mb-4", error && "animate-shake")}>
@@ -141,11 +213,11 @@ const PinWall = ({ onUnlock }: { onUnlock: () => void }) => {
                                 onChange={(e) => handlePinChange(e, i)}
                                 onKeyDown={(e) => handleKeyDown(e, i)}
                                 className="w-12 h-14 text-center text-2xl font-bold"
-                                disabled={isLoading}
+                                disabled={isLoading || isLockedOut}
                             />
                         ))}
                     </div>
-                    <Button type="submit" className="w-full font-bold" disabled={isLoading || pin.length !== 6}>
+                    <Button type="submit" className="w-full font-bold" disabled={isLoading || pin.length !== 6 || isLockedOut}>
                         {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Buka Akses'}
                     </Button>
                 </form>
