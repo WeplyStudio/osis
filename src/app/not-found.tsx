@@ -42,11 +42,6 @@ export default function NotFoundPage() {
                 Kembali ke Base
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="font-bold text-base py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105" onClick={() => window.history.back()}>
-                <button type="button">
-                    Go Back
-                </button>
-            </Button>
         </div>
 
       </main>
