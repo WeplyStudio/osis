@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { ArrowRight, Eye, HelpCircle, Mail, Loader2 } from 'lucide-react';
@@ -31,6 +31,8 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
+  DialogFooter,
+  DialogClose
 } from "@/components/ui/dialog";
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -38,6 +40,11 @@ import ClientOnly from '@/components/ClientOnly';
 import Marquee from '@/components/ui/marquee';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useToast } from "@/hooks/use-toast";
+import { sendAspiration } from '@/app/actions';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -47,33 +54,86 @@ const SectionTitle = ({ children, className }: { children: React.ReactNode, clas
   </h2>
 );
 
-const AspirationDialog = ({ title, children }: { title: string, children: React.ReactNode }) => (
-    <Dialog>
-        <DialogTrigger asChild>
-            {children}
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-                <DialogTitle className="font-body text-primary tracking-wider uppercase">{title}</DialogTitle>
-                <DialogDescription>
-                    Berikan saran atau kritik kamu secara jelas dan sopan.
-                </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-                <Input
-                    id="name"
-                    placeholder="Nama (Opsional/Anonim)"
-                />
-                <Textarea
-                    id="aspiration"
-                    placeholder="Tuliskan aspirasimu di sini..."
-                    className="min-h-[120px]"
-                />
-            </div>
-            <Button type="submit" className="w-full font-bold">KIRIM SEKARANG</Button>
-        </DialogContent>
-    </Dialog>
-);
+const aspirationSchema = z.object({
+  name: z.string().optional(),
+  aspiration: z.string().min(10, { message: "Aspirasi harus minimal 10 karakter." }),
+  category: z.string(),
+});
+
+type AspirationFormInputs = z.infer<typeof aspirationSchema>;
+
+const AspirationDialog = ({ title, category, children }: { title: string, category: string, children: React.ReactNode }) => {
+    const [open, setOpen] = useState(false);
+    const { toast } = useToast();
+    const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<AspirationFormInputs>({
+        resolver: zodResolver(aspirationSchema),
+        defaultValues: {
+            category: category,
+            name: '',
+            aspiration: ''
+        }
+    });
+
+    const processForm: SubmitHandler<AspirationFormInputs> = async (data) => {
+        const result = await sendAspiration(data);
+
+        if (result.success) {
+            toast({
+                title: "Aspirasi Terkirim!",
+                description: "Terima kasih atas masukanmu. Aspirasimu telah berhasil dikirim.",
+            });
+            reset();
+            setOpen(false);
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Gagal Mengirim",
+                description: result.error || "Terjadi kesalahan saat mengirim aspirasi.",
+            });
+        }
+    };
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                {children}
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                 <form onSubmit={handleSubmit(processForm)}>
+                    <DialogHeader>
+                        <DialogTitle className="font-body text-primary tracking-wider uppercase">{title}</DialogTitle>
+                        <DialogDescription>
+                            Berikan saran atau kritik kamu secara jelas dan sopan.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <Input
+                            id="name"
+                            placeholder="Nama (Opsional/Anonim)"
+                            {...register("name")}
+                        />
+                         <input type="hidden" {...register("category")} value={category} />
+                        <Textarea
+                            id="aspiration"
+                            placeholder="Tuliskan aspirasimu di sini..."
+                            className="min-h-[120px]"
+                            {...register("aspiration")}
+                        />
+                        {errors.aspiration && <p className="text-xs text-destructive">{errors.aspiration.message}</p>}
+                    </div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button type="button" variant="outline">Batal</Button>
+                      </DialogClose>
+                      <Button type="submit" className="font-bold" disabled={isSubmitting}>
+                          {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'KIRIM SEKARANG'}
+                      </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+};
 
 
 const DivisionTabs = () => {
@@ -359,7 +419,7 @@ export default function ClientLandingPage() {
                      <div className="space-y-4">
                         <ClientOnly>
                           {aspirationCategories.map((cat, index) => (
-                              <AspirationDialog key={cat.title} title={cat.title}>
+                              <AspirationDialog key={cat.title} title={cat.title} category={cat.title}>
                                   <AspirationCard
                                       className="aspiration-cards"
                                       title={cat.title}
@@ -508,3 +568,5 @@ export default function ClientLandingPage() {
     </div>
   );
 }
+
+    
