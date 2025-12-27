@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -162,10 +163,6 @@ const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
 
 
 export default function ClientLandingPage() {
-  const aboutUsImage = {
-    url: "https://picsum.photos/seed/about-us/800/600",
-    hint: "students collaborating",
-  };
   const teamMembers = staticTeamMembers;
 
 
@@ -225,15 +222,15 @@ export default function ClientLandingPage() {
             <p className="font-body text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
             <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tight text-foreground italic uppercase">Tentang Kami</h2>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            <div className="order-2 lg:order-1">
+          <div className="grid grid-cols-1 gap-8 lg:gap-16 items-center">
+            <div className="text-center">
               <h3 className="font-body text-3xl font-bold tracking-tight text-foreground">
                 Membangun Karakter, <br/><span className="text-primary">Mewujudkan Perubahan.</span>
               </h3>
-              <p className="mt-4 text-muted-foreground">
+              <p className="mt-4 text-muted-foreground max-w-3xl mx-auto">
                 Didirikan sejak tahun 2022, OSIS Kigra telah menjadi wadah bagi ribuan siswa untuk mengasah kepemimpinan. Kami percaya bahwa setiap suara siswa adalah aset berharga bagi kemajuan sekolah.
               </p>
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
                 <Card className="bg-card/80 border-border/80 shadow-sm">
                   <CardContent className="p-6">
                     <h4 className="font-body text-lg font-bold text-primary mb-2">Visi</h4>
@@ -247,9 +244,6 @@ export default function ClientLandingPage() {
                   </CardContent>
                 </Card>
               </div>
-            </div>
-            <div className="order-1 lg:order-2 relative aspect-video lg:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border">
-              {aboutUsImage && <Image src={aboutUsImage.url} alt="About OSIS" fill className="object-cover" data-ai-hint={aboutUsImage.hint} />}
             </div>
           </div>
         </section>
