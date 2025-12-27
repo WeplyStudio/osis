@@ -2,7 +2,7 @@
 'use client';
 
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Home, Menu, Phone, Users, Briefcase, Info, Youtube } from "lucide-react";
+import { Facebook, Twitter, Instagram, Home, Menu, Phone, Users, Briefcase, Info, Youtube, LucideIcon } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -34,11 +34,12 @@ const innovationLinks = [
     { href: '#', label: 'Podwaves' },
 ];
 
-const SocialIcon = ({ children }: { children: React.ReactNode }) => (
-    <Link href="#" className="w-12 h-12 flex items-center justify-center rounded-full bg-accent text-accent-foreground font-bold text-lg hover:bg-primary hover:text-primary-foreground transition-colors">
-        {children}
+const SocialIcon = ({ href, icon: Icon }: { href: string; icon: LucideIcon | React.ComponentType<{ className?: string }> | string }) => (
+    <Link href={href} target="_blank" rel="noopener noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full bg-accent text-accent-foreground font-bold text-lg hover:bg-primary hover:text-primary-foreground transition-colors">
+        {typeof Icon === 'string' ? Icon : <Icon className="w-6 h-6" />}
     </Link>
 );
+
 
 const AppFooter = () => (
     <footer className="bg-card text-card-foreground border-t">
@@ -52,9 +53,9 @@ const AppFooter = () => (
                         Organisasi Siswa Intra Sekolah Kigra. Membangun karakter religius, kreatif, dan mandiri melalui inovasi tanpa henti.
                     </p>
                     <div className="flex items-center gap-3 mt-8">
-                        <SocialIcon>IG</SocialIcon>
-                        <SocialIcon>YT</SocialIcon>
-                        <SocialIcon>TK</SocialIcon>
+                        <SocialIcon href="https://www.instagram.com/osissmp_kinaryagrasia" icon={Instagram} />
+                        <SocialIcon href="https://www.youtube.com/@kinaryagrasia" icon={Youtube} />
+                        <SocialIcon href="#" icon={'TK'} />
                     </div>
                 </div>
                 <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-8">
