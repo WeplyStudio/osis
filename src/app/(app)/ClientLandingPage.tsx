@@ -398,8 +398,8 @@ export default function ClientLandingPage() {
             </p>
             <div className="hero-buttons mt-8 flex flex-wrap justify-center gap-4">
               <Button asChild size="lg" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
-                <Link href="#">
-                  Mulai Berkontribusi <ArrowRight className="ml-2 h-5 w-5" />
+                <Link href="/#about">
+                  Tentang Kami
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
@@ -606,3 +606,5 @@ export default function ClientLandingPage() {
     </div>
   );
 }
+
+    
