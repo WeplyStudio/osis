@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,11 +10,12 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, Image as ImageIcon, Users, LogOut, BarChart3, Home, Loader2, Save } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
-import { useFirestore } from '@/firebase';
-import { doc, updateDoc, setDoc, getDocs, collection, getDoc } from 'firebase/firestore';
+import { useFirestore, useCollection, useDoc } from '@/firebase';
+import { doc, updateDoc, setDoc, collection } from 'firebase/firestore';
 import type { TeamMember } from '@/lib/types';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import { useMemoFirebase } from '@/firebase/hooks';
 
 
 const TeamMemberCard = ({ member }: { member: TeamMember }) => {
@@ -199,9 +200,22 @@ const AboutUsCard = ({ aboutUsImage }: { aboutUsImage: { url: string } | null })
     )
 }
 
-export default function ClientDashboardPage({ teamMembers, aboutUsImage }: { teamMembers: TeamMember[], aboutUsImage: { url: string, hint: string } | null }) {
+export default function ClientDashboardPage() {
   const router = useRouter();
   const { toast } = useToast();
+  const firestore = useFirestore();
+
+  const teamMembersQuery = useMemoFirebase(() => 
+    firestore ? collection(firestore, 'teamMembers') : null
+  , [firestore]);
+  const { data: teamMembers, isLoading: loadingMembers } = useCollection<TeamMember>(teamMembersQuery);
+  
+  const aboutUsQuery = useMemoFirebase(() => 
+    firestore ? doc(firestore, 'siteContent', 'aboutUs') : null
+  , [firestore]);
+  const { data: aboutUsImage, isLoading: loadingAboutUs } = useDoc<{url: string, hint: string}>(aboutUsQuery);
+
+  const isLoading = loadingMembers || loadingAboutUs;
 
   const handleLogout = () => {
     try {
@@ -219,6 +233,14 @@ export default function ClientDashboardPage({ teamMembers, aboutUsImage }: { tea
       });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-muted/40">
@@ -279,7 +301,7 @@ export default function ClientDashboardPage({ teamMembers, aboutUsImage }: { tea
          <section className="space-y-6">
             <h2 className="text-2xl font-bold flex items-center gap-3"><ImageIcon className="w-6 h-6 text-primary"/> Konten Lainnya</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                <AboutUsCard aboutUsImage={aboutUsImage} />
+                {aboutUsImage && <AboutUsCard aboutUsImage={aboutUsImage} />}
             </div>
         </section>
       </main>

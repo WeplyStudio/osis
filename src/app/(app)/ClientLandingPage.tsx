@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { ArrowRight, Eye, HelpCircle, Mail, Loader2 } from 'lucide-react';
@@ -35,9 +35,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import ClientOnly from '@/components/ClientOnly';
 import type { TeamMember } from '@/lib/types';
-import { useFirestore } from '@/firebase';
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
-import { useToast } from '@/hooks/use-toast';
+import { useFirestore, useCollection, useDoc } from '@/firebase';
+import { collection, doc } from 'firebase/firestore';
+import { useMemoFirebase } from '@/firebase/hooks';
+
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <h2 className={cn(`font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-foreground italic uppercase`, className)}>
@@ -166,11 +167,19 @@ const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
 
 
 export default function ClientLandingPage() {
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [aboutUsImage, setAboutUsImage] = useState<{ url: string, hint: string } | null>(null);
-  const [loading, setLoading] = useState(true);
   const firestore = useFirestore();
-  const { toast } = useToast();
+
+  const teamMembersQuery = useMemoFirebase(() => 
+    firestore ? collection(firestore, 'teamMembers') : null
+  , [firestore]);
+  const { data: teamMembers, isLoading: loadingMembers } = useCollection<TeamMember>(teamMembersQuery);
+
+  const aboutUsQuery = useMemoFirebase(() => 
+    firestore ? doc(firestore, 'siteContent', 'aboutUs') : null
+  , [firestore]);
+  const { data: aboutUsImage, isLoading: loadingAboutUs } = useDoc<{url: string, hint: string}>(aboutUsQuery);
+
+  const loading = loadingMembers || loadingAboutUs;
 
   const aspirationCategories = [
       {
@@ -192,37 +201,6 @@ export default function ClientLandingPage() {
           statusVariant: "outline" as const,
       }
   ];
-
-  useEffect(() => {
-    if (!firestore) return;
-
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const teamMembersCollection = collection(firestore, 'teamMembers');
-        const teamMembersSnapshot = await getDocs(teamMembersCollection);
-        const membersData = teamMembersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as TeamMember));
-        setTeamMembers(membersData);
-
-        const aboutUsDocRef = doc(firestore, 'siteContent', 'aboutUs');
-        const aboutUsSnap = await getDoc(aboutUsDocRef);
-        if (aboutUsSnap.exists()) {
-          setAboutUsImage(aboutUsSnap.data() as { url: string; hint: string });
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        toast({
-          variant: "destructive",
-          title: "Gagal memuat data",
-          description: "Tidak dapat mengambil data dari server. Silakan coba lagi nanti.",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [firestore, toast]);
 
   if (loading) {
     return (
@@ -455,5 +433,3 @@ export default function ClientLandingPage() {
     </div>
   );
 }
-
-    

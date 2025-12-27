@@ -1,4 +1,3 @@
-
 import type { FirebaseApp, FirebaseOptions } from 'firebase/app';
 import { initializeApp, getApps } from 'firebase/app';
 import { Auth, getAuth } from 'firebase/auth';
@@ -30,3 +29,5 @@ function initializeFirebase(options: FirebaseOptions = firebaseConfig): {
 
 export { initializeFirebase };
 export * from './provider';
+export * from './firestore/use-collection';
+export * from './firestore/use-doc';
