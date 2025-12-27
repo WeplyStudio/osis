@@ -168,13 +168,13 @@ const PeriodMarquee = () => {
   const marqueeText = `OSIS PERIODE ${currentYear} / ${nextYear}`;
   
   return (
-    <div className="bg-primary text-primary-foreground py-3">
-        <Marquee>
-            <span className="font-body text-xl font-bold italic uppercase tracking-wider mx-4">
-                {marqueeText}
-            </span>
-             <span className="text-xl mx-4">•</span>
-        </Marquee>
+    <div className="bg-primary text-primary-foreground py-3 overflow-x-hidden">
+      <Marquee baseVelocity={-1}>
+        <span className="font-body text-xl font-bold italic uppercase tracking-wider mx-4">
+          {marqueeText}
+        </span>
+        <span className="text-xl mx-4">•</span>
+      </Marquee>
     </div>
   );
 }
