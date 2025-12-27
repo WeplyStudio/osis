@@ -1,42 +1,76 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
+import { Shield } from 'lucide-react';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+const CORRECT_PIN = process.env.NEXT_PUBLIC_ADMIN_PIN || "123456";
+
+export default function LoginPage() {
+  const [pin, setPin] = useState('');
   const router = useRouter();
-  const pathname = usePathname();
+  const { toast } = useToast();
 
-  useEffect(() => {
-    try {
-        const pinAuthenticated = localStorage.getItem('pin_authenticated') === 'true';
-        if (pinAuthenticated) {
-            setIsAuthenticated(true);
-        } else if (pathname !== '/admin/login') {
-            router.replace('/admin/login');
-        }
-    } catch (e) {
-        if (pathname !== '/admin/login') {
-             router.replace('/admin/login');
-        }
+  const handleLogin = () => {
+    if (pin === CORRECT_PIN) {
+      try {
+        localStorage.setItem('pin_authenticated', 'true');
+        router.push('/admin/dashboard');
+      } catch (e) {
+         toast({
+            variant: "destructive",
+            title: 'Error',
+            description: 'Could not save login status. Please enable local storage.',
+        });
+      }
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'PIN Salah',
+        description: 'PIN yang Anda masukkan tidak benar. Silakan coba lagi.',
+      });
+      setPin('');
     }
-    setIsLoading(false);
-  }, [pathname, router]);
+  };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+  const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) {
+      setPin(value);
+    }
   }
 
-  if (!isAuthenticated && pathname !== '/admin/login') {
-    return null; // or a loading spinner, since redirection is happening
-  }
-
-  return <>{children}</>;
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-muted/40">
+      <Card className="w-full max-w-sm shadow-2xl">
+        <CardHeader className="text-center">
+            <div className="mx-auto bg-primary rounded-full p-3 w-fit mb-4">
+                <Shield className="w-8 h-8 text-primary-foreground" />
+            </div>
+          <CardTitle className="font-body text-2xl font-bold tracking-tight">Halaman Admin</CardTitle>
+          <CardDescription>Masukkan PIN untuk mengakses dasbor.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <Input
+              type="password"
+              placeholder="••••••"
+              value={pin}
+              onChange={handlePinChange}
+              maxLength={6}
+              className="text-center text-2xl tracking-[0.5em] font-mono"
+              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+            />
+            <Button onClick={handleLogin} className="w-full font-bold">
+              Masuk
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }

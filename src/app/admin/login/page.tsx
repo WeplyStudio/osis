@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Shield } from 'lucide-react';
 
-const CORRECT_PIN = process.env.NEXT_PUBLIC_ADMIN_PIN;
+const CORRECT_PIN = process.env.NEXT_PUBLIC_ADMIN_PIN || "123456";
 
 export default function LoginPage() {
   const [pin, setPin] = useState('');
