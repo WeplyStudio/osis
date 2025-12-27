@@ -13,6 +13,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { useFirestore } from '@/firebase';
 import { doc, updateDoc, setDoc, getDocs, collection, getDoc } from 'firebase/firestore';
 import type { TeamMember } from '@/lib/types';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 
 const TeamMemberCard = ({ member }: { member: TeamMember }) => {
@@ -40,31 +42,35 @@ const TeamMemberCard = ({ member }: { member: TeamMember }) => {
     }
 
     setIsUpdating(true);
-    try {
-      const memberRef = doc(firestore, 'teamMembers', member.id);
-      const updateData: { [key: string]: any } = {};
+    const memberRef = doc(firestore, 'teamMembers', member.id);
+    const updateData: { [key: string]: any } = {};
 
-      if (hasChangedName) updateData.name = newName;
-      if (hasChangedQuote) updateData.quote = newQuote;
-      if (hasChangedImage) updateData.image = newImageUrl;
-      
-      if (Object.keys(updateData).length > 0) {
-        await updateDoc(memberRef, updateData);
-      }
-
-      toast({
-        title: `Data ${member.name} Diperbarui!`,
-        description: 'Perubahan akan segera terlihat.',
-      });
-      setNewImageUrl('');
-      router.refresh(); 
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: 'Uh oh! Terjadi kesalahan.',
-        description: error.message || 'Tidak dapat menyimpan perubahan.',
-      });
-    } finally {
+    if (hasChangedName) updateData.name = newName;
+    if (hasChangedQuote) updateData.quote = newQuote;
+    if (hasChangedImage) updateData.image = newImageUrl;
+    
+    if (Object.keys(updateData).length > 0) {
+      updateDoc(memberRef, updateData)
+        .then(() => {
+          toast({
+            title: `Data ${member.name} Diperbarui!`,
+            description: 'Perubahan akan segera terlihat.',
+          });
+          setNewImageUrl('');
+          router.refresh(); 
+        })
+        .catch((serverError) => {
+           const permissionError = new FirestorePermissionError({
+                path: memberRef.path,
+                operation: 'update',
+                requestResourceData: updateData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
+        })
+        .finally(() => {
+            setIsUpdating(false);
+        });
+    } else {
         setIsUpdating(false);
     }
   };
@@ -142,25 +148,27 @@ const AboutUsCard = ({ aboutUsImage }: { aboutUsImage: { url: string } | null })
         return;
     }
     setIsUpdating(true);
-    try {
-        const aboutUsRef = doc(firestore, 'siteContent', 'aboutUs');
-        await setDoc(aboutUsRef, { url: newImageUrl }, { merge: true });
-
-        toast({
-            title: `Gambar "Tentang Kami" Diperbarui!`,
-            description: 'Perubahan akan segera terlihat.',
+    const aboutUsRef = doc(firestore, 'siteContent', 'aboutUs');
+    setDoc(aboutUsRef, { url: newImageUrl }, { merge: true })
+        .then(() => {
+            toast({
+                title: `Gambar "Tentang Kami" Diperbarui!`,
+                description: 'Perubahan akan segera terlihat.',
+            });
+            setNewImageUrl('');
+            router.refresh();
+        })
+        .catch((serverError) => {
+            const permissionError = new FirestorePermissionError({
+                path: aboutUsRef.path,
+                operation: 'update',
+                requestResourceData: { url: newImageUrl },
+            });
+            errorEmitter.emit('permission-error', permissionError);
+        })
+        .finally(() => {
+            setIsUpdating(false);
         });
-        setNewImageUrl('');
-        router.refresh();
-    } catch (error: any) {
-         toast({
-            variant: "destructive",
-            title: 'Uh oh! Terjadi kesalahan.',
-            description: error.message || 'Tidak dapat menyimpan gambar.',
-        });
-    } finally {
-        setIsUpdating(false);
-    }
   };
 
     return (
@@ -191,46 +199,9 @@ const AboutUsCard = ({ aboutUsImage }: { aboutUsImage: { url: string } | null })
     )
 }
 
-export default function ClientDashboardPage() {
+export default function ClientDashboardPage({ teamMembers, aboutUsImage }: { teamMembers: TeamMember[], aboutUsImage: { url: string, hint: string } | null }) {
   const router = useRouter();
   const { toast } = useToast();
-  const firestore = useFirestore();
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [aboutUsImage, setAboutUsImage] = useState<{ url: string } | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!firestore) return;
-
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        // Fetch Team Members
-        const teamMembersCollection = collection(firestore, 'teamMembers');
-        const teamMembersSnapshot = await getDocs(teamMembersCollection);
-        const members = teamMembersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as TeamMember));
-        setTeamMembers(members);
-
-        // Fetch About Us Image
-        const aboutUsDoc = doc(firestore, 'siteContent', 'aboutUs');
-        const aboutUsSnapshot = await getDoc(aboutUsDoc);
-        if (aboutUsSnapshot.exists()) {
-          setAboutUsImage(aboutUsSnapshot.data() as { url: string });
-        }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-        toast({
-          variant: "destructive",
-          title: "Gagal memuat data",
-          description: "Tidak dapat mengambil data dari server. Silakan coba lagi nanti.",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [firestore, toast]);
 
   const handleLogout = () => {
     try {
@@ -248,14 +219,6 @@ export default function ClientDashboardPage() {
       });
     }
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-muted/40">
@@ -323,5 +286,3 @@ export default function ClientDashboardPage() {
     </div>
   );
 }
-
-    
