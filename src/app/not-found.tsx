@@ -191,7 +191,7 @@ const NotFoundPage = () => {
               <div className="space-y-4 mb-16">
                   <h2 className="heading-premium text-4xl md:text-7xl text-white">Dimensi Tidak <br/><span className="text-indigo-500 italic">Ditemukan.</span></h2>
                   <p className="max-w-2xl mx-auto text-slate-500 font-medium italic text-lg leading-relaxed">
-                      Terjadi kebocoran data pada core SMANSA. Halaman yang kamu tuju telah terhapus dari realitas digital atau sedang dipindahkan ke server lain.
+                      Terjadi kebocoran data pada core Kigra. Halaman yang kamu tuju telah terhapus dari realitas digital atau sedang dipindahkan ke server lain.
                   </p>
               </div>
 
