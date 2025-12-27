@@ -97,6 +97,7 @@ const NotFoundPage = () => {
           body { 
               background-color: #020617 !important; 
               color: white !important;
+              overflow-x: hidden !important;
           }
           .heading-premium { 
               font-weight: 900; 
