@@ -62,7 +62,7 @@ const aspirationSchema = z.object({
 
 type AspirationFormInputs = z.infer<typeof aspirationSchema>;
 
-const COOLDOWN_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+const COOLDOWN_DURATION = 1 * 60 * 1000; // 1 minute in milliseconds
 
 const AspirationDialog = ({ title, category, children }: { title: string, category: string, children: React.ReactNode }) => {
     const [open, setOpen] = useState(false);
@@ -606,3 +606,5 @@ export default function ClientLandingPage() {
     </div>
   );
 }
+
+    
