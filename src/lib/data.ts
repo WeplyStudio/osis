@@ -199,14 +199,14 @@ export const teamMembers: TeamMember[] = [
         id: "1",
         name: "wahyu",
         role: "Ketua Umum OSIS",
-        image: "https://i.postimg.cc/NL4YH262/20251227-001050-0001.png",
+        image: "https://i.postimg.cc/w3VHmRX2/20251227-001050-0000.png",
         quote: "Bersama kita bisa, bersama kita maju. Mari jadikan OSIS sebagai wadah aspirasi dan kreasi bagi seluruh siswa."
     },
     {
         id: "2",
         name: "crishtian",
         role: "Wakil Ketua OSIS",
-        image: "https://i.postimg.cc/NL4YH262/20251227-001050-0002.png",
+        image: "https://i.postimg.cc/Z0cZdv8r/20251227-001050-0001.png",
         quote: "Setiap suara berarti, setiap ide berharga. Jangan ragu untuk berkontribusi demi kemajuan sekolah kita."
     },
     {
