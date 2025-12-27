@@ -180,7 +180,7 @@ export const faqItems: FaqItem[] = [
   {
     id: "faq1",
     question: "Siapa pengelola website ini?",
-    answer: "Website ini dikelola penuh oleh Sekbid Teknologi OSIS SMANSA sebagai portofolio inovasi digital sekolah sekaligus kanal informasi publik resmi."
+    answer: "Website ini dikelola penuh oleh Sekbid Teknologi OSIS Kigra sebagai portofolio inovasi digital sekolah sekaligus kanal informasi publik resmi."
   },
   {
     id: "faq2",
@@ -239,6 +239,8 @@ export const teamMembers: TeamMember[] = [
     }
 ]
     
+    
+
     
 
     
