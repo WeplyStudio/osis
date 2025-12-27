@@ -198,7 +198,7 @@ export const teamMembers: TeamMember[] = [
         id: "1",
         name: "wahyu",
         role: "Ketua Umum OSIS",
-        image: "https://i.postimg.cc/NL4YH262/20251227-001050-0005.png",
+        image: "https://i.postimg.cc/NL4YH262/20251227-001050-0001.png",
         quote: "Bersama kita bisa, bersama kita maju. Mari jadikan OSIS sebagai wadah aspirasi dan kreasi bagi seluruh siswa."
     },
     {
