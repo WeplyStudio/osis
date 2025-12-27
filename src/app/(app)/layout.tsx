@@ -64,7 +64,7 @@ const AppFooter = () => (
                         <ul className="space-y-4">
                             {organizationLinks.map(item => (
                                  <li key={item.label}>
-                                    <Link href={item.href} className="text-sm uppercase text-muted-foreground hover:text-primary transition-colors">
+                                    <Link href={item.href} className="text-xs font-bold uppercase text-muted-foreground hover:text-primary transition-colors">
                                         {item.label}
                                     </Link>
                                 </li>
@@ -76,7 +76,7 @@ const AppFooter = () => (
                         <ul className="space-y-4">
                              {innovationLinks.map(item => (
                                  <li key={item.label}>
-                                    <Link href={item.href} className="text-sm uppercase text-muted-foreground hover:text-primary transition-colors">
+                                    <Link href={item.href} className="text-xs font-bold uppercase text-muted-foreground hover:text-primary transition-colors">
                                         {item.label}
                                     </Link>
                                 </li>
