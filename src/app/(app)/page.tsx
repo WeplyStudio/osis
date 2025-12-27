@@ -1,14 +1,9 @@
-
 import React from 'react';
-import fs from 'fs';
-import path from 'path';
 import ClientLandingPage from './ClientLandingPage';
-
-// Read data directly on the server side
-const dbPath = path.join(process.cwd(), 'src', 'lib', 'database.json');
-const dbFile = fs.readFileSync(dbPath, 'utf-8');
-const { teamMembers, aboutUsImage } = JSON.parse(dbFile);
+import { unstable_noStore as noStore } from 'next/cache';
 
 export default function LandingPage() {
-  return <ClientLandingPage teamMembers={teamMembers} aboutUsImage={aboutUsImage} />;
+  noStore();
+  
+  return <ClientLandingPage />;
 }

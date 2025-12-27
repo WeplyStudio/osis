@@ -1,14 +1,22 @@
-
 import React from 'react';
-import fs from 'fs';
-import path from 'path';
 import ClientDashboardPage from './ClientDashboardPage';
+import { initializeFirebase } from '@/firebase';
+import { getDocs, collection, doc, getDoc } from 'firebase/firestore';
+import type { TeamMember } from '@/lib/types';
+import { unstable_noStore as noStore } from 'next/cache';
 
-// Read data directly on the server side
-const dbPath = path.join(process.cwd(), 'src', 'lib', 'database.json');
-const dbFile = fs.readFileSync(dbPath, 'utf-8');
-const { teamMembers, aboutUsImage } = JSON.parse(dbFile);
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  noStore();
+  const { firestore } = initializeFirebase();
+  
+  const teamMembersCollection = collection(firestore, 'teamMembers');
+  const teamMembersSnapshot = await getDocs(teamMembersCollection);
+  const teamMembers = teamMembersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as TeamMember));
+
+  const aboutUsDoc = doc(firestore, 'siteContent', 'aboutUs');
+  const aboutUsSnapshot = await getDoc(aboutUsDoc);
+const aboutUsImage = aboutUsSnapshot.data() as { url: string, hint: string };
+
   return <ClientDashboardPage teamMembers={teamMembers} aboutUsImage={aboutUsImage} />;
 }

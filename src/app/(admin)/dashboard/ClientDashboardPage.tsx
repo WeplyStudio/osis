@@ -10,6 +10,10 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, Image as ImageIcon, Users, LogOut, BarChart3, Home, Loader2, Save } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
+import { useFirestore } from '@/firebase';
+import { doc, updateDoc, setDoc, collection, getDocs, getDoc } from 'firebase/firestore';
+import type { TeamMember } from '@/lib/types';
+
 
 const TeamMemberCard = ({ member }: { member: any }) => {
   const [newName, setNewName] = React.useState(member.name);
@@ -18,37 +22,39 @@ const TeamMemberCard = ({ member }: { member: any }) => {
   const [isUpdating, setIsUpdating] = React.useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const firestore = useFirestore();
 
   const handleUpdateMember = async () => {
-    if (!newName && !newImageUrl && !newQuote) {
+    if (!firestore) return;
+    const hasChangedName = newName && newName !== member.name;
+    const hasChangedQuote = newQuote && newQuote !== member.quote;
+    const hasChangedImage = newImageUrl && newImageUrl.trim() !== '';
+
+    if (!hasChangedName && !hasChangedQuote && !hasChangedImage) {
       toast({
-        variant: "destructive",
+        variant: 'destructive',
         title: 'Tidak Ada Perubahan',
-        description: 'Harap masukkan nama, kutipan, atau URL gambar baru.',
+        description: 'Anda belum membuat perubahan apa pun.',
       });
       return;
     }
+
     setIsUpdating(true);
     try {
-      const response = await fetch('/api/content', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'teamMember',
-          id: member.id,
-          name: newName,
-          quote: newQuote,
-          url: newImageUrl,
-        }),
-      });
+      const memberRef = doc(firestore, 'teamMembers', member.id);
+      const updateData: { [key: string]: any } = {};
 
-      if (!response.ok) {
-        throw new Error('Gagal memperbarui data anggota');
+      if (hasChangedName) updateData.name = newName;
+      if (hasChangedQuote) updateData.quote = newQuote;
+      if (hasChangedImage) updateData.image = newImageUrl;
+      
+      if (Object.keys(updateData).length > 0) {
+        await updateDoc(memberRef, updateData);
       }
 
       toast({
         title: `Data ${member.name} Diperbarui!`,
-        description: 'Perubahan akan terlihat setelah me-refresh halaman.',
+        description: 'Perubahan akan segera terlihat.',
       });
       setNewImageUrl('');
       router.refresh(); 
@@ -118,13 +124,15 @@ const TeamMemberCard = ({ member }: { member: any }) => {
 };
 
 
-const AboutUsCard = ({ aboutUsImage }: { aboutUsImage: { url: string } }) => {
+const AboutUsCard = ({ aboutUsImage }: { aboutUsImage: { url: string } | null }) => {
   const [newImageUrl, setNewImageUrl] = React.useState('');
   const [isUpdating, setIsUpdating] = React.useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const firestore = useFirestore();
 
   const handleUpdateImage = async () => {
+    if (!firestore) return;
     if (!newImageUrl) {
         toast({
             variant: "destructive",
@@ -135,22 +143,12 @@ const AboutUsCard = ({ aboutUsImage }: { aboutUsImage: { url: string } }) => {
     }
     setIsUpdating(true);
     try {
-        const response = await fetch('/api/content', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                type: 'aboutUsImage',
-                url: newImageUrl,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Gagal memperbarui gambar');
-        }
+        const aboutUsRef = doc(firestore, 'siteContent', 'aboutUs');
+        await setDoc(aboutUsRef, { url: newImageUrl }, { merge: true });
 
         toast({
             title: `Gambar "Tentang Kami" Diperbarui!`,
-            description: 'Perubahan akan terlihat setelah me-refresh halaman.',
+            description: 'Perubahan akan segera terlihat.',
         });
         setNewImageUrl('');
         router.refresh();
@@ -170,7 +168,7 @@ const AboutUsCard = ({ aboutUsImage }: { aboutUsImage: { url: string } }) => {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><ImageIcon className="w-5 h-5"/> Gambar "Tentang Kami"</CardTitle>
                  <div className="relative aspect-video w-full rounded-md overflow-hidden mt-2">
-                     <Image src={aboutUsImage.url} alt="Current About Us" fill className="object-cover" />
+                     {aboutUsImage && <Image src={aboutUsImage.url} alt="Current About Us" fill className="object-cover" />}
                  </div>
             </CardHeader>
             <CardContent className="space-y-2">
@@ -193,9 +191,34 @@ const AboutUsCard = ({ aboutUsImage }: { aboutUsImage: { url: string } }) => {
     )
 }
 
-export default function ClientDashboardPage({ teamMembers, aboutUsImage }: { teamMembers: any[], aboutUsImage: { url: string } }) {
+export default function ClientDashboardPage() {
   const router = useRouter();
   const { toast } = useToast();
+  const [teamMembers, setTeamMembers] = React.useState<TeamMember[]>([]);
+  const [aboutUsImage, setAboutUsImage] = React.useState<{ url: string } | null>(null);
+  const firestore = useFirestore();
+
+  React.useEffect(() => {
+    if (!firestore) return;
+
+    const fetchTeamMembers = async () => {
+      const teamMembersCollection = collection(firestore, 'teamMembers');
+      const teamMembersSnapshot = await getDocs(teamMembersCollection);
+      const teamMembersData = teamMembersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as TeamMember));
+      setTeamMembers(teamMembersData);
+    };
+
+    const fetchAboutUsImage = async () => {
+      const aboutUsDoc = doc(firestore, 'siteContent', 'aboutUs');
+      const aboutUsSnapshot = await getDoc(aboutUsDoc);
+      if (aboutUsSnapshot.exists()) {
+        setAboutUsImage(aboutUsSnapshot.data() as { url: string });
+      }
+    };
+
+    fetchTeamMembers();
+    fetchAboutUsImage();
+  }, [firestore]);
 
   const handleLogout = () => {
     try {
@@ -264,7 +287,7 @@ export default function ClientDashboardPage({ teamMembers, aboutUsImage }: { tea
         <section className="space-y-6">
             <h2 className="text-2xl font-bold flex items-center gap-3"><Users className="w-6 h-6 text-primary"/> Tim Kami</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {teamMembers.map((member: any) => (
+                {teamMembers && teamMembers.map((member: any) => (
                     <TeamMemberCard key={member.id} member={member} />
                 ))}
             </div>

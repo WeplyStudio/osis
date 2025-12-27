@@ -34,6 +34,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import ClientOnly from '@/components/ClientOnly';
+import type { TeamMember } from '@/lib/types';
+import { useFirestore } from '@/firebase';
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
+
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <h2 className={cn(`font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-foreground italic uppercase`, className)}>
@@ -161,7 +165,33 @@ const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
 );
 
 
-export default function ClientLandingPage({ teamMembers, aboutUsImage }: { teamMembers: any[], aboutUsImage: { url: string, hint: string } }) {
+export default function ClientLandingPage() {
+  const [teamMembers, setTeamMembers] = React.useState<TeamMember[]>([]);
+  const [aboutUsImage, setAboutUsImage] = React.useState<{ url: string, hint: string } | null>(null);
+  const firestore = useFirestore();
+
+  React.useEffect(() => {
+    if (!firestore) return;
+
+    const fetchTeamMembers = async () => {
+      const teamMembersCollection = collection(firestore, 'teamMembers');
+      const teamMembersSnapshot = await getDocs(teamMembersCollection);
+      const teamMembersData = teamMembersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as TeamMember));
+      setTeamMembers(teamMembersData);
+    };
+
+    const fetchAboutUsImage = async () => {
+      const aboutUsDoc = doc(firestore, 'siteContent', 'aboutUs');
+      const aboutUsSnapshot = await getDoc(aboutUsDoc);
+      if (aboutUsSnapshot.exists()) {
+        setAboutUsImage(aboutUsSnapshot.data() as { url: string, hint: string });
+      }
+    };
+
+    fetchTeamMembers();
+    fetchAboutUsImage();
+  }, [firestore]);
+
 
   const aspirationCategories = [
       {
@@ -243,7 +273,7 @@ export default function ClientLandingPage({ teamMembers, aboutUsImage }: { teamM
               </div>
             </div>
             <div className="order-1 lg:order-2 relative aspect-video lg:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border">
-              <Image src={aboutUsImage.url} alt="About OSIS" fill className="object-cover" data-ai-hint={aboutUsImage.hint} />
+              {aboutUsImage && <Image src={aboutUsImage.url} alt="About OSIS" fill className="object-cover" data-ai-hint={aboutUsImage.hint} />}
             </div>
           </div>
         </section>
@@ -289,7 +319,7 @@ export default function ClientLandingPage({ teamMembers, aboutUsImage }: { teamM
           <SectionTitle>Tim <span className="text-primary">Kami</span></SectionTitle>
           <Carousel opts={{ loop: true }} className="w-full max-w-6xl mx-auto">
             <CarouselContent>
-              {teamMembers.map((member: any) => (
+              {teamMembers && teamMembers.map((member: any) => (
                 <CarouselItem key={member.id}>
                   <Card className="bg-card/80 backdrop-blur-sm rounded-3xl overflow-hidden border">
                     <CardContent className="p-6 md:p-10">
@@ -407,5 +437,3 @@ export default function ClientLandingPage({ teamMembers, aboutUsImage }: { teamM
     </div>
   );
 }
-
-    
