@@ -402,11 +402,6 @@ export default function ClientLandingPage() {
                   Tentang Kami
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
-                <Link href="/#about">
-                  Lihat Agenda
-                </Link>
-              </Button>
             </div>
         </section>
         
@@ -609,5 +604,4 @@ export default function ClientLandingPage() {
   );
 }
 
-    
     
