@@ -16,6 +16,9 @@ const NotFoundPage = () => {
   useEffect(() => {
     // 1. Fragment Generator
     const createFragments = () => {
+      const existingContainer = document.getElementById('fragment-container');
+      if (existingContainer) return; // Don't create if it already exists
+
       const fragmentContainer = document.createElement('div');
       fragmentContainer.id = 'fragment-container';
       document.body.appendChild(fragmentContainer);
@@ -94,8 +97,8 @@ const NotFoundPage = () => {
       document.removeEventListener('mousemove', handleMouseMove);
       clearInterval(logInterval);
       const fragmentContainer = document.getElementById('fragment-container');
-      if (fragmentContainer) {
-        document.body.removeChild(fragmentContainer);
+      if (fragmentContainer && fragmentContainer.parentNode) {
+        fragmentContainer.parentNode.removeChild(fragmentContainer);
       }
     };
   }, []);
@@ -134,7 +137,6 @@ const NotFoundPage = () => {
         }
         body { 
             background-color: #020617 !important; 
-            overflow: hidden !important; 
             color: white !important;
         }
         .heading-premium { 
@@ -209,7 +211,7 @@ const NotFoundPage = () => {
         }
       `}</style>
       
-      <div className="flex items-center justify-center min-h-screen bg-[#020617] text-white font-body">
+      <div className="flex items-center justify-center min-h-screen bg-[#020617] text-white font-body py-16">
         <div className="grid-bg"></div>
         <div className="scanline"></div>
 
@@ -264,3 +266,5 @@ const NotFoundPage = () => {
 };
 
 export default NotFoundPage;
+
+    
