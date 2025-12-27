@@ -15,7 +15,6 @@ export async function sendAspiration(data: AspirationFormInputs): Promise<{ succ
   const parsedData = aspirationSchema.safeParse(data);
 
   if (!parsedData.success) {
-    // Extract a more specific error message if available
     const errorMessage = parsedData.error.errors[0]?.message || "Data tidak valid.";
     return { success: false, error: errorMessage };
   }
@@ -53,7 +52,7 @@ ${aspiration}
 
   try {
     const response = await fetch(`${url}?${params.toString()}`, {
-      method: 'GET', // Explicitly set method to GET
+      method: 'GET',
     });
 
     const result = await response.json();
