@@ -55,7 +55,6 @@ const AppFooter = () => (
                     <div className="flex items-center gap-3 mt-8">
                         <SocialIcon href="https://www.instagram.com/osissmp_kinaryagrasia" icon={Instagram} />
                         <SocialIcon href="https://www.youtube.com/@kinaryagrasia" icon={Youtube} />
-                        <SocialIcon href="#" icon={'TK'} />
                     </div>
                 </div>
                 <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-8">
