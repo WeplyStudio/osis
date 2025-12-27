@@ -321,7 +321,7 @@ const PeriodMarquee = () => {
   
   return (
     <div className="bg-primary text-primary-foreground py-3 overflow-x-hidden">
-      <Marquee baseVelocity={-2}>
+      <Marquee baseVelocity={-0.5}>
         <span className="font-body text-xl font-bold italic uppercase tracking-wider mx-4">
           {marqueeText}
         </span>
@@ -663,3 +663,6 @@ export default function ClientLandingPage() {
 
     
 
+
+
+    
