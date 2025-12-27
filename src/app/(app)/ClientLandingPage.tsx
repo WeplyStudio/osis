@@ -35,6 +35,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import ClientOnly from '@/components/ClientOnly';
+import Marquee from '@/components/ui/marquee';
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <h2 className={cn(`font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-foreground italic uppercase`, className)}>
@@ -161,6 +162,23 @@ const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
     </div>
 );
 
+const PeriodMarquee = () => {
+  const currentYear = new Date().getFullYear();
+  const nextYear = currentYear + 1;
+  const marqueeText = `OSIS PERIODE ${currentYear} / ${nextYear}`;
+  
+  return (
+    <div className="bg-primary text-primary-foreground py-3">
+        <Marquee>
+            <span className="font-body text-xl font-bold italic uppercase tracking-wider mx-4">
+                {marqueeText}
+            </span>
+             <span className="text-xl mx-4">•</span>
+        </Marquee>
+    </div>
+  );
+}
+
 
 export default function ClientLandingPage() {
   const teamMembers = staticTeamMembers;
@@ -189,9 +207,9 @@ export default function ClientLandingPage() {
 
   return (
     <div className="w-full bg-background text-foreground min-h-screen pt-24 md:pt-32">
-      <main className="container mx-auto px-4 space-y-24 md:space-y-32 pb-24 md:pb-32">
+      <main className="space-y-24 md:space-y-32 pb-24 md:pb-32">
         {/* Hero Section */}
-        <section className="text-center">
+        <section className="text-center container mx-auto px-4">
             <div className="inline-block bg-accent text-accent-foreground rounded-full px-4 py-2 mb-6">
                 <p className="font-bold text-sm tracking-wider uppercase">EMPOWERING FUTURE LEADERS</p>
             </div>
@@ -215,9 +233,11 @@ export default function ClientLandingPage() {
               </Button>
             </div>
         </section>
+        
+        <PeriodMarquee />
 
         {/* About Us Section */}
-        <section id="about">
+        <section id="about" className="container mx-auto px-4">
           <div className="text-left mb-12">
             <p className="font-body text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
             <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tight text-foreground italic uppercase">Tentang Kami</h2>
@@ -249,7 +269,7 @@ export default function ClientLandingPage() {
         </section>
 
         {/* Aspirasi Section */}
-        <section id="aspirasi">
+        <section id="aspirasi" className="container mx-auto px-4">
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                 <div>
                     <h2 className="font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-foreground mb-4 italic uppercase">
@@ -285,7 +305,7 @@ export default function ClientLandingPage() {
         </section>
 
         {/* Our Team Section */}
-        <section>
+        <section className="container mx-auto px-4">
           <SectionTitle>Tim <span className="text-primary">Kami</span></SectionTitle>
           <Carousel opts={{ loop: true }} className="w-full max-w-6xl mx-auto">
             <CarouselContent>
@@ -331,13 +351,13 @@ export default function ClientLandingPage() {
         </section>
 
         {/* Divisions Section */}
-        <section id="divisions">
+        <section id="divisions" className="container mx-auto px-4">
            <SectionTitle>Divisi <span className="text-primary">Kami</span></SectionTitle>
            <DivisionTabs />
         </section>
 
         {/* Newsletter Section */}
-        <section>
+        <section className="container mx-auto px-4">
             <div className="text-center">
                 <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-4 italic uppercase">
                     INFO KIGRA DI <span className="text-primary">INBOXTU.</span>
@@ -361,7 +381,7 @@ export default function ClientLandingPage() {
 
 
         {/* FAQ Section */}
-        <section>
+        <section className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                 <div className="lg:col-span-1">
                     <h2 className="font-body text-5xl font-extrabold tracking-tight text-foreground italic uppercase">
@@ -407,3 +427,5 @@ export default function ClientLandingPage() {
     </div>
   );
 }
+
+    
