@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,11 +11,11 @@ import { useToast } from '@/hooks/use-toast';
 import { Upload, Image as ImageIcon, Users, LogOut, BarChart3, Home, Loader2, Save } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { useFirestore } from '@/firebase';
-import { doc, updateDoc, setDoc, collection, getDocs, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, setDoc, getDocs, collection, getDoc } from 'firebase/firestore';
 import type { TeamMember } from '@/lib/types';
 
 
-const TeamMemberCard = ({ member }: { member: any }) => {
+const TeamMemberCard = ({ member }: { member: TeamMember }) => {
   const [newName, setNewName] = React.useState(member.name);
   const [newQuote, setNewQuote] = React.useState(member.quote);
   const [newImageUrl, setNewImageUrl] = React.useState('');
@@ -194,31 +194,43 @@ const AboutUsCard = ({ aboutUsImage }: { aboutUsImage: { url: string } | null })
 export default function ClientDashboardPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [teamMembers, setTeamMembers] = React.useState<TeamMember[]>([]);
-  const [aboutUsImage, setAboutUsImage] = React.useState<{ url: string } | null>(null);
   const firestore = useFirestore();
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [aboutUsImage, setAboutUsImage] = useState<{ url: string } | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!firestore) return;
 
-    const fetchTeamMembers = async () => {
-      const teamMembersCollection = collection(firestore, 'teamMembers');
-      const teamMembersSnapshot = await getDocs(teamMembersCollection);
-      const teamMembersData = teamMembersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as TeamMember));
-      setTeamMembers(teamMembersData);
-    };
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Fetch Team Members
+        const teamMembersCollection = collection(firestore, 'teamMembers');
+        const teamMembersSnapshot = await getDocs(teamMembersCollection);
+        const members = teamMembersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as TeamMember));
+        setTeamMembers(members);
 
-    const fetchAboutUsImage = async () => {
-      const aboutUsDoc = doc(firestore, 'siteContent', 'aboutUs');
-      const aboutUsSnapshot = await getDoc(aboutUsDoc);
-      if (aboutUsSnapshot.exists()) {
-        setAboutUsImage(aboutUsSnapshot.data() as { url: string });
+        // Fetch About Us Image
+        const aboutUsDoc = doc(firestore, 'siteContent', 'aboutUs');
+        const aboutUsSnapshot = await getDoc(aboutUsDoc);
+        if (aboutUsSnapshot.exists()) {
+          setAboutUsImage(aboutUsSnapshot.data() as { url: string });
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+        toast({
+          variant: "destructive",
+          title: "Gagal memuat data",
+          description: "Tidak dapat mengambil data dari server. Silakan coba lagi nanti.",
+        });
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchTeamMembers();
-    fetchAboutUsImage();
-  }, [firestore]);
+    fetchData();
+  }, [firestore, toast]);
 
   const handleLogout = () => {
     try {
@@ -236,6 +248,14 @@ export default function ClientDashboardPage() {
       });
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-muted/40">
@@ -303,3 +323,5 @@ export default function ClientDashboardPage() {
     </div>
   );
 }
+
+    
