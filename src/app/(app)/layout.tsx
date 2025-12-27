@@ -45,9 +45,8 @@ const AppFooter = () => (
         <div className="container mx-auto px-4 py-16">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                 <div className="lg:col-span-5">
-                     <Link href="/" className="flex items-center gap-4 mb-6">
-                      <div className="w-12 h-12 rounded-lg bg-primary"></div>
-                      <h1 className="text-3xl font-body font-extrabold text-foreground tracking-tighter">OSIS KIGRA</h1>
+                     <Link href="/" className="flex items-center gap-3 mb-6">
+                      <h1 className="text-3xl font-body font-extrabold text-foreground italic uppercase">OSIS<span className="text-primary">Kigra</span></h1>
                     </Link>
                     <p className="text-muted-foreground text-base max-w-sm leading-relaxed">
                         Organisasi Siswa Intra Sekolah Kigra. Membangun karakter religius, kreatif, dan mandiri melalui inovasi tanpa henti.
