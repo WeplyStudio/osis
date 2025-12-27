@@ -192,11 +192,19 @@ export default function ClientLandingPage() {
     const ctx = gsap.context(() => {
       // Helper function for animations
       const animateFrom = (elem: gsap.TweenTarget, vars: gsap.TweenVars = {}) => {
+        const delay = vars.delay || 0;
+        const duration = vars.duration || 1;
+        const ease = vars.ease || "power3.out";
+        const y = vars.y || 50;
+        const x = vars.x || 0;
+
         gsap.from(elem, {
           opacity: 0,
-          y: 50,
-          duration: 1,
-          ease: "power3.out",
+          y,
+          x,
+          duration,
+          delay,
+          ease,
           scrollTrigger: {
             trigger: elem as gsap.DOMTarget,
             start: "top 85%",
@@ -205,44 +213,50 @@ export default function ClientLandingPage() {
           ...vars,
         });
       };
+      
+      const sequence = (targets: gsap.TweenTarget[], vars: gsap.TweenVars = {}) => {
+        gsap.utils.toArray(targets).forEach((target, index) => {
+          animateFrom(target, { ...vars, delay: (vars.delay || 0) + index * 0.1 });
+        });
+      };
 
       // Hero Section
-      gsap.from('.hero-badge', { opacity: 0, y: -20, delay: 0.2, duration: 0.5 });
-      gsap.from('.hero-title', { opacity: 0, y: 20, delay: 0.4, duration: 0.8, ease: 'power3.out' });
-      gsap.from('.hero-p', { opacity: 0, y: 20, delay: 0.7, duration: 0.8 });
-      gsap.from('.hero-buttons', { opacity: 0, y: 20, delay: 1, duration: 0.8 });
+      animateFrom('.hero-badge', { y: -20, delay: 0.2, duration: 0.5 });
+      animateFrom('.hero-title', { y: 20, delay: 0.4, duration: 0.8 });
+      animateFrom('.hero-p', { y: 20, delay: 0.7, duration: 0.8 });
+      animateFrom('.hero-buttons', { y: 20, delay: 1, duration: 0.8 });
 
       // About Section
       animateFrom("#about .section-p");
-      animateFrom("#about .section-h2");
-      animateFrom("#about .section-h3");
-      animateFrom("#about .section-p-desc");
-      animateFrom(gsap.utils.toArray("#about .about-cards"));
+      animateFrom("#about .section-h2", {delay: 0.1});
+      animateFrom("#about .section-h3", {delay: 0.2});
+      animateFrom("#about .section-p-desc", {delay: 0.3});
+      sequence("#about .about-cards", {delay: 0.4});
 
       // Aspirasi Section
-      animateFrom("#aspirasi .section-h2");
-      animateFrom("#aspirasi .section-p");
-      animateFrom(gsap.utils.toArray("#aspirasi .aspiration-cards"));
-      animateFrom("#aspirasi .why-speak-up");
+      animateFrom("#aspirasi .section-h2", {delay: 0});
+      animateFrom("#aspirasi .section-p", {delay: 0.1});
+      sequence("#aspirasi .aspiration-cards", {delay: 0.2});
+      animateFrom("#aspirasi .why-speak-up", {delay: 0.5});
       
       // Team Section
       animateFrom("#team .section-title");
-      animateFrom("#team .team-carousel");
+      animateFrom("#team .team-carousel", {delay: 0.2});
 
       // Divisions Section
       animateFrom("#divisions .section-title");
-      animateFrom("#divisions .division-tabs");
+      animateFrom("#divisions .division-tabs", {delay: 0.2});
 
       // Newsletter Section
       animateFrom("#newsletter .section-h2");
-      animateFrom("#newsletter .section-p");
-      animateFrom("#newsletter .newsletter-form");
+      animateFrom("#newsletter .section-p", {delay: 0.1});
+      animateFrom("#newsletter .newsletter-form", {delay: 0.2});
       
       // FAQ Section
       animateFrom("#faq .section-h2");
-      animateFrom("#faq .section-p");
-      animateFrom("#faq .faq-contact-button");
-      animateFrom(gsap.utils.toArray("#faq .faq-items"));
+      animateFrom("#faq .section-p", {delay: 0.1});
+      animateFrom("#faq .faq-contact-button", {delay: 0.2});
+      sequence("#faq .faq-items", {delay: 0.3});
 
     }, mainRef);
     return () => ctx.revert();
