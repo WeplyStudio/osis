@@ -4,7 +4,7 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { ArrowRight, Eye, HelpCircle, Mail, Loader2 } from 'lucide-react';
+import { ArrowRight, Eye, HelpCircle, Mail, Loader2, Calendar } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Accordion,
@@ -19,7 +19,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { divisions, faqItems, teamMembers as staticTeamMembers } from '@/lib/data';
+import { divisions, faqItems, teamMembers as staticTeamMembers, upcomingEvents } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -237,6 +237,56 @@ const DivisionTabs = () => {
     );
 };
 
+const UpcomingEvents = () => {
+    const mainEvent = upcomingEvents.find(e => e.type === 'main');
+    const secondaryEvents = upcomingEvents.filter(e => e.type === 'secondary');
+
+    return (
+        <section id="upcoming-events" className="container mx-auto px-4">
+            <div className="flex justify-between items-center mb-8">
+                <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tight text-foreground italic uppercase">
+                    Program <span className="text-primary">Kami.</span>
+                </h2>
+                <Button variant="link" asChild className="hidden md:flex">
+                    <Link href="#" className="font-bold tracking-wider">FULL CALENDAR <ArrowRight className="ml-2" /></Link>
+                </Button>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Main Event */}
+                {mainEvent && (
+                    <div className="main-event-card bg-card text-card-foreground rounded-3xl p-8 flex flex-col relative overflow-hidden shadow-2xl border">
+                         <div className="absolute top-8 right-8 text-foreground/5 font-body font-extrabold text-8xl italic select-none -z-0">EVENT</div>
+                         <div className="relative z-10 flex flex-col h-full">
+                            <p className="font-mono text-sm uppercase tracking-widest text-primary mb-4">MAIN EVENT • {mainEvent.month}</p>
+                            <h3 className="font-body text-6xl font-extrabold tracking-tighter text-foreground mb-4 uppercase italic">
+                                {mainEvent.title}
+                            </h3>
+                            <p className="text-muted-foreground mb-auto max-w-md">{mainEvent.description}</p>
+                            <Button size="lg" className="mt-8 font-bold w-full md:w-auto">
+                                LIHAT GALERI
+                            </Button>
+                         </div>
+                    </div>
+                )}
+                {/* Secondary Events */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {secondaryEvents.map(event => (
+                        <div key={event.id} className="secondary-event-card bg-card/80 border backdrop-blur-sm rounded-3xl p-6 flex flex-col text-left hover:bg-accent/50 transition-colors">
+                            <p className="text-sm font-bold text-primary tracking-widest uppercase">{event.date} {event.month} • {event.location}</p>
+                            <h4 className="font-body text-xl font-bold uppercase text-foreground mt-2 mb-2">{event.title}</h4>
+                            <p className="text-xs text-muted-foreground">{event.description}</p>
+                        </div>
+                    ))}
+                     <div className="secondary-event-card bg-card/50 border-dashed border-2 rounded-3xl p-6 flex flex-col items-center justify-center text-center hover:bg-accent/30 hover:border-primary/50 transition-colors cursor-pointer">
+                        <Calendar className="w-8 h-8 text-muted-foreground mb-2" />
+                        <h4 className="font-bold text-sm uppercase tracking-widest text-muted-foreground">SEE ALL EVENTS</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
 const AspirationCard = React.forwardRef<HTMLDivElement, { title: string; description: string; status: string; statusVariant: "default" | "secondary" | "outline" | "destructive" | null | undefined, [key: string]: any }>(
     ({ title, description, status, statusVariant, ...props }, ref) => (
     <Card ref={ref} className="hover:bg-accent/50 transition-colors duration-200 cursor-pointer" {...props}>
@@ -330,6 +380,11 @@ export default function ClientLandingPage() {
       animateFrom("#about .section-h3", {delay: 0.2});
       animateFrom("#about .section-p-desc", {delay: 0.3});
       sequence("#about .about-cards", {delay: 0.4});
+      
+      // Upcoming Events Section
+      animateFrom("#upcoming-events .main-event-card", {y: 60});
+      sequence("#upcoming-events .secondary-event-card", {y: 60, delay: 0.2});
+
 
       // Aspirasi Section
       animateFrom("#aspirasi .section-h2", {delay: 0});
@@ -438,6 +493,8 @@ export default function ClientLandingPage() {
             </div>
           </div>
         </section>
+
+        <UpcomingEvents />
 
         {/* Aspirasi Section */}
         <section id="aspirasi" className="container mx-auto px-4">
@@ -605,3 +662,4 @@ export default function ClientLandingPage() {
 }
 
     
+

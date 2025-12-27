@@ -54,5 +54,16 @@ export type Document = {
   icon: 'document' | 'spreadsheet' | 'presentation';
 };
     
+export type UpcomingEvent = {
+  id: string;
+  type: 'main' | 'secondary';
+  date: string;
+  month: string;
+  location?: string;
+  title: string;
+  description: string;
+};
+    
+
 
 

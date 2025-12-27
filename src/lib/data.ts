@@ -1,5 +1,5 @@
 
-import type { Announcement, VisionMission, Division, NewsArticle, FaqItem, TeamMember } from './types';
+import type { Announcement, VisionMission, Division, NewsArticle, FaqItem, TeamMember, UpcomingEvent } from './types';
 import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Calendar, ClipboardCheck } from 'lucide-react';
 
 
@@ -206,6 +206,26 @@ export const faqItems: FaqItem[] = [
     id: "faq6",
     question: "Bagaimana cara bekerjasama atau menjadi sponsor acara OSIS?",
     answer: "Kami sangat terbuka untuk kolaborasi dan sponsorship. Anda dapat menghubungi kami melalui halaman Kontak atau mengirimkan proposal langsung ke email resmi OSIS yang tertera di bagian footer website."
+  },
+  {
+    id: 'faq7',
+    question: 'Apa saja divisi yang ada di OSIS Kigra?',
+    answer: 'Kami memiliki 10 divisi yang mencakup berbagai bidang mulai dari Kerohanian, Akademik, Seni, Olahraga, hingga Teknologi. Anda bisa melihat detail lengkapnya di bagian Divisi pada halaman ini.'
+  },
+  {
+    id: 'faq8',
+    question: 'Kapan periode kepengurusan OSIS saat ini berakhir?',
+    answer: 'Periode kepengurusan saat ini berjalan untuk tahun ajaran yang sedang berlangsung. Proses regenerasi dan pemilihan pengurus baru akan diumumkan menjelang akhir tahun ajaran.'
+  },
+  {
+    id: 'faq9',
+    question: 'Apakah siswa non-pengurus bisa berpartisipasi dalam program kerja?',
+    answer: 'Tentu saja! Sebagian besar acara kami, seperti lomba, seminar, dan festival, terbuka untuk seluruh siswa. Beberapa program juga membuka kepanitiaan atau relawan untuk non-pengurus.'
+  },
+  {
+    id: 'faq10',
+    question: 'Bagaimana cara mendapatkan informasi terbaru dari OSIS?',
+    answer: 'Cara terbaik adalah dengan mengikuti akun Instagram resmi kami @osissmp_kinaryagrasia dan secara rutin memeriksa pengumuman di website ini. Anda juga bisa berlangganan newsletter kami.'
   }
 ];
 
@@ -252,10 +272,48 @@ export const teamMembers: TeamMember[] = [
         image: "https://i.postimg.cc/7bVD2J30/20251227-001050-0002.png",
         quote: "Setiap rupiah akan kami kelola dengan penuh tanggung jawab demi kemajuan bersama."
     }
-]
-    
+];
+
+export const upcomingEvents: UpcomingEvent[] = [
+  {
+    id: '1',
+    type: 'main',
+    date: '21',
+    month: 'JUNI',
+    title: 'MPLS 2025',
+    description: 'Menyambut siswa-siswi baru dengan rangkaian acara pengenalan lingkungan sekolah yang seru dan edukatif.',
+  },
+  {
+    id: '2',
+    type: 'secondary',
+    date: '05',
+    month: 'AGU',
+    location: 'Online',
+    title: 'Lomba Poster 17-an',
+    description: 'Tuangkan semangat kemerdekaan dalam karya poster digitalmu.',
+  },
+  {
+    id: '3',
+    type: 'secondary',
+    date: '05',
+    month: 'AGU',
+    location: 'Online',
+    title: 'Lomba Video 17-an',
+    description: 'Buat video kreatif bertema kemerdekaan dan menangkan hadiahnya.',
+  },
+  {
+    id: '4',
+    type: 'secondary',
+    date: '11',
+    month: 'OKT',
+    location: 'GOR Sekolah',
+    title: 'KIGRA BADMINTON',
+    description: 'Tunjukkan bakat bulu tangkismu dalam turnamen persahabatan antar kelas.',
+  },
+];
     
 
     
 
     
+
