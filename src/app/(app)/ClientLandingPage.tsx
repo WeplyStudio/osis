@@ -1,7 +1,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { ArrowRight, Eye, HelpCircle, Mail, Loader2 } from 'lucide-react';
@@ -36,6 +36,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import ClientOnly from '@/components/ClientOnly';
 import Marquee from '@/components/ui/marquee';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <h2 className={cn(`font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-foreground italic uppercase`, className)}>
@@ -182,7 +186,67 @@ const PeriodMarquee = () => {
 
 export default function ClientLandingPage() {
   const teamMembers = staticTeamMembers;
+  const mainRef = useRef<HTMLDivElement>(null);
 
+   useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // Helper function for animations
+      const animateFrom = (elem: gsap.TweenTarget, vars: gsap.TweenVars = {}) => {
+        gsap.from(elem, {
+          opacity: 0,
+          y: 50,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: elem as gsap.DOMTarget,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          ...vars,
+        });
+      };
+
+      // Hero Section
+      gsap.from('.hero-badge', { opacity: 0, y: -20, delay: 0.2, duration: 0.5 });
+      gsap.from('.hero-title', { opacity: 0, y: 20, delay: 0.4, duration: 0.8, ease: 'power3.out' });
+      gsap.from('.hero-p', { opacity: 0, y: 20, delay: 0.7, duration: 0.8 });
+      gsap.from('.hero-buttons', { opacity: 0, y: 20, delay: 1, duration: 0.8 });
+
+      // About Section
+      animateFrom("#about .section-p");
+      animateFrom("#about .section-h2");
+      animateFrom("#about .section-h3");
+      animateFrom("#about .section-p-desc");
+      animateFrom(gsap.utils.toArray("#about .about-cards"));
+
+      // Aspirasi Section
+      animateFrom("#aspirasi .section-h2");
+      animateFrom("#aspirasi .section-p");
+      animateFrom(gsap.utils.toArray("#aspirasi .aspiration-cards"));
+      animateFrom("#aspirasi .why-speak-up");
+      
+      // Team Section
+      animateFrom("#team .section-title");
+      animateFrom("#team .team-carousel");
+
+      // Divisions Section
+      animateFrom("#divisions .section-title");
+      animateFrom("#divisions .division-tabs");
+
+      // Newsletter Section
+      animateFrom("#newsletter .section-h2");
+      animateFrom("#newsletter .section-p");
+      animateFrom("#newsletter .newsletter-form");
+      
+      // FAQ Section
+      animateFrom("#faq .section-h2");
+      animateFrom("#faq .section-p");
+      animateFrom("#faq .faq-contact-button");
+      animateFrom(gsap.utils.toArray("#faq .faq-items"));
+
+    }, mainRef);
+    return () => ctx.revert();
+  }, []);
 
   const aspirationCategories = [
       {
@@ -206,21 +270,21 @@ export default function ClientLandingPage() {
   ];
 
   return (
-    <div className="w-full bg-background text-foreground min-h-screen pt-24 md:pt-32">
+    <div ref={mainRef} className="w-full bg-background text-foreground min-h-screen pt-24 md:pt-32">
       <main className="space-y-24 md:space-y-32 pb-24 md:pb-32">
         {/* Hero Section */}
         <section className="text-center container mx-auto px-4">
-            <div className="inline-block bg-accent text-accent-foreground rounded-full px-4 py-2 mb-6">
+            <div className="hero-badge inline-block bg-accent text-accent-foreground rounded-full px-4 py-2 mb-6">
                 <p className="font-bold text-sm tracking-wider uppercase">EMPOWERING FUTURE LEADERS</p>
             </div>
-            <h1 className="font-body text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 text-foreground italic uppercase">
+            <h1 className="hero-title font-body text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 text-foreground italic uppercase">
                 Inovasi Digital<br/>
                 <span className="text-primary">Satu Suara Kigra.</span>
             </h1>
-            <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
+            <p className="hero-p max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
                 Wadah kolaborasi inklusif bagi seluruh siswa Kigra untuk berkarya, berinovasi, dan membawa perubahan positif bagi sekolah dan masyarakat.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="hero-buttons mt-8 flex flex-wrap justify-center gap-4">
               <Button asChild size="lg" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
                 <Link href="#">
                   Mulai Berkontribusi <ArrowRight className="ml-2 h-5 w-5" />
@@ -239,25 +303,25 @@ export default function ClientLandingPage() {
         {/* About Us Section */}
         <section id="about" className="container mx-auto px-4">
           <div className="text-left mb-12">
-            <p className="font-body text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
-            <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tight text-foreground italic uppercase">Tentang Kami</h2>
+            <p className="section-p font-body text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
+            <h2 className="section-h2 font-body text-4xl md:text-5xl font-extrabold tracking-tight text-foreground italic uppercase">Tentang Kami</h2>
           </div>
           <div className="grid grid-cols-1 gap-8 lg:gap-16 items-center">
             <div>
-              <h3 className="font-body text-3xl font-bold tracking-tight text-foreground text-left">
+              <h3 className="section-h3 font-body text-3xl font-bold tracking-tight text-foreground text-left">
                 Membangun Karakter, <br/><span className="text-primary">Mewujudkan Perubahan.</span>
               </h3>
-              <p className="mt-4 text-muted-foreground max-w-3xl text-left">
+              <p className="section-p-desc mt-4 text-muted-foreground max-w-3xl text-left">
                 Didirikan sejak tahun 2022, OSIS Kigra telah menjadi wadah bagi ribuan siswa untuk mengasah kepemimpinan. Kami percaya bahwa setiap suara siswa adalah aset berharga bagi kemajuan sekolah.
               </p>
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl">
-                <Card className="bg-card/80 border-border/80 shadow-sm">
+                <Card className="about-cards bg-card/80 border-border/80 shadow-sm">
                   <CardContent className="p-6">
                     <h4 className="font-body text-lg font-bold text-primary mb-2">Visi</h4>
                     <p className="text-sm text-muted-foreground">Menjadi barometer organisasi sekolah yang religius, kreatif, dan mandiri.</p>
                   </CardContent>
                 </Card>
-                <Card className="bg-card/80 border-border/80 shadow-sm">
+                <Card className="about-cards bg-card/80 border-border/80 shadow-sm">
                   <CardContent className="p-6">
                     <h4 className="font-body text-lg font-bold text-primary mb-2">Misi</h4>
                     <p className="text-sm text-muted-foreground">Mengoptimalkan minat bakat melalui program kerja inovatif.</p>
@@ -272,17 +336,18 @@ export default function ClientLandingPage() {
         <section id="aspirasi" className="container mx-auto px-4">
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                 <div>
-                    <h2 className="font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-foreground mb-4 italic uppercase">
+                    <h2 className="section-h2 font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-foreground mb-4 italic uppercase">
                         Suara Kamu, <br/><span className="text-primary">Perubahan Kita.</span>
                     </h2>
-                    <p className="text-muted-foreground mb-8 max-w-lg">
+                    <p className="section-p text-muted-foreground mb-8 max-w-lg">
                         OSIS sedang fokus mengevaluasi beberapa hal penting. Pilih salah satu kategori dan berikan masukan terbaikmu untuk sekolah.
                     </p>
                      <div className="space-y-4">
                         <ClientOnly>
-                          {aspirationCategories.map((cat) => (
+                          {aspirationCategories.map((cat, index) => (
                               <AspirationDialog key={cat.title} title={cat.title}>
                                   <AspirationCard
+                                      className="aspiration-cards"
                                       title={cat.title}
                                       description={cat.description}
                                       status={cat.status}
@@ -293,7 +358,7 @@ export default function ClientLandingPage() {
                         </ClientOnly>
                     </div>
                 </div>
-                <div className="bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 flex flex-col justify-center">
+                <div className="why-speak-up bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 flex flex-col justify-center">
                     <h3 className="font-body text-3xl font-extrabold tracking-tight mb-6 italic">Kenapa Harus Bersuara?</h3>
                     <div className="space-y-5">
                         <WhySpeakUpItem number={1} text="Aspirasi kamu dibaca langsung oleh Ketua Umum & Sekbid terkait." />
@@ -305,9 +370,9 @@ export default function ClientLandingPage() {
         </section>
 
         {/* Our Team Section */}
-        <section className="container mx-auto px-4">
-          <SectionTitle>Tim <span className="text-primary">Kami</span></SectionTitle>
-          <Carousel opts={{ loop: true }} className="w-full max-w-6xl mx-auto">
+        <section id="team" className="container mx-auto px-4">
+          <SectionTitle className="section-title">Tim <span className="text-primary">Kami</span></SectionTitle>
+          <Carousel opts={{ loop: true }} className="team-carousel w-full max-w-6xl mx-auto">
             <CarouselContent>
               {teamMembers && teamMembers.map((member: any) => (
                 <CarouselItem key={member.id}>
@@ -352,20 +417,22 @@ export default function ClientLandingPage() {
 
         {/* Divisions Section */}
         <section id="divisions" className="container mx-auto px-4">
-           <SectionTitle>Divisi <span className="text-primary">Kami</span></SectionTitle>
-           <DivisionTabs />
+           <SectionTitle className="section-title">Divisi <span className="text-primary">Kami</span></SectionTitle>
+           <div className="division-tabs">
+            <DivisionTabs />
+           </div>
         </section>
 
         {/* Newsletter Section */}
-        <section className="container mx-auto px-4">
+        <section id="newsletter" className="container mx-auto px-4">
             <div className="text-center">
-                <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-4 italic uppercase">
+                <h2 className="section-h2 font-body text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-4 italic uppercase">
                     INFO KIGRA DI <span className="text-primary">INBOXTU.</span>
                 </h2>
-                <p className="max-w-xl mx-auto text-muted-foreground mb-8">
+                <p className="section-p max-w-xl mx-auto text-muted-foreground mb-8">
                     Berlangganan info mingguan seputar pendaftaran, kegiatan, dan beasiswa terbaru eksklusif via email.
                 </p>
-                <form className="max-w-lg mx-auto flex items-center gap-2 bg-card p-2 rounded-full border shadow-sm">
+                <form className="newsletter-form max-w-lg mx-auto flex items-center gap-2 bg-card p-2 rounded-full border shadow-sm">
                     <Mail className="ml-4 text-muted-foreground" />
                     <Input 
                         type="email" 
@@ -381,16 +448,16 @@ export default function ClientLandingPage() {
 
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4">
+        <section id="faq" className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                 <div className="lg:col-span-1">
-                    <h2 className="font-body text-5xl font-extrabold tracking-tight text-foreground italic uppercase">
+                    <h2 className="section-h2 font-body text-5xl font-extrabold tracking-tight text-foreground italic uppercase">
                         FAQ<br/><span className="text-primary">COMMON GROUND.</span>
                     </h2>
-                    <p className="mt-4 text-muted-foreground">
+                    <p className="section-p mt-4 text-muted-foreground">
                         Punya ganjalan atau pertanyaan seputar OSIS? Kami rangkum jawaban yang paling sering ditanyakan di sini untuk mempermudahmu.
                     </p>
-                    <Button variant="default" size="lg" className="mt-8 w-full h-auto py-4 rounded-2xl bg-primary text-primary-foreground">
+                    <Button variant="default" size="lg" className="faq-contact-button mt-8 w-full h-auto py-4 rounded-2xl bg-primary text-primary-foreground">
                         <div className="flex items-center gap-4 text-left">
                              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
                                 <HelpCircle className="w-6 h-6 text-primary-foreground" />
@@ -406,7 +473,7 @@ export default function ClientLandingPage() {
                   <ClientOnly>
                       <Accordion type="single" collapsible className="w-full space-y-4">
                           {faqItems.map((item) => (
-                               <AccordionItem key={item.id} value={item.id} className="group bg-card border-none rounded-2xl shadow-sm data-[state=open]:border data-[state=open]:border-primary/50">
+                               <AccordionItem key={item.id} value={item.id} className="faq-items group bg-card border-none rounded-2xl shadow-sm data-[state=open]:border data-[state=open]:border-primary/50">
                                   <AccordionTrigger className="p-6 font-bold text-sm uppercase tracking-wider hover:no-underline text-left data-[state=open]:text-primary">
                                       {item.question}
                                       <span className="ml-auto shrink-0 transition-transform duration-200 group-data-[state=closed]:block hidden italic text-primary">↓</span>
@@ -427,5 +494,3 @@ export default function ClientLandingPage() {
     </div>
   );
 }
-
-    
