@@ -1,3 +1,4 @@
+
 import type { Announcement, VisionMission, Division, NewsArticle, FaqItem, TeamMember } from './types';
 import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Calendar, ClipboardCheck } from 'lucide-react';
 
@@ -203,9 +204,9 @@ export const teamMembers: TeamMember[] = [
     },
     {
         id: "2",
-        name: "Bunga Citra",
+        name: "crishtian",
         role: "Wakil Ketua OSIS",
-        image: "https://i.ibb.co/6yvBA0D/Ellipse-3-1.png",
+        image: "https://i.postimg.cc/NL4YH262/20251227-001050-0002.png",
         quote: "Setiap suara berarti, setiap ide berharga. Jangan ragu untuk berkontribusi demi kemajuan sekolah kita."
     },
     {
@@ -224,4 +225,6 @@ export const teamMembers: TeamMember[] = [
     }
 ]
     
+    
+
     
