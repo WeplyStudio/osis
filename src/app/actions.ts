@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 const aspirationSchema = z.object({
   name: z.string().optional(),
-  aspiration: z.string().min(1, { message: "Aspiration cannot be empty." }),
+  aspiration: z.string().min(10, { message: "Aspirasi harus minimal 10 karakter." }),
   category: z.string(),
 });
 
@@ -68,5 +68,7 @@ ${aspiration}
     return { success: false, error: "Terjadi kesalahan jaringan." };
   }
 }
+
+    
 
     
