@@ -60,7 +60,7 @@ const AppFooter = () => (
                 </div>
                 <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-8">
                     <div className="md:col-start-2">
-                        <h3 className="font-mono text-sm font-bold tracking-[0.2em] uppercase text-foreground/80 mb-6">ORGANIZATION</h3>
+                        <h3 className="font-mono text-sm font-bold tracking-[0.2em] uppercase text-muted-foreground mb-6">ORGANIZATION</h3>
                         <ul className="space-y-4">
                             {organizationLinks.map(item => (
                                  <li key={item.label}>
@@ -72,7 +72,7 @@ const AppFooter = () => (
                         </ul>
                     </div>
                      <div>
-                        <h3 className="font-mono text-sm font-bold tracking-[0.2em] uppercase text-foreground/80 mb-6">INNOVATION</h3>
+                        <h3 className="font-mono text-sm font-bold tracking-[0.2em] uppercase text-muted-foreground mb-6">INNOVATION</h3>
                         <ul className="space-y-4">
                              {innovationLinks.map(item => (
                                  <li key={item.label}>
