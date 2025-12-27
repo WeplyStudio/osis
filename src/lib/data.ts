@@ -184,13 +184,28 @@ export const faqItems: FaqItem[] = [
   },
   {
     id: "faq2",
-    question: "Syarat daftar pengurus?",
-    answer: "Pendaftaran pengurus OSIS biasanya dibuka setiap awal tahun ajaran baru. Syarat utamanya adalah siswa aktif, memiliki komitmen, dan lolos seleksi yang diadakan. Pantau terus informasinya di media sosial kami!"
+    question: "Bagaimana cara daftar menjadi pengurus OSIS?",
+    answer: "Pendaftaran pengurus OSIS biasanya dibuka setiap awal tahun ajaran baru. Syarat utamanya adalah siswa aktif, memiliki komitmen, dan lolos serangkaian seleksi. Pantau terus informasinya di media sosial dan website kami!"
   },
-    {
+  {
     id: "faq3",
-    question: "Cara kerjasama/sponsor?",
-    answer: "Kami sangat terbuka untuk kerjasama dan sponsorship. Anda dapat menghubungi kami melalui halaman Kontak atau mengirimkan proposal langsung ke email OSIS yang tertera di bagian footer."
+    question: "Bagaimana cara menyampaikan aspirasi atau keluhan?",
+    answer: "Anda dapat menggunakan fitur 'Suara Kamu' di halaman utama website ini. Setiap masukan, baik berupa kritik maupun saran, akan kami terima dan tindak lanjuti secara transparan."
+  },
+  {
+    id: "faq4",
+    question: "Apakah kegiatan OSIS mengganggu waktu belajar?",
+    answer: "Tidak sama sekali. Kami merancang semua program kerja dengan mempertimbangkan jadwal akademik. Justru, manajemen waktu adalah salah satu soft skill utama yang akan kamu pelajari saat menjadi pengurus."
+  },
+  {
+    id: "faq5",
+    question: "Di mana saya bisa melihat Laporan Pertanggungjawaban (LPJ)?",
+    answer: "Transparansi adalah kunci. Anda bisa mengakses semua dokumen penting seperti LPJ, proposal, dan kurikulum kaderisasi di halaman 'Digital Library' yang dilindungi oleh PIN."
+  },
+  {
+    id: "faq6",
+    question: "Bagaimana cara bekerjasama atau menjadi sponsor acara OSIS?",
+    answer: "Kami sangat terbuka untuk kolaborasi dan sponsorship. Anda dapat menghubungi kami melalui halaman Kontak atau mengirimkan proposal langsung ke email resmi OSIS yang tertera di bagian footer website."
   }
 ];
 
