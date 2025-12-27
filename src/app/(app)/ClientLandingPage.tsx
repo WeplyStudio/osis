@@ -223,14 +223,14 @@ export default function ClientLandingPage() {
             <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tight text-foreground italic uppercase">Tentang Kami</h2>
           </div>
           <div className="grid grid-cols-1 gap-8 lg:gap-16 items-center">
-            <div className="text-center">
+            <div>
               <h3 className="font-body text-3xl font-bold tracking-tight text-foreground">
                 Membangun Karakter, <br/><span className="text-primary">Mewujudkan Perubahan.</span>
               </h3>
-              <p className="mt-4 text-muted-foreground max-w-3xl mx-auto">
+              <p className="mt-4 text-muted-foreground max-w-3xl">
                 Didirikan sejak tahun 2022, OSIS Kigra telah menjadi wadah bagi ribuan siswa untuk mengasah kepemimpinan. Kami percaya bahwa setiap suara siswa adalah aset berharga bagi kemajuan sekolah.
               </p>
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl">
                 <Card className="bg-card/80 border-border/80 shadow-sm">
                   <CardContent className="p-6">
                     <h4 className="font-body text-lg font-bold text-primary mb-2">Visi</h4>
