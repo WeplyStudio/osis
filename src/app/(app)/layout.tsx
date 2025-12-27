@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const navItems = [
     { href: '/', icon: Home, label: 'Beranda' },
@@ -94,17 +95,32 @@ const AppFooter = () => (
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [animationClass, setAnimationClass] = useState('animate-fade-in');
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    const timer = setTimeout(() => {
+      setAnimationClass('animate-fade-out');
+      setTimeout(() => setLoading(false), 500); // Wait for fade-out animation
+    }, 2000); // Adjust duration as needed
+
+    return () => {
+        window.removeEventListener('scroll', handleScroll);
+        clearTimeout(timer);
+    };
   }, []);
 
+  if (loading) {
+    return <LoadingScreen animationClassName={animationClass} />;
+  }
+
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background animate-fade-in">
         <header className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out",
           "flex items-center justify-between",
