@@ -218,16 +218,16 @@ export default function ClientLandingPage() {
 
         {/* About Us Section */}
         <section id="about">
-          <div className="text-center mb-12">
+          <div className="text-left mb-12">
             <p className="font-body text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
             <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tight text-foreground italic uppercase">Tentang Kami</h2>
           </div>
           <div className="grid grid-cols-1 gap-8 lg:gap-16 items-center">
             <div>
-              <h3 className="font-body text-3xl font-bold tracking-tight text-foreground">
+              <h3 className="font-body text-3xl font-bold tracking-tight text-foreground text-left">
                 Membangun Karakter, <br/><span className="text-primary">Mewujudkan Perubahan.</span>
               </h3>
-              <p className="mt-4 text-muted-foreground max-w-3xl">
+              <p className="mt-4 text-muted-foreground max-w-3xl text-left">
                 Didirikan sejak tahun 2022, OSIS Kigra telah menjadi wadah bagi ribuan siswa untuk mengasah kepemimpinan. Kami percaya bahwa setiap suara siswa adalah aset berharga bagi kemajuan sekolah.
               </p>
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl">
@@ -340,7 +340,7 @@ export default function ClientLandingPage() {
         <section>
             <div className="text-center">
                 <h2 className="font-body text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-4 italic uppercase">
-                    INFO SMANSA DI <span className="text-primary">INBOXTU.</span>
+                    INFO KIGRA DI <span className="text-primary">INBOXTU.</span>
                 </h2>
                 <p className="max-w-xl mx-auto text-muted-foreground mb-8">
                     Berlangganan info mingguan seputar pendaftaran, kegiatan, dan beasiswa terbaru eksklusif via email.
