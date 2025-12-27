@@ -45,5 +45,14 @@ export type FaqItem = {
   question: string;
   answer: string;
 };
+
+export type Document = {
+  id: string;
+  title: string;
+  description: string;
+  fileUrl: string;
+  icon: 'document' | 'spreadsheet' | 'presentation';
+};
     
+
 

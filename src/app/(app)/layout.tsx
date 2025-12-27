@@ -2,7 +2,7 @@
 'use client';
 
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Home, Menu, Phone, Users, Briefcase, Info, Youtube, LucideIcon } from "lucide-react";
+import { Facebook, Twitter, Instagram, Home, Menu, Phone, Users, Briefcase, Info, Youtube, LucideIcon, Library } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -28,9 +28,9 @@ const organizationLinks = [
 ];
 
 const innovationLinks = [
+    { href: '/library', label: 'Digital Library' },
     { href: '#', label: 'E-Voting' },
     { href: '#', label: 'AI Assistant' },
-    { href: '#', label: 'Library' },
     { href: '#', label: 'Podwaves' },
 ];
 
@@ -126,6 +126,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     </Link>
                 </Button>
             ))}
+             <Button asChild variant="ghost">
+                <Link href="/library">
+                    Library
+                </Link>
+            </Button>
           </nav>
           
           <div className="flex items-center gap-4">
@@ -156,6 +161,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                           </Link>
                       </Button>
                     ))}
+                     <Button asChild variant="ghost" className="justify-start text-lg h-14">
+                          <Link href="/library" className="flex items-center gap-4">
+                              <Library className="w-6 h-6" />
+                              Library
+                          </Link>
+                      </Button>
                   </nav>
                     <Button asChild className="mt-auto w-full font-bold text-lg py-6 rounded-full shadow-lg">
                       <Link href="#"><Phone className="mr-2 h-5 w-5"/>Kontak</Link>
