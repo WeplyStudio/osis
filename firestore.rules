@@ -5,8 +5,11 @@ service cloud.firestore {
 
     // Allow public read access to team members and site content
     match /teamMembers/{memberId} {
-      allow read: if true;
-      allow write: if false; // Protect against public writes
+      allow get: if true;
+      allow write: if false;
+    }
+     match /teamMembers {
+      allow list: if true;
     }
 
     match /siteContent/{contentId} {
