@@ -26,47 +26,40 @@ const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
       const items = marqueeRef.current.children;
       if (items.length <= 1) return;
 
-      const itemWidth = items[0].getBoundingClientRect().width;
-      const totalWidth = itemWidth * items.length;
-      gsap.set(items, {
-        x: (i) => i * itemWidth,
+      // Duplicate children to create a seamless loop
+      const childArray = React.Children.toArray(children);
+      const duplicatedChildren = [...childArray, ...childArray, ...childArray, ...childArray, ...childArray];
+      
+      gsap.set(marqueeRef.current, {
+        width: 'max-content'
       });
 
       const animate = () => {
-        const speed = baseVelocity;
-        const firstItem = items[0];
-        const lastItem = items[items.length - 1];
+        if (!marqueeRef.current) return;
+        const { width } = marqueeRef.current.getBoundingClientRect();
+        const halfWidth = width / 5; // Since we duplicated 5 times
 
-        if (speed < 0) {
-          xPercent.current -= Math.abs(speed) / 100;
-          if (firstItem.getBoundingClientRect().right <= 0) {
-             xPercent.current = 0;
-          }
+        xPercent.current += baseVelocity * 0.016; // 60fps
+        if (baseVelocity < 0) {
+            if (xPercent.current < -100 * (4/5)) {
+                xPercent.current = 0;
+            }
         } else {
-          xPercent.current += Math.abs(speed) / 100;
-           if (lastItem.getBoundingClientRect().left >= window.innerWidth) {
-             xPercent.current = 0;
-           }
+            if (xPercent.current > 0) {
+                xPercent.current = -100 * (4/5);
+            }
         }
+
+        gsap.set(marqueeRef.current, {
+            xPercent: xPercent.current
+        });
         
-        gsap.set(items, { xPercent: xPercent.current });
         requestAnimationFrame(animate);
       };
-
-      const resizeObserver = new ResizeObserver(() => {
-          const newWidth = items[0].getBoundingClientRect().width;
-          gsap.set(items, {
-            x: (i) => i * newWidth,
-          });
-      });
-      resizeObserver.observe(items[0]);
       
       requestAnimationFrame(animate);
 
-      return () => {
-        resizeObserver.disconnect();
-      };
-    }, [baseVelocity]);
+    }, [baseVelocity, children]);
 
     return (
       <div
@@ -74,16 +67,13 @@ const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
         className={cn("relative flex w-full overflow-hidden", className)}
       >
         <div ref={marqueeRef} className="flex whitespace-nowrap">
-          {React.Children.map(children, (child) => (
+           {React.Children.map(children, (child) => (
             <div className="shrink-0">{child}</div>
           ))}
            {React.Children.map(children, (child) => (
             <div className="shrink-0">{child}</div>
           ))}
           {React.Children.map(children, (child) => (
-            <div className="shrink-0">{child}</div>
-          ))}
-           {React.Children.map(children, (child) => (
             <div className="shrink-0">{child}</div>
           ))}
            {React.Children.map(children, (child) => (
