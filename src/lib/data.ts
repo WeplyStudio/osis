@@ -1,4 +1,4 @@
-import type { Announcement, VisionMission, Division, NewsArticle, FaqItem } from './types';
+import type { Announcement, VisionMission, Division, NewsArticle, FaqItem, TeamMember } from './types';
 import { Megaphone, GraduationCap, PartyPopper, Target, Eye, Gem, Heart, Shield, Sparkles, Brain, Landmark, Palette, Dumbbell, BookOpen, Cpu, Languages, Calendar, ClipboardCheck } from 'lucide-react';
 
 
@@ -192,5 +192,36 @@ export const faqItems: FaqItem[] = [
     answer: "Kami sangat terbuka untuk kerjasama dan sponsorship. Anda dapat menghubungi kami melalui halaman Kontak atau mengirimkan proposal langsung ke email OSIS yang tertera di bagian footer."
   }
 ];
+
+export const teamMembers: TeamMember[] = [
+    {
+        id: "1",
+        name: "Ahmad Zaky",
+        role: "Ketua Umum OSIS",
+        image: "https://i.ibb.co/6yvBA0D/Ellipse-3-1.png",
+        quote: "Bersama kita bisa, bersama kita maju. Mari jadikan OSIS sebagai wadah aspirasi dan kreasi bagi seluruh siswa."
+    },
+    {
+        id: "2",
+        name: "Bunga Citra",
+        role: "Wakil Ketua OSIS",
+        image: "https://i.ibb.co/6yvBA0D/Ellipse-3-1.png",
+        quote: "Setiap suara berarti, setiap ide berharga. Jangan ragu untuk berkontribusi demi kemajuan sekolah kita."
+    },
+    {
+        id: "3",
+        name: "Putra Perdana",
+        role: "Sekretaris Umum",
+        image: "https://i.ibb.co/6yvBA0D/Ellipse-3-1.png",
+        quote: "Administrasi yang rapi adalah kunci organisasi yang sehat. Saya siap melayani dengan sepenuh hati."
+    },
+    {
+        id: "4",
+        name: "Cahaya Putri",
+        role: "Bendahara Umum",
+        image: "https://i.ibb.co/6yvBA0D/Ellipse-3-1.png",
+        quote: "Transparansi dan akuntabilitas adalah prioritas utama dalam mengelola keuangan OSIS."
+    }
+]
     
     

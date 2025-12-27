@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { ArrowRight, Eye, HelpCircle, Mail, Loader2 } from 'lucide-react';
@@ -18,7 +18,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { divisions, faqItems } from '@/lib/data';
+import { divisions, faqItems, teamMembers as staticTeamMembers } from '@/lib/data';
 import Image from 'next/image';
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -34,11 +34,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import ClientOnly from '@/components/ClientOnly';
-import type { TeamMember } from '@/lib/types';
-import { useFirestore, useCollection, useDoc } from '@/firebase';
-import { collection, doc } from 'firebase/firestore';
-import { useMemoFirebase } from '@/firebase/hooks';
-
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <h2 className={cn(`font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-foreground italic uppercase`, className)}>
@@ -167,19 +162,12 @@ const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
 
 
 export default function ClientLandingPage() {
-  const firestore = useFirestore();
+  const aboutUsImage = {
+    url: "https://picsum.photos/seed/about-us/800/600",
+    hint: "students collaborating",
+  };
+  const teamMembers = staticTeamMembers;
 
-  const teamMembersQuery = useMemoFirebase(() => 
-    firestore ? collection(firestore, 'teamMembers') : null
-  , [firestore]);
-  const { data: teamMembers, isLoading: loadingMembers } = useCollection<TeamMember>(teamMembersQuery);
-
-  const aboutUsQuery = useMemoFirebase(() => 
-    firestore ? doc(firestore, 'siteContent', 'aboutUs') : null
-  , [firestore]);
-  const { data: aboutUsImage, isLoading: loadingAboutUs } = useDoc<{url: string, hint: string}>(aboutUsQuery);
-
-  const loading = loadingMembers || loadingAboutUs;
 
   const aspirationCategories = [
       {
@@ -201,14 +189,6 @@ export default function ClientLandingPage() {
           statusVariant: "outline" as const,
       }
   ];
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   return (
     <div className="w-full bg-background text-foreground min-h-screen pt-24 md:pt-32">

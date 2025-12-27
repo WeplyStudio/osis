@@ -13,7 +13,6 @@ export type TeamMember = {
   name: string;
   role: string;
   image: string;
-  bgColor: string;
   quote: string;
 };
 
@@ -47,3 +46,4 @@ export type FaqItem = {
   answer: string;
 };
     
+
