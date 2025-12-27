@@ -211,16 +211,16 @@ export const teamMembers: TeamMember[] = [
     },
     {
         id: "3",
-        name: "Putra Perdana",
-        role: "Sekretaris Umum",
-        image: "https://i.ibb.co/6yvBA0D/Ellipse-3-1.png",
+        name: "violyn",
+        role: "Sekretaris 1",
+        image: "https://i.postimg.cc/xqRYzNvH/20251227-001050-0004.png",
         quote: "Administrasi yang rapi adalah kunci organisasi yang sehat. Saya siap melayani dengan sepenuh hati."
     },
     {
         id: "4",
-        name: "Cahaya Putri",
-        role: "Bendahara Umum",
-        image: "https://i.ibb.co/6yvBA0D/Ellipse-3-1.png",
+        name: "callista",
+        role: "Sekretaris 2",
+        image: "https://i.postimg.cc/NL4YH262/20251227-001050-0005.png",
         quote: "Transparansi dan akuntabilitas adalah prioritas utama dalam mengelola keuangan OSIS."
     }
 ]
