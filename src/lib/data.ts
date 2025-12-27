@@ -222,6 +222,20 @@ export const teamMembers: TeamMember[] = [
         role: "Sekretaris 2",
         image: "https://i.postimg.cc/NL4YH262/20251227-001050-0005.png",
         quote: "Transparansi dan akuntabilitas adalah prioritas utama dalam mengelola keuangan OSIS."
+    },
+    {
+        id: "5",
+        name: "Tesalonica",
+        role: "Bendahara 1",
+        image: "https://i.postimg.cc/8sHD6fRL/20251227-001050-0003.png",
+        quote: "Keuangan yang sehat adalah tulang punggung program kerja yang sukses."
+    },
+    {
+        id: "6",
+        name: "mikhaela",
+        role: "Bendahara 2",
+        image: "https://i.postimg.cc/7bVD2J30/20251227-001050-0002.png",
+        quote: "Setiap rupiah akan kami kelola dengan penuh tanggung jawab demi kemajuan bersama."
     }
 ]
     
