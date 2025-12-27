@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { ArrowRight, Eye, HelpCircle, Mail, Loader2 } from 'lucide-react';
@@ -62,9 +62,33 @@ const aspirationSchema = z.object({
 
 type AspirationFormInputs = z.infer<typeof aspirationSchema>;
 
+const COOLDOWN_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+
 const AspirationDialog = ({ title, category, children }: { title: string, category: string, children: React.ReactNode }) => {
     const [open, setOpen] = useState(false);
     const { toast } = useToast();
+    const [cooldownTime, setCooldownTime] = useState(0);
+
+    useEffect(() => {
+        if (open) {
+            const lastSubmission = localStorage.getItem('lastAspirationTime');
+            if (lastSubmission) {
+                const timePassed = Date.now() - parseInt(lastSubmission, 10);
+                if (timePassed < COOLDOWN_DURATION) {
+                    setCooldownTime(COOLDOWN_DURATION - timePassed);
+                }
+            }
+        }
+    }, [open]);
+
+    useEffect(() => {
+        if (cooldownTime > 0) {
+            const timer = setTimeout(() => setCooldownTime(cooldownTime - 1000), 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [cooldownTime]);
+
+
     const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<AspirationFormInputs>({
         resolver: zodResolver(aspirationSchema),
         defaultValues: {
@@ -82,6 +106,8 @@ const AspirationDialog = ({ title, category, children }: { title: string, catego
                 title: "Aspirasi Terkirim!",
                 description: "Terima kasih atas masukanmu. Aspirasimu telah berhasil dikirim.",
             });
+            localStorage.setItem('lastAspirationTime', Date.now().toString());
+            setCooldownTime(COOLDOWN_DURATION);
             reset();
             setOpen(false);
         } else {
@@ -92,6 +118,11 @@ const AspirationDialog = ({ title, category, children }: { title: string, catego
             });
         }
     };
+    
+    const isCoolingDown = cooldownTime > 0;
+    const minutesLeft = Math.floor(cooldownTime / 60000);
+    const secondsLeft = Math.floor((cooldownTime % 60000) / 1000).toString().padStart(2, '0');
+
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -111,6 +142,7 @@ const AspirationDialog = ({ title, category, children }: { title: string, catego
                             id="name"
                             placeholder="Nama (Opsional/Anonim)"
                             {...register("name")}
+                            disabled={isCoolingDown}
                         />
                          <input type="hidden" {...register("category")} value={category} />
                         <Textarea
@@ -118,14 +150,20 @@ const AspirationDialog = ({ title, category, children }: { title: string, catego
                             placeholder="Tuliskan aspirasimu di sini..."
                             className="min-h-[120px]"
                             {...register("aspiration")}
+                            disabled={isCoolingDown}
                         />
                         {errors.aspiration && <p className="text-xs text-destructive">{errors.aspiration.message}</p>}
                     </div>
                     <DialogFooter>
+                      {isCoolingDown && (
+                          <p className="text-sm text-muted-foreground mr-auto">
+                              Coba lagi dalam {minutesLeft}:{secondsLeft}
+                          </p>
+                      )}
                       <DialogClose asChild>
                         <Button type="button" variant="outline">Batal</Button>
                       </DialogClose>
-                      <Button type="submit" className="font-bold" disabled={isSubmitting}>
+                      <Button type="submit" className="font-bold" disabled={isSubmitting || isCoolingDown}>
                           {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'KIRIM SEKARANG'}
                       </Button>
                     </DialogFooter>
