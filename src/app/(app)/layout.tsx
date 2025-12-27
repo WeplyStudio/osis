@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Home, Menu, Phone, Users, Briefcase, Info } from "lucide-react";
+import { Facebook, Twitter, Instagram, Home, Menu, Phone, Users, Briefcase, Info, Youtube } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -19,54 +19,72 @@ const navItems = [
     { href: '/#about', icon: Info, label: 'Tentang' },
 ];
 
+const organizationLinks = [
+    { href: '#', label: 'Visi & Misi' },
+    { href: '#', label: 'Sejarah' },
+    { href: '#', label: 'Arsip LPJ' },
+    { href: '#', label: 'Struktur' },
+];
+
+const innovationLinks = [
+    { href: '#', label: 'E-Voting' },
+    { href: '#', label: 'AI Assistant' },
+    { href: '#', label: 'Library' },
+    { href: '#', label: 'Podwaves' },
+];
+
+const SocialIcon = ({ children }: { children: React.ReactNode }) => (
+    <Link href="#" className="w-12 h-12 flex items-center justify-center rounded-full bg-accent text-accent-foreground font-bold text-lg hover:bg-primary hover:text-primary-foreground transition-colors">
+        {children}
+    </Link>
+);
+
 const AppFooter = () => (
     <footer className="bg-card text-card-foreground border-t">
-        <div className="container mx-auto px-4 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div className="col-span-1 md:col-span-2 lg:col-span-1">
-                    <Link href="/" className="flex items-center gap-3 mb-4">
-                      <h1 className="text-xl font-body font-extrabold text-foreground italic uppercase">OSIS<span className="text-primary">Kigra</span></h1>
+        <div className="container mx-auto px-4 py-16">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div className="lg:col-span-5">
+                     <Link href="/" className="flex items-center gap-4 mb-6">
+                      <div className="w-12 h-12 rounded-lg bg-primary"></div>
+                      <h1 className="text-3xl font-body font-extrabold text-foreground tracking-tighter">OSIS KIGRA</h1>
                     </Link>
-                    <p className="text-muted-foreground text-sm max-w-xs">
-                        Organisasi Siswa Intra Sekolah. Berkomitmen menciptakan lingkungan sekolah yang inklusif dan inovatif.
+                    <p className="text-muted-foreground text-base max-w-sm leading-relaxed">
+                        Organisasi Siswa Intra Sekolah Kigra. Membangun karakter religius, kreatif, dan mandiri melalui inovasi tanpa henti.
                     </p>
+                    <div className="flex items-center gap-3 mt-8">
+                        <SocialIcon>IG</SocialIcon>
+                        <SocialIcon>YT</SocialIcon>
+                        <SocialIcon>TK</SocialIcon>
+                    </div>
                 </div>
-                <div>
-                    <h3 className="font-body text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Navigasi</h3>
-                    <ul className="space-y-3">
-                        {navItems.map(item => (
-                             <li key={item.label}>
-                                <Link href={item.href} className="text-sm text-foreground hover:text-primary transition-colors">
-                                    {item.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                 <div>
-                    <h3 className="font-body text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Dukungan</h3>
-                    <ul className="space-y-3">
-                        <li><Link href="#" className="text-sm text-foreground hover:text-primary transition-colors">Aspirasi</Link></li>
-                        <li><Link href="#" className="text-sm text-foreground hover:text-primary transition-colors">Sponsor</Link></li>
-                        <li><Link href="#" className="text-sm text-foreground hover:text-primary transition-colors">Kontak</Link></li>
-                    </ul>
-                </div>
-                <div>
-                     <h3 className="font-body text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Ikuti Kami</h3>
-                     <div className="flex items-center gap-3">
-                        <Button asChild variant="outline" size="icon" className="rounded-lg">
-                            <Link href="#"><Facebook className="w-5 h-5" /></Link>
-                        </Button>
-                        <Button asChild variant="outline" size="icon" className="rounded-lg">
-                            <Link href="#"><Twitter className="w-5 h-5" /></Link>
-                        </Button>
-                         <Button asChild variant="outline" size="icon" className="rounded-lg">
-                            <Link href="#"><Instagram className="w-5 h-5" /></Link>
-                        </Button>
-                     </div>
+                <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div className="md:col-start-2">
+                        <h3 className="font-mono text-sm font-bold tracking-[0.2em] uppercase text-muted-foreground mb-6">ORGANIZATION</h3>
+                        <ul className="space-y-4">
+                            {organizationLinks.map(item => (
+                                 <li key={item.label}>
+                                    <Link href={item.href} className="text-base text-foreground hover:text-primary transition-colors">
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                     <div>
+                        <h3 className="font-mono text-sm font-bold tracking-[0.2em] uppercase text-muted-foreground mb-6">INNOVATION</h3>
+                        <ul className="space-y-4">
+                             {innovationLinks.map(item => (
+                                 <li key={item.label}>
+                                    <Link href={item.href} className="text-base text-foreground hover:text-primary transition-colors">
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div className="border-t mt-8 pt-6 text-center text-xs text-muted-foreground">
+            <div className="border-t mt-16 pt-6 text-center text-xs text-muted-foreground">
                 <p>&copy; {new Date().getFullYear()} OSIS Kigra. All rights reserved.</p>
             </div>
         </div>
@@ -147,7 +165,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </Sheet>
           </div>
         </header>
-        <main className="flex-1 pb-24 md:pb-32">
+        <main className="flex-1">
           {children}
         </main>
         <AppFooter />
