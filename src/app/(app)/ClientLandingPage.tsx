@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import ClientOnly from '@/components/ClientOnly';
 
 const SectionTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <h2 className={cn(`font-body text-5xl md:text-6xl font-extrabold tracking-tighter text-center mb-12 text-foreground italic uppercase`, className)}>
@@ -258,16 +259,18 @@ export default function ClientLandingPage({ teamMembers, aboutUsImage }: { teamM
                         OSIS sedang fokus mengevaluasi beberapa hal penting. Pilih salah satu kategori dan berikan masukan terbaikmu untuk sekolah.
                     </p>
                      <div className="space-y-4">
-                        {aspirationCategories.map((cat) => (
-                            <AspirationDialog key={cat.title} title={cat.title}>
-                                <AspirationCard
-                                    title={cat.title}
-                                    description={cat.description}
-                                    status={cat.status}
-                                    statusVariant={cat.statusVariant}
-                                />
-                            </AspirationDialog>
-                        ))}
+                        <ClientOnly>
+                          {aspirationCategories.map((cat) => (
+                              <AspirationDialog key={cat.title} title={cat.title}>
+                                  <AspirationCard
+                                      title={cat.title}
+                                      description={cat.description}
+                                      status={cat.status}
+                                      statusVariant={cat.statusVariant}
+                                  />
+                              </AspirationDialog>
+                          ))}
+                        </ClientOnly>
                     </div>
                 </div>
                 <div className="bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 flex flex-col justify-center">
@@ -380,20 +383,22 @@ export default function ClientLandingPage({ teamMembers, aboutUsImage }: { teamM
                     </Button>
                 </div>
                 <div className="lg:col-span-2">
-                    <Accordion type="single" collapsible className="w-full space-y-4">
-                        {faqItems.map((item) => (
-                             <AccordionItem key={item.id} value={item.id} className="group bg-card border-none rounded-2xl shadow-sm data-[state=open]:border data-[state=open]:border-primary/50">
-                                <AccordionTrigger className="p-6 font-bold text-sm uppercase tracking-wider hover:no-underline text-left data-[state=open]:text-primary">
-                                    {item.question}
-                                    <span className="ml-auto shrink-0 transition-transform duration-200 group-data-[state=closed]:block hidden italic text-primary">↓</span>
-                                    <span className="ml-auto shrink-0 transition-transform duration-200 group-data-[state=open]:block hidden italic text-primary">↑</span>
-                                </AccordionTrigger>
-                                <AccordionContent className="p-6 pt-0 text-muted-foreground text-left">
-                                    {item.answer}
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
+                  <ClientOnly>
+                      <Accordion type="single" collapsible className="w-full space-y-4">
+                          {faqItems.map((item) => (
+                               <AccordionItem key={item.id} value={item.id} className="group bg-card border-none rounded-2xl shadow-sm data-[state=open]:border data-[state=open]:border-primary/50">
+                                  <AccordionTrigger className="p-6 font-bold text-sm uppercase tracking-wider hover:no-underline text-left data-[state=open]:text-primary">
+                                      {item.question}
+                                      <span className="ml-auto shrink-0 transition-transform duration-200 group-data-[state=closed]:block hidden italic text-primary">↓</span>
+                                      <span className="ml-auto shrink-0 transition-transform duration-200 group-data-[state=open]:block hidden italic text-primary">↑</span>
+                                  </AccordionTrigger>
+                                  <AccordionContent className="p-6 pt-0 text-muted-foreground text-left">
+                                      {item.answer}
+                                  </AccordionContent>
+                              </AccordionItem>
+                          ))}
+                      </Accordion>
+                    </ClientOnly>
                 </div>
             </div>
         </section>
@@ -402,3 +407,5 @@ export default function ClientLandingPage({ teamMembers, aboutUsImage }: { teamM
     </div>
   );
 }
+
+    
