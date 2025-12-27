@@ -568,7 +568,3 @@ export default function ClientLandingPage() {
     </div>
   );
 }
-
-    
-
-    

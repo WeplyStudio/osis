@@ -15,7 +15,9 @@ export async function sendAspiration(data: AspirationFormInputs): Promise<{ succ
   const parsedData = aspirationSchema.safeParse(data);
 
   if (!parsedData.success) {
-    return { success: false, error: "Data tidak valid." };
+    // Extract a more specific error message if available
+    const errorMessage = parsedData.error.errors[0]?.message || "Data tidak valid.";
+    return { success: false, error: errorMessage };
   }
 
   const { name, aspiration, category } = parsedData.data;
@@ -51,7 +53,7 @@ ${aspiration}
 
   try {
     const response = await fetch(`${url}?${params.toString()}`, {
-      method: 'GET', // Telegram API uses GET for sendMessage with URL params
+      method: 'GET', // Explicitly set method to GET
     });
 
     const result = await response.json();
@@ -68,7 +70,3 @@ ${aspiration}
     return { success: false, error: "Terjadi kesalahan jaringan." };
   }
 }
-
-    
-
-    
