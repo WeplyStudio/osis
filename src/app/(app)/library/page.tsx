@@ -17,10 +17,14 @@ type Document = {
   id: string;
   title: string;
   description: string;
-  fileUrl: string;
+  fileUrl: string; // This will point to a file in the /public directory
   icon: 'document' | 'spreadsheet' | 'presentation';
 };
 
+// NOTE: To add or change downloadable files, modify the list below.
+// Then, make sure the corresponding PDF files exist in the `/public` folder.
+// For example, the `fileUrl: '/proposal-laporan-kegiatan.pdf'` here
+// corresponds to the file located at `/public/proposal-laporan-kegiatan.pdf`.
 const documents: Document[] = [
   {
     id: '1',
@@ -44,6 +48,7 @@ const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) =
   };
 
   const handleDownload = () => {
+    // This opens the file from the /public directory in a new tab.
     window.open(doc.fileUrl, '_blank');
   };
 
