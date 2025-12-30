@@ -21,25 +21,24 @@ type Document = {
   icon: 'document' | 'spreadsheet' | 'presentation';
 };
 
-// NOTE: To add or change downloadable files, modify the list below.
-// Then, make sure the corresponding PDF files exist in the `/public` folder.
-// For example, the `fileUrl: '/proposal-laporan-kegiatan.pdf'` here
-// corresponds to the file located at `/public/proposal-laporan-kegiatan.pdf`.
+// NOTE: This list is now empty.
+// To add files, you can add them here, or ideally, we build a dynamic system
+// that reads from the /public folder at build time.
 const documents: Document[] = [
-  {
-    id: '1',
-    title: 'PROPOSAL LAPORAN KEGIATAN',
-    description: 'Dokumen pertanggungjawaban program yang telah dilaksanakan.',
-    fileUrl: '/proposal-laporan-kegiatan.pdf',
-    icon: 'document',
-  },
-  {
-    id: '2',
-    title: 'PROPOSAL PENGAJUAN PROGRAM',
-    description: 'Dokumen untuk mengajukan ide program kerja baru.',
-    fileUrl: '/proposal-pengajuan-program.pdf',
-    icon: 'document',
-  },
+  // {
+  //   id: '1',
+  //   title: 'PROPOSAL LAPORAN KEGIATAN',
+  //   description: 'Dokumen pertanggungjawaban program yang telah dilaksanakan.',
+  //   fileUrl: '/proposal-laporan-kegiatan.pdf',
+  //   icon: 'document',
+  // },
+  // {
+  //   id: '2',
+  //   title: 'PROPOSAL PENGAJUAN PROGRAM',
+  //   description: 'Dokumen untuk mengajukan ide program kerja baru.',
+  //   fileUrl: '/proposal-pengajuan-program.pdf',
+  //   icon: 'document',
+  // },
 ];
 
 const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) => {
@@ -257,14 +256,24 @@ export default function LibraryPage() {
             </section>
 
             <section>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {documents.map(doc => (
-                        <DocumentCard key={doc.id} doc={doc} isLocked={isLocked} />
-                    ))}
-                </div>
+                 {documents.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {documents.map(doc => (
+                            <DocumentCard key={doc.id} doc={doc} isLocked={isLocked} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-16 bg-card rounded-2xl border border-dashed">
+                        <File className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                        <h3 className="text-xl font-bold text-foreground">Perpustakaan Kosong</h3>
+                        <p className="text-muted-foreground">Saat ini belum ada dokumen yang tersedia untuk diunduh.</p>
+                    </div>
+                )}
             </section>
         </div>
       </main>
     </div>
   );
 }
+
+    
