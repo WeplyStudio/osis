@@ -21,24 +21,21 @@ type Document = {
   icon: 'document' | 'spreadsheet' | 'presentation';
 };
 
-// NOTE: This list is now empty.
-// To add files, you can add them here, or ideally, we build a dynamic system
-// that reads from the /public folder at build time.
 const documents: Document[] = [
-  // {
-  //   id: '1',
-  //   title: 'PROPOSAL LAPORAN KEGIATAN',
-  //   description: 'Dokumen pertanggungjawaban program yang telah dilaksanakan.',
-  //   fileUrl: '/proposal-laporan-kegiatan.pdf',
-  //   icon: 'document',
-  // },
-  // {
-  //   id: '2',
-  //   title: 'PROPOSAL PENGAJUAN PROGRAM',
-  //   description: 'Dokumen untuk mengajukan ide program kerja baru.',
-  //   fileUrl: '/proposal-pengajuan-program.pdf',
-  //   icon: 'document',
-  // },
+  {
+    id: '1',
+    title: 'PROPOSAL LAPORAN KEGIATAN',
+    description: 'Dokumen pertanggungjawaban program yang telah dilaksanakan.',
+    fileUrl: '/proposal-laporan-kegiatan.docx',
+    icon: 'document',
+  },
+  {
+    id: '2',
+    title: 'PROPOSAL PENGAJUAN PROGRAM',
+    description: 'Dokumen untuk mengajukan ide program kerja baru.',
+    fileUrl: '/proposal-pengajuan-program.docx',
+    icon: 'document',
+  },
 ];
 
 const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) => {
@@ -60,7 +57,7 @@ const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) =
         <h3 className="font-body text-xl font-bold uppercase tracking-tight text-foreground mb-1">{doc.title}</h3>
         <p className="text-sm text-muted-foreground mb-6 uppercase tracking-wider">{doc.description}</p>
         <Button onClick={handleDownload} disabled={isLocked} size="sm" variant="link" className="font-bold text-primary">
-          DOWNLOAD PDF
+          DOWNLOAD DOCX
         </Button>
       </CardContent>
     </Card>
@@ -275,5 +272,3 @@ export default function LibraryPage() {
     </div>
   );
 }
-
-    
