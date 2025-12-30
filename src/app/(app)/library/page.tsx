@@ -8,7 +8,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Lock, File, Download, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 
 const DOCS_PIN = process.env.NEXT_PUBLIC_DOCS_PIN || '010810';
@@ -53,7 +52,7 @@ const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) =
         </div>
         <h3 className="font-body text-xl font-bold uppercase tracking-tight text-foreground mb-1">{doc.title}</h3>
         <p className="text-sm text-muted-foreground mb-6 uppercase tracking-wider">{doc.description}</p>
-         <Link
+         <a
             href={isLocked ? '#' : doc.fileUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -66,7 +65,7 @@ const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) =
             )}
         >
           DOWNLOAD DOCX
-        </Link>
+        </a>
       </CardContent>
     </Card>
   );
