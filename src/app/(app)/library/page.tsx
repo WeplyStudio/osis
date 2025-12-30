@@ -24,16 +24,16 @@ type Document = {
 const documents: Document[] = [
   {
     id: '1',
-    title: 'LPJ TRIWULAN III',
-    description: 'REALISASI DANA & AGENDA',
-    fileUrl: '/path/to/your/lpj.pdf',
+    title: 'PROPOSAL LAPORAN KEGIATAN',
+    description: 'Dokumen pertanggungjawaban program yang telah dilaksanakan.',
+    fileUrl: '/proposal-laporan-kegiatan.pdf',
     icon: 'document',
   },
   {
     id: '2',
-    title: 'MODUL KEPEMIMPINAN',
-    description: 'KURIKULUM KADERISASI OSIS',
-    fileUrl: '/path/to/your/module.pdf',
+    title: 'PROPOSAL PENGAJUAN PROGRAM',
+    description: 'Dokumen untuk mengajukan ide program kerja baru.',
+    fileUrl: '/proposal-pengajuan-program.pdf',
     icon: 'document',
   },
 ];
