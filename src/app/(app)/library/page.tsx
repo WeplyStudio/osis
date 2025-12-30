@@ -8,6 +8,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Lock, File, Download, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
+import { buttonVariants } from '@/components/ui/button';
 
 const DOCS_PIN = process.env.NEXT_PUBLIC_DOCS_PIN || '010810';
 const MAX_ATTEMPTS = 3;
@@ -43,11 +45,6 @@ const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) =
     return <File className="w-8 h-8 text-primary" />;
   };
 
-  const handleDownload = () => {
-    // This opens the file from the /public directory in a new tab.
-    window.open(doc.fileUrl, '_blank');
-  };
-
   return (
     <Card className="text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
       <CardContent className="p-8 flex flex-col items-center justify-center">
@@ -56,9 +53,20 @@ const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) =
         </div>
         <h3 className="font-body text-xl font-bold uppercase tracking-tight text-foreground mb-1">{doc.title}</h3>
         <p className="text-sm text-muted-foreground mb-6 uppercase tracking-wider">{doc.description}</p>
-        <Button onClick={handleDownload} disabled={isLocked} size="sm" variant="link" className="font-bold text-primary">
+         <Link
+            href={isLocked ? '#' : doc.fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            download
+            aria-disabled={isLocked}
+            className={cn(
+                buttonVariants({ variant: "link", size: "sm" }),
+                "font-bold text-primary",
+                isLocked && "pointer-events-none opacity-50"
+            )}
+        >
           DOWNLOAD DOCX
-        </Button>
+        </Link>
       </CardContent>
     </Card>
   );
