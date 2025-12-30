@@ -27,14 +27,14 @@ const documents: Document[] = [
     id: '1',
     title: 'PROPOSAL LAPORAN KEGIATAN',
     description: 'Dokumen pertanggungjawaban program yang telah dilaksanakan.',
-    fileUrl: '/proposal-laporan-kegiatan.docx',
+    fileUrl: '/Proposal Laporan Kegiatan.docx',
     icon: 'document',
   },
   {
     id: '2',
     title: 'PROPOSAL PENGAJUAN PROGRAM',
     description: 'Dokumen untuk mengajukan ide program kerja baru.',
-    fileUrl: '/proposal-pengajuan-program.docx',
+    fileUrl: '/Proposal Pengajuan Kegiatan.docx',
     icon: 'document',
   },
 ];
