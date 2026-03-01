@@ -2,7 +2,7 @@
 'use client';
 
 import Link from "next/link";
-import { Instagram, Home, Menu, Phone, Users, Info, Youtube, LucideIcon, Library, ShieldCheck, ClipboardCheck } from "lucide-react";
+import { Instagram, Home, Menu, Phone, Users, Info, Youtube, LucideIcon, Library, ClipboardCheck } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -159,9 +159,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </nav>
             
             <div className="flex items-center gap-4">
-              <Button asChild variant="outline" size="icon" className="rounded-full">
-                  <Link href="/login" title="Admin Login"><ShieldCheck className="h-4 w-4" /></Link>
-              </Button>
               <Button asChild className="hidden md:flex rounded-full font-bold px-6">
                   <Link href="#">Kontak</Link>
               </Button>
@@ -199,12 +196,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             <Link href="/check-aspiration" className="flex items-center gap-4">
                                 <ClipboardCheck className="w-6 h-6" />
                                 Cek Aspirasi
-                            </Link>
-                        </Button>
-                         <Button asChild variant="ghost" className="justify-start text-lg h-14">
-                            <Link href="/login" className="flex items-center gap-4">
-                                <ShieldCheck className="w-6 h-6" />
-                                Admin Area
                             </Link>
                         </Button>
                     </nav>
