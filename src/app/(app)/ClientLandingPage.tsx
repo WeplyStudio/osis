@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect, useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { ArrowRight, Eye, HelpCircle, Mail, Loader2, Calendar, ClipboardCheck, Copy, CheckCircle2 } from 'lucide-react';
@@ -61,12 +61,10 @@ const AspirationFormSection = () => {
     });
 
     const onSubmit: SubmitHandler<AspirationFormInputs> = async (data) => {
-        // Generate document reference client-side to get ID immediately
         const aspirationsRef = collection(firestore, 'aspirations');
         const newDocRef = doc(aspirationsRef);
         const id = newDocRef.id;
 
-        // Initiate the write without awaiting the promise for instant feel
         setDoc(newDocRef, {
             content: data.aspiration,
             status: 'menunggu',
@@ -85,7 +83,6 @@ const AspirationFormSection = () => {
             });
         });
 
-        // Update UI immediately (Optimistic feedback)
         setSubmittedId(id);
         toast({
             title: "Aspirasi Terkirim!",
@@ -284,13 +281,13 @@ export default function ClientLandingPage() {
   const mainRef = useRef<HTMLDivElement>(null);
   const firestore = useFirestore();
 
-  const programsQuery = query(collection(firestore, 'programs'), orderBy('createdAt', 'desc'));
+  const programsQuery = useMemo(() => query(collection(firestore, 'programs'), orderBy('createdAt', 'desc')), [firestore]);
   const { data: programs } = useCollection(programsQuery);
 
-  const teamQuery = query(collection(firestore, 'teamMembers'), orderBy('order', 'asc'));
+  const teamQuery = useMemo(() => query(collection(firestore, 'teamMembers'), orderBy('order', 'asc')), [firestore]);
   const { data: teamMembers } = useCollection(teamQuery);
 
-  const periodDocRef = doc(firestore, 'settings', 'period');
+  const periodDocRef = useMemo(() => doc(firestore, 'settings', 'period'), [firestore]);
   const { data: periodSetting } = useDoc(periodDocRef);
   const periodText = periodSetting?.value || "OSIS PERIODE 2025 / 2026";
 

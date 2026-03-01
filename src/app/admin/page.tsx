@@ -1,6 +1,7 @@
+
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
     collection, 
@@ -11,6 +12,7 @@ import {
     setDoc,
     query,
     orderBy,
+    limit,
     serverTimestamp
 } from 'firebase/firestore';
 import { useFirestore, useCollection, useDoc, initializeFirebase, FirebaseClientProvider } from '@/firebase';
@@ -59,7 +61,6 @@ function AdminDashboardContent() {
         router.push('/login');
     };
 
-    // --- IMGBB UPLOAD LOGIC ---
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -69,7 +70,6 @@ function AdminDashboardContent() {
         formData.append('image', file);
 
         try {
-            // Menggunakan API Key yang diberikan oleh user
             const response = await fetch(`https://api.imgbb.com/1/upload?key=1fa90970c71549cdd68ce59dcf6f3a12`, {
                 method: 'POST',
                 body: formData,
@@ -96,10 +96,25 @@ function AdminDashboardContent() {
         }
     };
 
-    // --- PROGRAMS ---
-    const programsQuery = query(collection(firestore, 'programs'), orderBy('createdAt', 'desc'));
+    // Memoized Queries to prevent infinite re-renders and speed up loading
+    const programsQuery = useMemo(() => 
+        query(collection(firestore, 'programs'), orderBy('createdAt', 'desc')), 
+    [firestore]);
     const { data: programs, loading: programsLoading } = useCollection<any>(programsQuery);
     
+    const teamQuery = useMemo(() => 
+        query(collection(firestore, 'teamMembers'), orderBy('order', 'asc')), 
+    [firestore]);
+    const { data: teamMembers, loading: teamLoading } = useCollection<any>(teamQuery);
+
+    const aspirationsQuery = useMemo(() => 
+        query(collection(firestore, 'aspirations'), orderBy('createdAt', 'desc'), limit(50)), 
+    [firestore]);
+    const { data: aspirations, loading: aspirationsLoading } = useCollection<any>(aspirationsQuery);
+
+    const periodDocRef = useMemo(() => doc(firestore, 'settings', 'period'), [firestore]);
+    const { data: periodSetting } = useDoc<any>(periodDocRef);
+
     const [programForm, setProgramForm] = useState({
         id: '',
         title: '',
@@ -137,10 +152,6 @@ function AdminDashboardContent() {
         }
     };
 
-    // --- TEAM MEMBERS ---
-    const teamQuery = query(collection(firestore, 'teamMembers'), orderBy('order', 'asc'));
-    const { data: teamMembers, loading: teamLoading } = useCollection<any>(teamQuery);
-
     const [teamForm, setTeamForm] = useState({
         id: '',
         name: '',
@@ -171,10 +182,6 @@ function AdminDashboardContent() {
         }
     };
 
-    // --- ASPIRATIONS ---
-    const aspirationsQuery = query(collection(firestore, 'aspirations'), orderBy('createdAt', 'desc'));
-    const { data: aspirations, loading: aspirationsLoading } = useCollection<any>(aspirationsQuery);
-
     const handleUpdateAspirationStatus = (id: string, newStatus: string) => {
         updateDoc(doc(firestore, 'aspirations', id), {
             status: newStatus
@@ -200,11 +207,7 @@ function AdminDashboardContent() {
         }
     };
 
-    // --- SETTINGS ---
-    const periodDocRef = doc(firestore, 'settings', 'period');
-    const { data: periodSetting } = useDoc<any>(periodDocRef);
     const [periodText, setPeriodText] = useState('');
-
     useEffect(() => {
         if (periodSetting) {
             setPeriodText(periodSetting.value);
@@ -271,7 +274,7 @@ function AdminDashboardContent() {
                                 </CardContent>
                             </Card>
                             <div className="lg:col-span-2 space-y-4">
-                                {programsLoading ? <Loader2 className="animate-spin mx-auto" /> : programs?.map((prog: any) => (
+                                {programsLoading ? <div className="flex justify-center p-8"><Loader2 className="animate-spin text-primary" /></div> : programs?.map((prog: any) => (
                                     <Card key={prog.id} className="hover:border-primary transition-colors">
                                         <CardContent className="p-4 flex justify-between items-center">
                                             <div>
@@ -357,7 +360,7 @@ function AdminDashboardContent() {
                                 </CardContent>
                             </Card>
                             <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {teamLoading ? <Loader2 className="animate-spin mx-auto" /> : teamMembers?.map((member: any) => (
+                                {teamLoading ? <div className="flex justify-center p-8 w-full"><Loader2 className="animate-spin text-primary" /></div> : teamMembers?.map((member: any) => (
                                     <Card key={member.id} className="hover:border-primary transition-colors">
                                         <CardContent className="p-4 flex gap-4 items-center">
                                             <img src={member.image} alt={member.name} className="w-12 h-12 rounded-full object-cover border" />
@@ -380,11 +383,11 @@ function AdminDashboardContent() {
                         <div className="space-y-6">
                             <div className="flex justify-between items-center">
                                 <h2 className="text-xl font-bold italic uppercase tracking-tighter">DAFTAR <span className="text-primary">ASPIRASI SISWA</span></h2>
-                                <Badge variant="outline" className="font-bold">{aspirations?.length || 0} TOTAL</Badge>
+                                <Badge variant="outline" className="font-bold">{aspirations?.length || 0} TERBARU</Badge>
                             </div>
                             <div className="grid grid-cols-1 gap-4">
                                 {aspirationsLoading ? (
-                                    <Loader2 className="animate-spin mx-auto h-8 w-8" />
+                                    <div className="flex justify-center p-12"><Loader2 className="animate-spin text-primary h-8 w-8" /></div>
                                 ) : aspirations?.length === 0 ? (
                                     <Card className="bg-muted/50 border-dashed">
                                         <CardContent className="p-12 text-center text-muted-foreground">Belum ada aspirasi masuk.</CardContent>
@@ -468,7 +471,7 @@ function AdminDashboardContent() {
 }
 
 export default function AdminDashboard() {
-    const { firebaseApp, firestore, auth } = initializeFirebase();
+    const { firebaseApp, firestore, auth } = useMemo(() => initializeFirebase(), []);
     return (
         <FirebaseClientProvider firebaseApp={firebaseApp} firestore={firestore} auth={auth}>
             <AdminDashboardContent />
