@@ -11,7 +11,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import LoadingScreen from "@/components/LoadingScreen";
 import { FirebaseClientProvider, initializeFirebase } from '@/firebase';
@@ -99,6 +99,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [animationClass, setAnimationClass] = useState('animate-fade-in');
 
+  // Initialize Firebase once
+  const { firebaseApp, firestore, auth } = useMemo(() => initializeFirebase(), []);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
@@ -119,8 +122,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (loading) {
     return <LoadingScreen animationClassName={animationClass} />;
   }
-
-  const { firebaseApp, firestore, auth } = initializeFirebase();
 
   return (
     <FirebaseClientProvider firebaseApp={firebaseApp} firestore={firestore} auth={auth}>

@@ -2,15 +2,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFirestore } from '@/firebase';
+import { useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ClipboardCheck, Search, Loader2, Calendar, MessageSquare, AlertCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Search, Loader2, Calendar, MessageSquare, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
 
 export default function CheckAspirationPage() {
     const [aspirationId, setAspirationId] = useState('');
@@ -21,26 +22,33 @@ export default function CheckAspirationPage() {
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!aspirationId.trim()) return;
+        const trimmedId = aspirationId.trim();
+        if (!trimmedId) return;
 
         setIsLoading(true);
         setError(null);
         setResult(null);
 
-        try {
-            const docRef = doc(firestore, 'aspirations', aspirationId.trim());
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                setResult({ id: docSnap.id, ...docSnap.data() });
-            } else {
-                setError("ID Aspirasi tidak ditemukan. Pastikan ID yang kamu masukkan benar.");
-            }
-        } catch (err) {
-            setError("Terjadi kesalahan saat mencari data. Coba lagi nanti.");
-        } finally {
-            setIsLoading(false);
-        }
+        const docRef = doc(firestore, 'aspirations', trimmedId);
+        
+        getDoc(docRef)
+            .then((docSnap) => {
+                if (docSnap.exists()) {
+                    setResult({ id: docSnap.id, ...docSnap.data() });
+                } else {
+                    setError("ID Aspirasi tidak ditemukan. Pastikan ID yang kamu masukkan benar.");
+                }
+                setIsLoading(false);
+            })
+            .catch(async (serverError) => {
+                const permissionError = new FirestorePermissionError({
+                    path: docRef.path,
+                    operation: 'get',
+                });
+                errorEmitter.emit('permission-error', permissionError);
+                setError("Gagal memuat data. Periksa koneksi internet kamu.");
+                setIsLoading(false);
+            });
     };
 
     const getStatusColor = (status: string) => {
