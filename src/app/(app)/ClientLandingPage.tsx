@@ -33,8 +33,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useToast } from "@/hooks/use-toast";
-import { collection, query, orderBy, doc, addDoc, serverTimestamp } from 'firebase/firestore';
-import { useFirestore, useCollection, useDoc } from '@/firebase';
+import { collection, query, orderBy, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { useFirestore, useCollection, useDoc, errorEmitter, FirestorePermissionError } from '@/firebase';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -61,25 +61,37 @@ const AspirationFormSection = () => {
     });
 
     const onSubmit: SubmitHandler<AspirationFormInputs> = async (data) => {
-        try {
-            const docRef = await addDoc(collection(firestore, 'aspirations'), {
-                content: data.aspiration,
-                status: 'menunggu',
-                createdAt: serverTimestamp(),
+        // Generate document reference client-side to get ID immediately
+        const aspirationsRef = collection(firestore, 'aspirations');
+        const newDocRef = doc(aspirationsRef);
+        const id = newDocRef.id;
+
+        // Initiate the write without awaiting the promise for instant feel
+        setDoc(newDocRef, {
+            content: data.aspiration,
+            status: 'menunggu',
+            createdAt: serverTimestamp(),
+        }).catch(async (error) => {
+            const permissionError = new FirestorePermissionError({
+                path: newDocRef.path,
+                operation: 'create',
+                requestResourceData: data,
             });
-            setSubmittedId(docRef.id);
-            toast({
-                title: "Aspirasi Terkirim!",
-                description: "Terima kasih atas masukanmu.",
-            });
-            reset();
-        } catch (error) {
+            errorEmitter.emit('permission-error', permissionError);
             toast({
                 variant: "destructive",
                 title: "Gagal Mengirim",
                 description: "Terjadi kesalahan saat mengirim aspirasi.",
             });
-        }
+        });
+
+        // Update UI immediately (Optimistic feedback)
+        setSubmittedId(id);
+        toast({
+            title: "Aspirasi Terkirim!",
+            description: "Terima kasih atas masukanmu.",
+        });
+        reset();
     };
 
     const copyToClipboard = () => {
