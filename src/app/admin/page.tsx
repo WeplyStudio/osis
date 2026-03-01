@@ -15,7 +15,7 @@ import {
     limit,
     serverTimestamp
 } from 'firebase/firestore';
-import { useFirestore, useCollection, useDoc, initializeFirebase, FirebaseClientProvider } from '@/firebase';
+import { useFirestore, useCollection, useDoc, initializeFirebase, FirebaseClientProvider, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -96,7 +96,6 @@ function AdminDashboardContent() {
         }
     };
 
-    // Memoized Queries to prevent infinite re-renders and speed up loading
     const programsQuery = useMemo(() => 
         query(collection(firestore, 'programs'), orderBy('createdAt', 'desc')), 
     [firestore]);
@@ -129,16 +128,30 @@ function AdminDashboardContent() {
         e.preventDefault();
         if (programForm.id) {
             const { id, ...data } = programForm;
-            updateDoc(doc(firestore, 'programs', id), {
+            const docRef = doc(firestore, 'programs', id);
+            updateDoc(docRef, {
                 ...data,
                 updatedAt: serverTimestamp()
+            }).catch(async () => {
+                errorEmitter.emit('permission-error', new FirestorePermissionError({
+                    path: docRef.path,
+                    operation: 'update',
+                    requestResourceData: data,
+                }));
             });
             toast({ title: "Berhasil", description: "Program diperbarui." });
         } else {
             const { id, ...data } = programForm;
-            addDoc(collection(firestore, 'programs'), {
+            const colRef = collection(firestore, 'programs');
+            addDoc(colRef, {
                 ...data,
                 createdAt: serverTimestamp()
+            }).catch(async () => {
+                errorEmitter.emit('permission-error', new FirestorePermissionError({
+                    path: 'programs',
+                    operation: 'create',
+                    requestResourceData: data,
+                }));
             });
             toast({ title: "Berhasil", description: "Program ditambahkan." });
         }
@@ -147,7 +160,13 @@ function AdminDashboardContent() {
 
     const handleDeleteProgram = (id: string) => {
         if (confirm('Hapus program ini?')) {
-            deleteDoc(doc(firestore, 'programs', id));
+            const docRef = doc(firestore, 'programs', id);
+            deleteDoc(docRef).catch(async () => {
+                errorEmitter.emit('permission-error', new FirestorePermissionError({
+                    path: docRef.path,
+                    operation: 'delete',
+                }));
+            });
             toast({ title: "Dihapus", description: "Program telah dihapus." });
         }
     };
@@ -165,11 +184,25 @@ function AdminDashboardContent() {
         e.preventDefault();
         if (teamForm.id) {
             const { id, ...data } = teamForm;
-            updateDoc(doc(firestore, 'teamMembers', id), data);
+            const docRef = doc(firestore, 'teamMembers', id);
+            updateDoc(docRef, data).catch(async () => {
+                errorEmitter.emit('permission-error', new FirestorePermissionError({
+                    path: docRef.path,
+                    operation: 'update',
+                    requestResourceData: data,
+                }));
+            });
             toast({ title: "Berhasil", description: "Anggota tim diperbarui." });
         } else {
             const { id, ...data } = teamForm;
-            addDoc(collection(firestore, 'teamMembers'), data);
+            const colRef = collection(firestore, 'teamMembers');
+            addDoc(colRef, data).catch(async () => {
+                errorEmitter.emit('permission-error', new FirestorePermissionError({
+                    path: 'teamMembers',
+                    operation: 'create',
+                    requestResourceData: data,
+                }));
+            });
             toast({ title: "Berhasil", description: "Anggota tim ditambahkan." });
         }
         setTeamForm({ id: '', name: '', role: '', quote: '', image: '', order: 0 });
@@ -177,21 +210,40 @@ function AdminDashboardContent() {
 
     const handleDeleteTeam = (id: string) => {
         if (confirm('Hapus anggota ini?')) {
-            deleteDoc(doc(firestore, 'teamMembers', id));
+            const docRef = doc(firestore, 'teamMembers', id);
+            deleteDoc(docRef).catch(async () => {
+                errorEmitter.emit('permission-error', new FirestorePermissionError({
+                    path: docRef.path,
+                    operation: 'delete',
+                }));
+            });
             toast({ title: "Dihapus", description: "Anggota telah dihapus." });
         }
     };
 
     const handleUpdateAspirationStatus = (id: string, newStatus: string) => {
-        updateDoc(doc(firestore, 'aspirations', id), {
+        const docRef = doc(firestore, 'aspirations', id);
+        updateDoc(docRef, {
             status: newStatus
+        }).catch(async () => {
+            errorEmitter.emit('permission-error', new FirestorePermissionError({
+                path: docRef.path,
+                operation: 'update',
+                requestResourceData: { status: newStatus },
+            }));
         });
         toast({ title: "Status Diperbarui", description: `Aspirasi sekarang berstatus ${newStatus}.` });
     };
 
     const handleDeleteAspiration = (id: string) => {
         if (confirm('Hapus aspirasi ini secara permanen?')) {
-            deleteDoc(doc(firestore, 'aspirations', id));
+            const docRef = doc(firestore, 'aspirations', id);
+            deleteDoc(docRef).catch(async () => {
+                errorEmitter.emit('permission-error', new FirestorePermissionError({
+                    path: docRef.path,
+                    operation: 'delete',
+                }));
+            });
             toast({ title: "Dihapus", description: "Aspirasi telah dihapus." });
         }
     };
@@ -215,9 +267,17 @@ function AdminDashboardContent() {
     }, [periodSetting]);
 
     const handleSavePeriod = () => {
-        setDoc(doc(firestore, 'settings', 'period'), {
+        const docRef = doc(firestore, 'settings', 'period');
+        const data = {
             key: 'period',
             value: periodText
+        };
+        setDoc(docRef, data).catch(async () => {
+            errorEmitter.emit('permission-error', new FirestorePermissionError({
+                path: docRef.path,
+                operation: 'write',
+                requestResourceData: data,
+            }));
         });
         toast({ title: "Berhasil", description: "Periode OSIS diperbarui." });
     };
