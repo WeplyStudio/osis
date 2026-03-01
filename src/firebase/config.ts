@@ -1,13 +1,11 @@
-
 'use client';
 
-// Konfigurasi Firebase resmi dari pengguna
+// Konfigurasi Firebase terbaru untuk proyek studio-2442639896-97fd9
 export const firebaseConfig = {
-  apiKey: "AIzaSyCQLWlC8rXWcrDMZt4dd_piV_uijAUNCg4",
-  authDomain: "lustrous-drake-375709.firebaseapp.com",
-  projectId: "lustrous-drake-375709",
-  storageBucket: "lustrous-drake-375709.firebasestorage.app",
-  messagingSenderId: "1072008631107",
-  appId: "1:1072008631107:web:66cfc52fe5199c7a0295f6",
-  measurementId: "G-EME7508G6Y"
+  apiKey: "AIzaSyAFgrk5FJX_46RDINqOH20h_LJcq2Mnz6U",
+  authDomain: "studio-2442639896-97fd9.firebaseapp.com",
+  projectId: "studio-2442639896-97fd9",
+  storageBucket: "studio-2442639896-97fd9.firebasestorage.app",
+  messagingSenderId: "951419346855",
+  appId: "1:951419346855:web:280c102a6bba017ea1a082"
 };

@@ -1,9 +1,8 @@
-
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // IZINKAN AKSES PUBLIK PENUH UNTUK SEMUA KOLEKSI
-    // Ini memastikan data pasti tersimpan tanpa hambatan izin keamanan di sisi server
+    // IZINKAN AKSES PUBLIK PENUH UNTUK SEMUA KOLEKSI SELAMA MASA PENGEMBANGAN
+    // Ini memastikan data pasti tersimpan tanpa hambatan izin keamanan
     match /{document=**} {
       allow read, write: if true;
     }

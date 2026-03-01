@@ -1,4 +1,3 @@
-
 {
   "entities": {
     "Program": {
@@ -12,7 +11,8 @@
         "location": { "type": "string" },
         "description": { "type": "string" },
         "type": { "type": "string", "enum": ["main", "secondary"] },
-        "createdAt": { "type": "object" }
+        "createdAt": { "type": "object" },
+        "updatedAt": { "type": "object" }
       },
       "required": ["title", "date", "month", "type"]
     },
@@ -65,7 +65,7 @@
     },
     "settings/{settingId}": {
       "schema": "Setting",
-      "description": "Koleksi pengaturan seperti periode"
+      "description": "Koleksi pengaturan global"
     },
     "aspirations/{aspirationId}": {
       "schema": "Aspiration",
