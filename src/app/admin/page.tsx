@@ -260,26 +260,32 @@ function AdminDashboardContent() {
     };
 
     const [periodText, setPeriodText] = useState('');
+    const [hasInitializedPeriod, setHasInitializedPeriod] = useState(false);
+
     useEffect(() => {
-        if (periodSetting) {
-            setPeriodText(periodSetting.value);
+        if (periodSetting && !hasInitializedPeriod) {
+            setPeriodText(periodSetting.value || '');
+            setHasInitializedPeriod(true);
         }
-    }, [periodSetting]);
+    }, [periodSetting, hasInitializedPeriod]);
 
     const handleSavePeriod = () => {
         const docRef = doc(firestore, 'settings', 'period');
         const data = {
             key: 'period',
-            value: periodText
+            value: periodText,
+            updatedAt: serverTimestamp()
         };
-        setDoc(docRef, data).catch(async () => {
+        setDoc(docRef, data, { merge: true }).then(() => {
+            toast({ title: "Berhasil", description: "Periode OSIS diperbarui di database." });
+        }).catch(async () => {
             errorEmitter.emit('permission-error', new FirestorePermissionError({
                 path: docRef.path,
                 operation: 'write',
                 requestResourceData: data,
             }));
+            toast({ variant: "destructive", title: "Gagal Simpan", description: "Terjadi kesalahan saat menyimpan pengaturan." });
         });
-        toast({ title: "Berhasil", description: "Periode OSIS diperbarui." });
     };
 
     return (
@@ -314,7 +320,7 @@ function AdminDashboardContent() {
                                         <Input placeholder="Judul Program" value={programForm.title} onChange={e => setProgramForm({...programForm, title: e.target.value})} required />
                                         <div className="grid grid-cols-2 gap-2">
                                             <Input placeholder="Tgl (Ex: 21)" value={programForm.date} onChange={e => setProgramForm({...programForm, date: e.target.value})} required />
-                                            <Input placeholder="Bulan (Ex: JUNI)" value={programForm.month} onChange={e => setProgramForm({...programForm, month: e.target.value})} required />
+                                            <Input placeholder="Bulan (Ex: JUNI)" value={programForm.month} onChange={e => setPeriodText(e.target.value)} required />
                                         </div>
                                         <Input placeholder="Lokasi (Ex: GOR)" value={programForm.location} onChange={e => setProgramForm({...programForm, location: e.target.value})} />
                                         <Textarea placeholder="Deskripsi Singkat" value={programForm.description} onChange={e => setProgramForm({...programForm, description: e.target.value})} required />
@@ -506,6 +512,7 @@ function AdminDashboardContent() {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="uppercase italic tracking-tighter">Pengaturan Umum</CardTitle>
+                                <CardDescription>Ganti teks yang berjalan di bagian bawah header.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
                                 <div className="space-y-2">
@@ -517,9 +524,10 @@ function AdminDashboardContent() {
                                             onChange={e => setPeriodText(e.target.value)}
                                         />
                                         <Button onClick={handleSavePeriod} className="font-bold">
-                                            <Save className="mr-2 h-4 w-4" /> UPDATE
+                                            <Save className="mr-2 h-4 w-4" /> SIMPAN PERUBAHAN
                                         </Button>
                                     </div>
+                                    <p className="text-[10px] text-muted-foreground italic">*Teks ini akan muncul secara real-time di halaman utama setelah disimpan.</p>
                                 </div>
                             </CardContent>
                         </Card>

@@ -19,16 +19,13 @@ const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
   ({ className, children, baseVelocity = -50 }, ref) => {
     const marqueeRef = useRef<HTMLDivElement>(null);
     const xPercent = useRef(0);
+    const requestRef = useRef<number | null>(null);
 
     useEffect(() => {
       if (!marqueeRef.current) return;
 
       const items = marqueeRef.current.children;
       if (items.length <= 1) return;
-
-      // Duplicate children to create a seamless loop
-      const childArray = React.Children.toArray(children);
-      const duplicatedChildren = [...childArray, ...childArray, ...childArray, ...childArray, ...childArray];
       
       gsap.set(marqueeRef.current, {
         width: 'max-content'
@@ -36,17 +33,18 @@ const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
 
       const animate = () => {
         if (!marqueeRef.current) return;
-        const { width } = marqueeRef.current.getBoundingClientRect();
-        const halfWidth = width / 5; // Since we duplicated 5 times
-
-        xPercent.current += baseVelocity * 0.016; // 60fps
+        
+        xPercent.current += baseVelocity * 0.016; // Approx 60fps
+        
+        // Loop logic: Since we have 5 duplicates, reset at 1/5th
+        // Actually simpler logic for GSAP:
         if (baseVelocity < 0) {
-            if (xPercent.current < -100 * (4/5)) {
+            if (xPercent.current < -20) { // Reset after 1/5th
                 xPercent.current = 0;
             }
         } else {
             if (xPercent.current > 0) {
-                xPercent.current = -100 * (4/5);
+                xPercent.current = -20;
             }
         }
 
@@ -54,10 +52,16 @@ const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
             xPercent: xPercent.current
         });
         
-        requestAnimationFrame(animate);
+        requestRef.current = requestAnimationFrame(animate);
       };
       
-      requestAnimationFrame(animate);
+      requestRef.current = requestAnimationFrame(animate);
+
+      return () => {
+        if (requestRef.current) {
+          cancelAnimationFrame(requestRef.current);
+        }
+      };
 
     }, [baseVelocity, children]);
 
@@ -67,21 +71,14 @@ const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
         className={cn("relative flex w-full overflow-hidden", className)}
       >
         <div ref={marqueeRef} className="flex whitespace-nowrap">
-           {React.Children.map(children, (child) => (
-            <div className="shrink-0">{child}</div>
-          ))}
-           {React.Children.map(children, (child) => (
-            <div className="shrink-0">{child}</div>
-          ))}
-          {React.Children.map(children, (child) => (
-            <div className="shrink-0">{child}</div>
-          ))}
-           {React.Children.map(children, (child) => (
-            <div className="shrink-0">{child}</div>
-          ))}
-           {React.Children.map(children, (child) => (
-            <div className="shrink-0">{child}</div>
-          ))}
+           {/* Duplicate 5 times for a seamless loop across large screens */}
+           {[...Array(5)].map((_, i) => (
+             <React.Fragment key={i}>
+                {React.Children.map(children, (child) => (
+                    <div className="shrink-0">{child}</div>
+                ))}
+             </React.Fragment>
+           ))}
         </div>
       </div>
     );
