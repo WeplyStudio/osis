@@ -1,5 +1,7 @@
+
 'use client';
 
+// Konfigurasi Firebase resmi dari pengguna
 export const firebaseConfig = {
   apiKey: "AIzaSyCQLWlC8rXWcrDMZt4dd_piV_uijAUNCg4",
   authDomain: "lustrous-drake-375709.firebaseapp.com",

@@ -2,17 +2,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // IZINKAN AKSES PUBLIK UNTUK SEMUA KOLEKSI AGAR DATA PASTI TERSIMPAN
-    match /aspirations/{aspirationId} {
-      allow read, write: if true;
-    }
-    match /programs/{programId} {
-      allow read, write: if true;
-    }
-    match /teamMembers/{memberId} {
-      allow read, write: if true;
-    }
-    match /settings/{settingId} {
+    // IZINKAN AKSES PUBLIK PENUH UNTUK SEMUA KOLEKSI AGAR DATA PASTI TERSIMPAN
+    // Penting: Gunakan aturan ini hanya saat pengembangan untuk memastikan koneksi database berhasil.
+    match /{document=**} {
       allow read, write: if true;
     }
   }
