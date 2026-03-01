@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -70,8 +69,8 @@ function AdminDashboardContent() {
         formData.append('image', file);
 
         try {
-            // Menggunakan API Key publik (sebaiknya ganti dengan milik Anda sendiri di masa depan)
-            const response = await fetch(`https://api.imgbb.com/1/upload?key=767439031c5905d2146e257221666887`, {
+            // Menggunakan API Key yang diberikan oleh user
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=1fa90970c71549cdd68ce59dcf6f3a12`, {
                 method: 'POST',
                 body: formData,
             });
