@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Lock, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { initializeFirebase, FirebaseClientProvider } from '@/firebase';
 
-export default function LoginPage() {
+function LoginPageContent() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -81,5 +82,14 @@ export default function LoginPage() {
                 </CardContent>
             </Card>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    const { firebaseApp, firestore, auth } = initializeFirebase();
+    return (
+        <FirebaseClientProvider firebaseApp={firebaseApp} firestore={firestore} auth={auth}>
+            <LoginPageContent />
+        </FirebaseClientProvider>
     );
 }

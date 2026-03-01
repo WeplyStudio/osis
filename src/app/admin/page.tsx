@@ -14,7 +14,7 @@ import {
     orderBy,
     serverTimestamp
 } from 'firebase/firestore';
-import { useFirestore, useCollection, useDoc } from '@/firebase';
+import { useFirestore, useCollection, useDoc, initializeFirebase, FirebaseClientProvider } from '@/firebase';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -40,7 +40,7 @@ import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 
-export default function AdminDashboard() {
+function AdminDashboardContent() {
     const router = useRouter();
     const firestore = useFirestore();
     const { toast } = useToast();
@@ -381,5 +381,14 @@ export default function AdminDashboard() {
                 </Tabs>
             </div>
         </div>
+    );
+}
+
+export default function AdminDashboard() {
+    const { firebaseApp, firestore, auth } = initializeFirebase();
+    return (
+        <FirebaseClientProvider firebaseApp={firebaseApp} firestore={firestore} auth={auth}>
+            <AdminDashboardContent />
+        </FirebaseClientProvider>
     );
 }
