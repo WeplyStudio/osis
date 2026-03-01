@@ -2,20 +2,25 @@
 'use client';
 
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore } from 'firebase/firestore';
+import { getFirestore, Firestore, initializeFirestore, terminate } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
 import { firebaseConfig } from './config';
 import { useMemo } from 'react';
 
 export function initializeFirebase() {
   let firebaseApp: FirebaseApp;
+  
   if (!getApps().length) {
     firebaseApp = initializeApp(firebaseConfig);
   } else {
     firebaseApp = getApp();
   }
 
-  const firestore = getFirestore(firebaseApp);
+  // Menggunakan initializeFirestore dengan setting Long Polling agar lebih stabil di berbagai jaringan
+  const firestore = initializeFirestore(firebaseApp, {
+    experimentalForceLongPolling: true,
+  });
+  
   const auth = getAuth(firebaseApp);
 
   return { firebaseApp, firestore, auth };

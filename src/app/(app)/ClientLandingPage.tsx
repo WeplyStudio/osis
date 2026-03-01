@@ -61,19 +61,27 @@ const AspirationFormSection = () => {
         resolver: zodResolver(aspirationSchema),
     });
 
-    const onSubmit: SubmitHandler<AspirationFormInputs> = (data) => {
+    const onSubmit: SubmitHandler<AspirationFormInputs> = async (data) => {
         setLocalIsSubmitting(true);
         const aspirationsRef = collection(firestore, 'aspirations');
         const newDocRef = doc(aspirationsRef);
         const id = newDocRef.id;
 
-        // JANGAN gunakan await di sini agar UI langsung merespon (Optimistic Update)
-        setDoc(newDocRef, {
-            content: data.aspiration,
-            status: 'menunggu',
-            createdAt: serverTimestamp(),
-        })
-        .catch(async (error: any) => {
+        try {
+            // Kita gunakan await agar ID hanya muncul jika server sudah mengonfirmasi simpanan
+            await setDoc(newDocRef, {
+                content: data.aspiration,
+                status: 'menunggu',
+                createdAt: serverTimestamp(),
+            });
+
+            setSubmittedId(id);
+            toast({
+                title: "Aspirasi Terkirim!",
+                description: "Terima kasih atas masukanmu. Data telah aman tersimpan di database.",
+            });
+            reset();
+        } catch (error: any) {
             const permissionError = new FirestorePermissionError({
                 path: newDocRef.path,
                 operation: 'create',
@@ -83,18 +91,11 @@ const AspirationFormSection = () => {
             toast({
                 variant: "destructive",
                 title: "Gagal Mengirim",
-                description: "Terjadi kesalahan saat menyimpan ke database.",
+                description: "Database menolak penyimpanan atau koneksi terputus. Silakan coba lagi.",
             });
-        });
-
-        // Langsung tampilkan ID tanpa menunggu server (Firestore akan sinkron di background)
-        setSubmittedId(id);
-        toast({
-            title: "Aspirasi Terkirim!",
-            description: "Terima kasih atas masukanmu. Data sedang disinkronkan.",
-        });
-        reset();
-        setLocalIsSubmitting(false);
+        } finally {
+            setLocalIsSubmitting(false);
+        }
     };
 
     const copyToClipboard = () => {

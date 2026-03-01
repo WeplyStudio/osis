@@ -48,6 +48,7 @@ function AdminDashboardContent() {
     const firestore = useFirestore();
     const { toast } = useToast();
     const [isUploading, setIsUploading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     
     useEffect(() => {
         const isAdmin = localStorage.getItem('isAdmin');
@@ -124,50 +125,48 @@ function AdminDashboardContent() {
         type: 'secondary' as 'main' | 'secondary'
     });
 
-    const handleSaveProgram = (e: React.FormEvent) => {
+    const handleSaveProgram = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (programForm.id) {
-            const { id, ...data } = programForm;
-            const docRef = doc(firestore, 'programs', id);
-            updateDoc(docRef, {
-                ...data,
-                updatedAt: serverTimestamp()
-            }).catch(async () => {
-                errorEmitter.emit('permission-error', new FirestorePermissionError({
-                    path: docRef.path,
-                    operation: 'update',
-                    requestResourceData: data,
-                }));
-            });
-            toast({ title: "Berhasil", description: "Program diperbarui secara lokal." });
-        } else {
-            const { id, ...data } = programForm;
-            const colRef = collection(firestore, 'programs');
-            addDoc(colRef, {
-                ...data,
-                createdAt: serverTimestamp()
-            }).catch(async () => {
-                errorEmitter.emit('permission-error', new FirestorePermissionError({
-                    path: 'programs',
-                    operation: 'create',
-                    requestResourceData: data,
-                }));
-            });
-            toast({ title: "Berhasil", description: "Program ditambahkan secara lokal." });
+        setIsSaving(true);
+        try {
+            if (programForm.id) {
+                const { id, ...data } = programForm;
+                const docRef = doc(firestore, 'programs', id);
+                await updateDoc(docRef, {
+                    ...data,
+                    updatedAt: serverTimestamp()
+                });
+                toast({ title: "Berhasil", description: "Program diperbarui di database." });
+            } else {
+                const { id, ...data } = programForm;
+                const colRef = collection(firestore, 'programs');
+                await addDoc(colRef, {
+                    ...data,
+                    createdAt: serverTimestamp()
+                });
+                toast({ title: "Berhasil", description: "Program ditambahkan ke database." });
+            }
+            setProgramForm({ id: '', title: '', date: '', month: '', location: '', description: '', type: 'secondary' });
+        } catch (error: any) {
+             errorEmitter.emit('permission-error', new FirestorePermissionError({
+                path: 'programs',
+                operation: 'write',
+            }));
+            toast({ variant: "destructive", title: "Gagal Simpan", description: "Cek koneksi atau izin database." });
+        } finally {
+            setIsSaving(false);
         }
-        setProgramForm({ id: '', title: '', date: '', month: '', location: '', description: '', type: 'secondary' });
     };
 
-    const handleDeleteProgram = (id: string) => {
+    const handleDeleteProgram = async (id: string) => {
         if (confirm('Hapus program ini?')) {
-            const docRef = doc(firestore, 'programs', id);
-            deleteDoc(docRef).catch(async () => {
-                errorEmitter.emit('permission-error', new FirestorePermissionError({
-                    path: docRef.path,
-                    operation: 'delete',
-                }));
-            });
-            toast({ title: "Dihapus", description: "Program telah dihapus." });
+            try {
+                const docRef = doc(firestore, 'programs', id);
+                await deleteDoc(docRef);
+                toast({ title: "Dihapus", description: "Program telah dihapus dari database." });
+            } catch (error) {
+                toast({ variant: "destructive", title: "Gagal Hapus", description: "Izin ditolak." });
+            }
         }
     };
 
@@ -180,71 +179,60 @@ function AdminDashboardContent() {
         order: 0
     });
 
-    const handleSaveTeam = (e: React.FormEvent) => {
+    const handleSaveTeam = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (teamForm.id) {
-            const { id, ...data } = teamForm;
-            const docRef = doc(firestore, 'teamMembers', id);
-            updateDoc(docRef, data).catch(async () => {
-                errorEmitter.emit('permission-error', new FirestorePermissionError({
-                    path: docRef.path,
-                    operation: 'update',
-                    requestResourceData: data,
-                }));
-            });
-            toast({ title: "Berhasil", description: "Anggota tim diperbarui." });
-        } else {
-            const { id, ...data } = teamForm;
-            const colRef = collection(firestore, 'teamMembers');
-            addDoc(colRef, data).catch(async () => {
-                errorEmitter.emit('permission-error', new FirestorePermissionError({
-                    path: 'teamMembers',
-                    operation: 'create',
-                    requestResourceData: data,
-                }));
-            });
-            toast({ title: "Berhasil", description: "Anggota tim ditambahkan." });
+        setIsSaving(true);
+        try {
+            if (teamForm.id) {
+                const { id, ...data } = teamForm;
+                const docRef = doc(firestore, 'teamMembers', id);
+                await updateDoc(docRef, data);
+                toast({ title: "Berhasil", description: "Anggota tim diperbarui di database." });
+            } else {
+                const { id, ...data } = teamForm;
+                const colRef = collection(firestore, 'teamMembers');
+                await addDoc(colRef, data);
+                toast({ title: "Berhasil", description: "Anggota tim ditambahkan ke database." });
+            }
+            setTeamForm({ id: '', name: '', role: '', quote: '', image: '', order: 0 });
+        } catch (error) {
+             toast({ variant: "destructive", title: "Gagal Simpan", description: "Cek izin database." });
+        } finally {
+            setIsSaving(false);
         }
-        setTeamForm({ id: '', name: '', role: '', quote: '', image: '', order: 0 });
     };
 
-    const handleDeleteTeam = (id: string) => {
+    const handleDeleteTeam = async (id: string) => {
         if (confirm('Hapus anggota ini?')) {
-            const docRef = doc(firestore, 'teamMembers', id);
-            deleteDoc(docRef).catch(async () => {
-                errorEmitter.emit('permission-error', new FirestorePermissionError({
-                    path: docRef.path,
-                    operation: 'delete',
-                }));
-            });
-            toast({ title: "Dihapus", description: "Anggota telah dihapus." });
+            try {
+                const docRef = doc(firestore, 'teamMembers', id);
+                await deleteDoc(docRef);
+                toast({ title: "Dihapus", description: "Anggota telah dihapus." });
+            } catch (error) {
+                 toast({ variant: "destructive", title: "Gagal Hapus", description: "Izin ditolak." });
+            }
         }
     };
 
-    const handleUpdateAspirationStatus = (id: string, newStatus: string) => {
-        const docRef = doc(firestore, 'aspirations', id);
-        updateDoc(docRef, {
-            status: newStatus
-        }).catch(async () => {
-            errorEmitter.emit('permission-error', new FirestorePermissionError({
-                path: docRef.path,
-                operation: 'update',
-                requestResourceData: { status: newStatus },
-            }));
-        });
-        toast({ title: "Status Diperbarui", description: `Aspirasi sekarang berstatus ${newStatus}.` });
+    const handleUpdateAspirationStatus = async (id: string, newStatus: string) => {
+        try {
+            const docRef = doc(firestore, 'aspirations', id);
+            await updateDoc(docRef, { status: newStatus });
+            toast({ title: "Status Diperbarui", description: `Aspirasi sekarang berstatus ${newStatus}.` });
+        } catch (error) {
+            toast({ variant: "destructive", title: "Gagal Update", description: "Izin ditolak." });
+        }
     };
 
-    const handleDeleteAspiration = (id: string) => {
+    const handleDeleteAspiration = async (id: string) => {
         if (confirm('Hapus aspirasi ini secara permanen?')) {
-            const docRef = doc(firestore, 'aspirations', id);
-            deleteDoc(docRef).catch(async () => {
-                errorEmitter.emit('permission-error', new FirestorePermissionError({
-                    path: docRef.path,
-                    operation: 'delete',
-                }));
-            });
-            toast({ title: "Dihapus", description: "Aspirasi telah dihapus." });
+            try {
+                const docRef = doc(firestore, 'aspirations', id);
+                await deleteDoc(docRef);
+                toast({ title: "Dihapus", description: "Aspirasi telah dihapus." });
+            } catch (error) {
+                toast({ variant: "destructive", title: "Gagal Hapus", description: "Izin ditolak." });
+            }
         }
     };
 
@@ -269,21 +257,22 @@ function AdminDashboardContent() {
         }
     }, [periodSetting, hasInitializedPeriod]);
 
-    const handleSavePeriod = () => {
+    const handleSavePeriod = async () => {
+        setIsSaving(true);
         const docRef = doc(firestore, 'settings', 'period');
         const data = {
             key: 'period',
             value: periodText,
             updatedAt: serverTimestamp()
         };
-        setDoc(docRef, data, { merge: true }).catch(async () => {
-            errorEmitter.emit('permission-error', new FirestorePermissionError({
-                path: docRef.path,
-                operation: 'write',
-                requestResourceData: data,
-            }));
-        });
-        toast({ title: "Berhasil", description: "Periode OSIS diperbarui." });
+        try {
+            await setDoc(docRef, data, { merge: true });
+            toast({ title: "Berhasil", description: "Periode OSIS diperbarui di database." });
+        } catch (error) {
+             toast({ variant: "destructive", title: "Gagal Simpan", description: "Cek izin database." });
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
@@ -331,7 +320,9 @@ function AdminDashboardContent() {
                                             <option value="main">Main Event</option>
                                         </select>
                                         <div className="flex gap-2">
-                                            <Button type="submit" className="flex-1 font-bold"><Plus className="mr-2 h-4 w-4" /> SIMPAN</Button>
+                                            <Button type="submit" className="flex-1 font-bold" disabled={isSaving}>
+                                                {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />} SIMPAN
+                                            </Button>
                                             {programForm.id && <Button variant="ghost" type="button" onClick={() => setProgramForm({id: '', title: '', date: '', month: '', location: '', description: '', type: 'secondary'})}>Batal</Button>}
                                         </div>
                                     </form>
@@ -415,8 +406,8 @@ function AdminDashboardContent() {
                                         <Input type="number" placeholder="Urutan Tampil" value={teamForm.order} onChange={e => setTeamForm({...teamForm, order: parseInt(e.target.value) || 0})} />
                                         <Textarea placeholder="Quote Singkat" value={teamForm.quote} onChange={e => setTeamForm({...teamForm, quote: e.target.value})} required />
                                         <div className="flex gap-2">
-                                            <Button type="submit" className="flex-1 font-bold" disabled={isUploading}>
-                                                <Plus className="mr-2 h-4 w-4" /> {teamForm.id ? 'PERBARUI' : 'SIMPAN'}
+                                            <Button type="submit" className="flex-1 font-bold" disabled={isUploading || isSaving}>
+                                                {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />} {teamForm.id ? 'PERBARUI' : 'SIMPAN'}
                                             </Button>
                                             {teamForm.id && <Button variant="ghost" type="button" onClick={() => setTeamForm({id: '', name: '', role: '', quote: '', image: '', order: 0})}>Batal</Button>}
                                         </div>
@@ -521,8 +512,8 @@ function AdminDashboardContent() {
                                             value={periodText}
                                             onChange={e => setPeriodText(e.target.value)}
                                         />
-                                        <Button onClick={handleSavePeriod} className="font-bold">
-                                            <Save className="mr-2 h-4 w-4" /> SIMPAN PERUBAHAN
+                                        <Button onClick={handleSavePeriod} className="font-bold" disabled={isSaving}>
+                                            {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />} SIMPAN PERUBAHAN
                                         </Button>
                                     </div>
                                     <p className="text-[10px] text-muted-foreground italic">*Teks ini akan muncul secara real-time di halaman utama setelah disimpan.</p>
