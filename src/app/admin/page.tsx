@@ -139,7 +139,7 @@ function AdminDashboardContent() {
                     requestResourceData: data,
                 }));
             });
-            toast({ title: "Berhasil", description: "Program diperbarui." });
+            toast({ title: "Berhasil", description: "Program diperbarui secara lokal." });
         } else {
             const { id, ...data } = programForm;
             const colRef = collection(firestore, 'programs');
@@ -153,7 +153,7 @@ function AdminDashboardContent() {
                     requestResourceData: data,
                 }));
             });
-            toast({ title: "Berhasil", description: "Program ditambahkan." });
+            toast({ title: "Berhasil", description: "Program ditambahkan secara lokal." });
         }
         setProgramForm({ id: '', title: '', date: '', month: '', location: '', description: '', type: 'secondary' });
     };
@@ -276,16 +276,14 @@ function AdminDashboardContent() {
             value: periodText,
             updatedAt: serverTimestamp()
         };
-        setDoc(docRef, data, { merge: true }).then(() => {
-            toast({ title: "Berhasil", description: "Periode OSIS diperbarui di database." });
-        }).catch(async () => {
+        setDoc(docRef, data, { merge: true }).catch(async () => {
             errorEmitter.emit('permission-error', new FirestorePermissionError({
                 path: docRef.path,
                 operation: 'write',
                 requestResourceData: data,
             }));
-            toast({ variant: "destructive", title: "Gagal Simpan", description: "Terjadi kesalahan saat menyimpan pengaturan." });
         });
+        toast({ title: "Berhasil", description: "Periode OSIS diperbarui." });
     };
 
     return (
@@ -320,7 +318,7 @@ function AdminDashboardContent() {
                                         <Input placeholder="Judul Program" value={programForm.title} onChange={e => setProgramForm({...programForm, title: e.target.value})} required />
                                         <div className="grid grid-cols-2 gap-2">
                                             <Input placeholder="Tgl (Ex: 21)" value={programForm.date} onChange={e => setProgramForm({...programForm, date: e.target.value})} required />
-                                            <Input placeholder="Bulan (Ex: JUNI)" value={programForm.month} onChange={e => setPeriodText(e.target.value)} required />
+                                            <Input placeholder="Bulan (Ex: JUNI)" value={programForm.month} onChange={e => setProgramForm({...programForm, month: e.target.value})} required />
                                         </div>
                                         <Input placeholder="Lokasi (Ex: GOR)" value={programForm.location} onChange={e => setProgramForm({...programForm, location: e.target.value})} />
                                         <Textarea placeholder="Deskripsi Singkat" value={programForm.description} onChange={e => setProgramForm({...programForm, description: e.target.value})} required />

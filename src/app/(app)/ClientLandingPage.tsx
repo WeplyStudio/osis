@@ -55,31 +55,25 @@ const AspirationFormSection = () => {
     const { toast } = useToast();
     const [submittedId, setSubmittedId] = useState<string | null>(null);
     const [isCopied, setIsCopied] = useState(false);
+    const [localIsSubmitting, setLocalIsSubmitting] = useState(false);
 
-    const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<AspirationFormInputs>({
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<AspirationFormInputs>({
         resolver: zodResolver(aspirationSchema),
     });
 
-    const onSubmit: SubmitHandler<AspirationFormInputs> = async (data) => {
+    const onSubmit: SubmitHandler<AspirationFormInputs> = (data) => {
+        setLocalIsSubmitting(true);
         const aspirationsRef = collection(firestore, 'aspirations');
         const newDocRef = doc(aspirationsRef);
         const id = newDocRef.id;
 
-        // Pastikan simpan ke database BERHASIL dulu sebelum tampilkan ID
-        try {
-            await setDoc(newDocRef, {
-                content: data.aspiration,
-                status: 'menunggu',
-                createdAt: serverTimestamp(),
-            });
-            
-            setSubmittedId(id);
-            toast({
-                title: "Aspirasi Terkirim!",
-                description: "Terima kasih atas masukanmu.",
-            });
-            reset();
-        } catch (error: any) {
+        // JANGAN gunakan await di sini agar UI langsung merespon (Optimistic Update)
+        setDoc(newDocRef, {
+            content: data.aspiration,
+            status: 'menunggu',
+            createdAt: serverTimestamp(),
+        })
+        .catch(async (error: any) => {
             const permissionError = new FirestorePermissionError({
                 path: newDocRef.path,
                 operation: 'create',
@@ -89,9 +83,18 @@ const AspirationFormSection = () => {
             toast({
                 variant: "destructive",
                 title: "Gagal Mengirim",
-                description: "Database menolak pengiriman. Periksa koneksi atau izin akses.",
+                description: "Terjadi kesalahan saat menyimpan ke database.",
             });
-        }
+        });
+
+        // Langsung tampilkan ID tanpa menunggu server (Firestore akan sinkron di background)
+        setSubmittedId(id);
+        toast({
+            title: "Aspirasi Terkirim!",
+            description: "Terima kasih atas masukanmu. Data sedang disinkronkan.",
+        });
+        reset();
+        setLocalIsSubmitting(false);
     };
 
     const copyToClipboard = () => {
@@ -117,9 +120,9 @@ const AspirationFormSection = () => {
                         type="submit" 
                         size="lg" 
                         className="w-full md:w-auto font-bold rounded-full py-6 px-10 shadow-lg hover:scale-105 transition-transform"
-                        disabled={isSubmitting}
+                        disabled={localIsSubmitting}
                     >
-                        {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'KIRIM ASPIRASI SEKARANG'}
+                        {localIsSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'KIRIM ASPIRASI SEKARANG'}
                     </Button>
                 </form>
             ) : (
