@@ -1,7 +1,8 @@
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Izinkan akses publik untuk kebutuhan MVP OSIS Kigra
+    // IZINKAN AKSES PUBLIK UNTUK SEMUA KOLEKSI AGAR DATA PASTI TERSIMPAN
     match /aspirations/{aspirationId} {
       allow read, write: if true;
     }

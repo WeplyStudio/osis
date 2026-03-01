@@ -65,11 +65,21 @@ const AspirationFormSection = () => {
         const newDocRef = doc(aspirationsRef);
         const id = newDocRef.id;
 
-        setDoc(newDocRef, {
-            content: data.aspiration,
-            status: 'menunggu',
-            createdAt: serverTimestamp(),
-        }).catch(async (error) => {
+        // Pastikan simpan ke database BERHASIL dulu sebelum tampilkan ID
+        try {
+            await setDoc(newDocRef, {
+                content: data.aspiration,
+                status: 'menunggu',
+                createdAt: serverTimestamp(),
+            });
+            
+            setSubmittedId(id);
+            toast({
+                title: "Aspirasi Terkirim!",
+                description: "Terima kasih atas masukanmu.",
+            });
+            reset();
+        } catch (error: any) {
             const permissionError = new FirestorePermissionError({
                 path: newDocRef.path,
                 operation: 'create',
@@ -79,16 +89,9 @@ const AspirationFormSection = () => {
             toast({
                 variant: "destructive",
                 title: "Gagal Mengirim",
-                description: "Terjadi kesalahan saat mengirim aspirasi.",
+                description: "Database menolak pengiriman. Periksa koneksi atau izin akses.",
             });
-        });
-
-        setSubmittedId(id);
-        toast({
-            title: "Aspirasi Terkirim!",
-            description: "Terima kasih atas masukanmu.",
-        });
-        reset();
+        }
     };
 
     const copyToClipboard = () => {
