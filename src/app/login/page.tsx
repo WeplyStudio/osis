@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -86,7 +86,8 @@ function LoginPageContent() {
 }
 
 export default function LoginPage() {
-    const { firebaseApp, firestore, auth } = initializeFirebase();
+    // Memoize initialization to prevent infinite loop
+    const { firebaseApp, firestore, auth } = useMemo(() => initializeFirebase(), []);
     return (
         <FirebaseClientProvider firebaseApp={firebaseApp} firestore={firestore} auth={auth}>
             <LoginPageContent />

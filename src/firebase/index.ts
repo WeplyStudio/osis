@@ -5,6 +5,7 @@ import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
 import { firebaseConfig } from './config';
+import { useMemo } from 'react';
 
 export function initializeFirebase() {
   let firebaseApp: FirebaseApp;
@@ -18,6 +19,14 @@ export function initializeFirebase() {
   const auth = getAuth(firebaseApp);
 
   return { firebaseApp, firestore, auth };
+}
+
+/**
+ * A helper hook to stabilize Firebase references and queries.
+ * Use this to wrap doc() or query() calls.
+ */
+export function useMemoFirebase<T>(factory: () => T, deps: any[]): T {
+    return useMemo(factory, deps);
 }
 
 export * from './provider';
