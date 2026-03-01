@@ -2,7 +2,7 @@
 'use client';
 
 import Link from "next/link";
-import { Instagram, Home, Menu, Phone, Users, Info, Youtube, LucideIcon, Library, ShieldCheck } from "lucide-react";
+import { Instagram, Home, Menu, Phone, Users, Info, Youtube, LucideIcon, Library, ShieldCheck, ClipboardCheck } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -31,9 +31,9 @@ const organizationLinks = [
 
 const innovationLinks = [
     { href: '/library', label: 'Digital Library' },
+    { href: '/check-aspiration', label: 'Cek Aspirasi' },
     { href: '#', label: 'E-Voting' },
     { href: '#', label: 'AI Assistant' },
-    { href: '#', label: 'Podwaves' },
 ];
 
 const SocialIcon = ({ href, icon: Icon }: { href: string; icon: LucideIcon | React.ComponentType<{ className?: string }> | string }) => (
@@ -151,6 +151,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                       Library
                   </Link>
               </Button>
+              <Button asChild variant="ghost">
+                  <Link href="/check-aspiration">
+                      Cek Aspirasi
+                  </Link>
+              </Button>
             </nav>
             
             <div className="flex items-center gap-4">
@@ -188,6 +193,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             <Link href="/library" className="flex items-center gap-4">
                                 <Library className="w-6 h-6" />
                                 Library
+                            </Link>
+                        </Button>
+                        <Button asChild variant="ghost" className="justify-start text-lg h-14">
+                            <Link href="/check-aspiration" className="flex items-center gap-4">
+                                <ClipboardCheck className="w-6 h-6" />
+                                Cek Aspirasi
                             </Link>
                         </Button>
                          <Button asChild variant="ghost" className="justify-start text-lg h-14">

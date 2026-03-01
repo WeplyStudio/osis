@@ -18,7 +18,7 @@ import { useFirestore, useCollection, useDoc } from '@/firebase';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
     Plus, 
@@ -29,10 +29,16 @@ import {
     Users, 
     Settings,
     Save,
-    Loader2
+    Loader2,
+    MessageSquare,
+    CheckCircle2,
+    Clock
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
 
 export default function AdminDashboard() {
     const router = useRouter();
@@ -51,6 +57,7 @@ export default function AdminDashboard() {
         router.push('/login');
     };
 
+    // --- PROGRAMS ---
     const programsQuery = query(collection(firestore, 'programs'), orderBy('createdAt', 'desc'));
     const { data: programs, loading: programsLoading } = useCollection<any>(programsQuery);
     
@@ -91,6 +98,7 @@ export default function AdminDashboard() {
         }
     };
 
+    // --- TEAM MEMBERS ---
     const teamQuery = query(collection(firestore, 'teamMembers'), orderBy('order', 'asc'));
     const { data: teamMembers, loading: teamLoading } = useCollection<any>(teamQuery);
 
@@ -124,6 +132,36 @@ export default function AdminDashboard() {
         }
     };
 
+    // --- ASPIRATIONS ---
+    const aspirationsQuery = query(collection(firestore, 'aspirations'), orderBy('createdAt', 'desc'));
+    const { data: aspirations, loading: aspirationsLoading } = useCollection<any>(aspirationsQuery);
+
+    const handleUpdateAspirationStatus = (id: string, newStatus: string) => {
+        updateDoc(doc(firestore, 'aspirations', id), {
+            status: newStatus
+        });
+        toast({ title: "Status Diperbarui", description: `Aspirasi sekarang berstatus ${newStatus}.` });
+    };
+
+    const handleDeleteAspiration = (id: string) => {
+        if (confirm('Hapus aspirasi ini secara permanen?')) {
+            deleteDoc(doc(firestore, 'aspirations', id));
+            toast({ title: "Dihapus", description: "Aspirasi telah dihapus." });
+        }
+    };
+
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'menunggu': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+            case 'dilihat': return 'bg-blue-100 text-blue-800 border-blue-200';
+            case 'diproses': return 'bg-purple-100 text-purple-800 border-purple-200';
+            case 'dipertimbangkan': return 'bg-orange-100 text-orange-800 border-orange-200';
+            case 'selesai': return 'bg-green-100 text-green-800 border-green-200';
+            default: return 'bg-gray-100 text-gray-800 border-gray-200';
+        }
+    };
+
+    // --- SETTINGS ---
     const periodDocRef = doc(firestore, 'settings', 'period');
     const { data: periodSetting } = useDoc<any>(periodDocRef);
     const [periodText, setPeriodText] = useState('');
@@ -156,9 +194,10 @@ export default function AdminDashboard() {
                 </header>
 
                 <Tabs defaultValue="programs" className="w-full">
-                    <TabsList className="grid w-full grid-cols-3 mb-8">
+                    <TabsList className="grid w-full grid-cols-4 mb-8">
                         <TabsTrigger value="programs" className="font-bold uppercase"><Calendar className="mr-2 h-4 w-4" /> Program</TabsTrigger>
                         <TabsTrigger value="team" className="font-bold uppercase"><Users className="mr-2 h-4 w-4" /> Tim Kami</TabsTrigger>
+                        <TabsTrigger value="aspirations" className="font-bold uppercase"><MessageSquare className="mr-2 h-4 w-4" /> Aspirasi</TabsTrigger>
                         <TabsTrigger value="settings" className="font-bold uppercase"><Settings className="mr-2 h-4 w-4" /> Pengaturan</TabsTrigger>
                     </TabsList>
 
@@ -250,6 +289,69 @@ export default function AdminDashboard() {
                                         </CardContent>
                                     </Card>
                                 ))}
+                            </div>
+                        </div>
+                    </TabsContent>
+
+                    <TabsContent value="aspirations">
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-xl font-bold italic uppercase tracking-tighter">DAFTAR <span className="text-primary">ASPIRASI SISWA</span></h2>
+                                <Badge variant="outline" className="font-bold">{aspirations?.length || 0} TOTAL</Badge>
+                            </div>
+                            <div className="grid grid-cols-1 gap-4">
+                                {aspirationsLoading ? (
+                                    <Loader2 className="animate-spin mx-auto h-8 w-8" />
+                                ) : aspirations?.length === 0 ? (
+                                    <Card className="bg-muted/50 border-dashed">
+                                        <CardContent className="p-12 text-center text-muted-foreground">Belum ada aspirasi masuk.</CardContent>
+                                    </Card>
+                                ) : (
+                                    aspirations?.map((asp: any) => (
+                                        <Card key={asp.id} className="hover:shadow-md transition-shadow">
+                                            <CardContent className="p-6">
+                                                <div className="flex flex-col md:flex-row gap-6 justify-between items-start">
+                                                    <div className="flex-grow space-y-3">
+                                                        <div className="flex items-center gap-3">
+                                                            <Badge className={cn("px-3 py-1 rounded-full font-bold uppercase text-[10px] border", getStatusColor(asp.status))}>
+                                                                {asp.status}
+                                                            </Badge>
+                                                            <span className="text-xs text-muted-foreground font-mono">ID: {asp.id}</span>
+                                                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                                                <Clock className="w-3 h-3" />
+                                                                {asp.createdAt ? format(asp.createdAt.toDate(), 'PP p', { locale: id }) : '-'}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-foreground font-medium bg-accent/20 p-4 rounded-xl italic">"{asp.content}"</p>
+                                                    </div>
+                                                    <div className="flex md:flex-col gap-2 w-full md:w-auto">
+                                                        <div className="flex flex-wrap gap-2 mb-2">
+                                                            {['menunggu', 'dilihat', 'diproses', 'dipertimbangkan', 'selesai'].map((status) => (
+                                                                <Button 
+                                                                    key={status}
+                                                                    size="sm"
+                                                                    variant={asp.status === status ? 'default' : 'outline'}
+                                                                    className="h-7 text-[10px] font-bold uppercase"
+                                                                    onClick={() => handleUpdateAspirationStatus(asp.id, status)}
+                                                                >
+                                                                    {status}
+                                                                </Button>
+                                                            ))}
+                                                        </div>
+                                                        <Button 
+                                                            variant="destructive" 
+                                                            size="sm" 
+                                                            className="w-full md:w-auto font-bold"
+                                                            onClick={() => handleDeleteAspiration(asp.id)}
+                                                        >
+                                                            <Trash2 className="mr-2 h-4 w-4" /> HAPUS
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    ))
+                                )}
                             </div>
                         </div>
                     </TabsContent>

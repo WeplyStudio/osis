@@ -4,7 +4,7 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { ArrowRight, Eye, HelpCircle, Mail, Loader2, Calendar } from 'lucide-react';
+import { ArrowRight, Eye, HelpCircle, Mail, Loader2, Calendar, ClipboardCheck, Copy, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Accordion,
@@ -23,16 +23,6 @@ import { divisions, faqItems } from '@/lib/data';
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogDescription,
-  DialogFooter,
-  DialogClose
-} from "@/components/ui/dialog";
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import ClientOnly from '@/components/ClientOnly';
@@ -43,8 +33,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useToast } from "@/hooks/use-toast";
-import { sendAspiration } from '@/app/actions';
-import { collection, query, orderBy, doc } from 'firebase/firestore';
+import { collection, query, orderBy, doc, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useFirestore, useCollection, useDoc } from '@/firebase';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -56,124 +45,95 @@ const SectionTitle = ({ children, className }: { children: React.ReactNode, clas
 );
 
 const aspirationSchema = z.object({
-  name: z.string().optional(),
   aspiration: z.string().min(10, { message: "Aspirasi harus minimal 10 karakter." }),
-  category: z.string(),
 });
 
 type AspirationFormInputs = z.infer<typeof aspirationSchema>;
 
-const COOLDOWN_DURATION = 1 * 60 * 1000;
-
-const AspirationDialog = ({ title, category, children }: { title: string, category: string, children: React.ReactNode }) => {
-    const [open, setOpen] = useState(false);
+const AspirationFormSection = () => {
+    const firestore = useFirestore();
     const { toast } = useToast();
-    const [cooldownTime, setCooldownTime] = useState(0);
-
-    useEffect(() => {
-        if (open) {
-            const lastSubmission = localStorage.getItem('lastAspirationTime');
-            if (lastSubmission) {
-                const timePassed = Date.now() - parseInt(lastSubmission, 10);
-                if (timePassed < COOLDOWN_DURATION) {
-                    setCooldownTime(COOLDOWN_DURATION - timePassed);
-                }
-            }
-        }
-    }, [open]);
-
-    useEffect(() => {
-        if (cooldownTime > 0) {
-            const timer = setTimeout(() => setCooldownTime(prev => prev - 1000), 1000);
-            return () => clearTimeout(timer);
-        }
-    }, [cooldownTime]);
-
+    const [submittedId, setSubmittedId] = useState<string | null>(null);
+    const [isCopied, setIsCopied] = useState(false);
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<AspirationFormInputs>({
         resolver: zodResolver(aspirationSchema),
-        defaultValues: {
-            category: category,
-            name: '',
-            aspiration: ''
-        }
     });
 
-    const processForm: SubmitHandler<AspirationFormInputs> = async (data) => {
-        const result = await sendAspiration(data);
-
-        if (result.success) {
+    const onSubmit: SubmitHandler<AspirationFormInputs> = async (data) => {
+        try {
+            const docRef = await addDoc(collection(firestore, 'aspirations'), {
+                content: data.aspiration,
+                status: 'menunggu',
+                createdAt: serverTimestamp(),
+            });
+            setSubmittedId(docRef.id);
             toast({
                 title: "Aspirasi Terkirim!",
-                description: "Terima kasih atas masukanmu. Aspirasimu telah berhasil dikirim.",
+                description: "Terima kasih atas masukanmu.",
             });
-            localStorage.setItem('lastAspirationTime', Date.now().toString());
-            setCooldownTime(COOLDOWN_DURATION);
             reset();
-            setOpen(false);
-        } else {
+        } catch (error) {
             toast({
                 variant: "destructive",
                 title: "Gagal Mengirim",
-                description: result.error || "Terjadi kesalahan saat mengirim aspirasi.",
+                description: "Terjadi kesalahan saat mengirim aspirasi.",
             });
         }
     };
-    
-    const isCoolingDown = cooldownTime > 0;
-    const minutesLeft = Math.floor(cooldownTime / 60000);
-    const secondsLeft = Math.floor((cooldownTime % 60000) / 1000).toString().padStart(2, '0');
 
+    const copyToClipboard = () => {
+        if (submittedId) {
+            navigator.clipboard.writeText(submittedId);
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+            toast({ title: "ID Disalin!", description: "ID aspirasi telah disalin ke clipboard." });
+        }
+    };
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                {children}
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-                 <form onSubmit={handleSubmit(processForm)}>
-                    <DialogHeader>
-                        <DialogTitle className="font-body text-primary tracking-wider uppercase">{title}</DialogTitle>
-                        <DialogDescription>
-                            Berikan saran atau kritik kamu secara jelas dan sopan.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <Input
-                            id="name"
-                            placeholder="Nama (Opsional/Anonim)"
-                            {...register("name")}
-                            disabled={isCoolingDown}
-                        />
-                         <input type="hidden" {...register("category")} value={category} />
-                        <Textarea
-                            id="aspiration"
-                            placeholder="Tuliskan aspirasimu di sini..."
-                            className="min-h-[120px]"
-                            {...register("aspiration")}
-                            disabled={isCoolingDown}
-                        />
-                        {errors.aspiration && <p className="text-xs text-destructive">{errors.aspiration.message}</p>}
-                    </div>
-                    <DialogFooter>
-                      {isCoolingDown && (
-                          <p className="text-sm text-muted-foreground mr-auto">
-                              Coba lagi dalam {minutesLeft}:{secondsLeft}
-                          </p>
-                      )}
-                      <DialogClose asChild>
-                        <Button type="button" variant="outline">Batal</Button>
-                      </DialogClose>
-                      <Button type="submit" className="font-bold" disabled={isSubmitting || isCoolingDown}>
-                          {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'KIRIM SEKARANG'}
-                      </Button>
-                    </DialogFooter>
+        <div className="w-full">
+            {!submittedId ? (
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <Textarea
+                        placeholder="Tuliskan aspirasi, kritik, atau saran kamu di sini secara jujur dan sopan..."
+                        className="min-h-[150px] rounded-2xl bg-card border-2 focus:border-primary transition-all p-6 text-lg"
+                        {...register("aspiration")}
+                    />
+                    {errors.aspiration && <p className="text-sm text-destructive font-bold">{errors.aspiration.message}</p>}
+                    <Button 
+                        type="submit" 
+                        size="lg" 
+                        className="w-full md:w-auto font-bold rounded-full py-6 px-10 shadow-lg hover:scale-105 transition-transform"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'KIRIM ASPIRASI SEKARANG'}
+                    </Button>
                 </form>
-            </DialogContent>
-        </Dialog>
+            ) : (
+                <div className="bg-primary/5 border-2 border-primary/20 rounded-3xl p-8 text-center animate-fade-in">
+                    <CheckCircle2 className="w-16 h-16 text-primary mx-auto mb-4" />
+                    <h3 className="font-body text-2xl font-bold text-foreground mb-2">Aspirasi Berhasil Terkirim!</h3>
+                    <p className="text-muted-foreground mb-6">Simpan ID di bawah ini untuk mengecek status aspirasi kamu:</p>
+                    <div className="flex items-center justify-center gap-2 bg-card border rounded-2xl p-4 mb-6 shadow-inner">
+                        <code className="text-xl font-mono font-bold text-primary">{submittedId}</code>
+                        <Button variant="ghost" size="icon" onClick={copyToClipboard} className="text-muted-foreground">
+                            {isCopied ? <CheckCircle2 className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" />}
+                        </Button>
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-4">
+                        <Button variant="outline" onClick={() => setSubmittedId(null)} className="rounded-full font-bold">
+                            KIRIM LAGI
+                        </Button>
+                        <Button asChild className="rounded-full font-bold">
+                            <Link href="/check-aspiration">CEK STATUS</Link>
+                        </Button>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
-
 
 const DivisionTabs = () => {
     const [activeDivision, setActiveDivision] = React.useState(divisions[0].id);
@@ -283,22 +243,6 @@ const UpcomingEvents = ({ events }: { events: any[] }) => {
     );
 }
 
-const AspirationCard = React.forwardRef<HTMLDivElement, { title: string; description: string; status: string; statusVariant: "default" | "secondary" | "outline" | "destructive" | null | undefined, [key: string]: any }>(
-    ({ title, description, status, statusVariant, ...props }, ref) => (
-    <Card ref={ref} className="hover:bg-accent/50 transition-colors duration-200 cursor-pointer" {...props}>
-        <CardContent className="p-6 flex items-center justify-between">
-            <div>
-                <h4 className="font-bold text-lg text-foreground">{title}</h4>
-                <p className="text-sm text-muted-foreground">{description}</p>
-            </div>
-            <Badge variant={statusVariant} className="flex-shrink-0">
-                {status}
-            </Badge>
-        </CardContent>
-    </Card>
-));
-AspirationCard.displayName = 'AspirationCard';
-
 const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
     <div className="flex items-start gap-4">
         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-foreground/20 text-primary-foreground font-bold text-xs flex items-center justify-center">
@@ -380,7 +324,7 @@ export default function ClientLandingPage() {
       sequence("#upcoming-events .secondary-event-card", {y: 60, delay: 0.2});
       animateFrom("#aspirasi .section-h2", {delay: 0});
       animateFrom("#aspirasi .section-p", {delay: 0.1});
-      sequence("#aspirasi .aspiration-cards", {delay: 0.2});
+      animateFrom("#aspirasi .aspiration-form", {delay: 0.2});
       animateFrom("#aspirasi .why-speak-up", {delay: 0.5});
       animateFrom("#team .section-title");
       animateFrom("#team .team-carousel", {delay: 0.2});
@@ -397,27 +341,6 @@ export default function ClientLandingPage() {
     }, mainRef);
     return () => ctx.revert();
   }, [programs, teamMembers]);
-
-  const aspirationCategories = [
-      {
-          title: "Program Kerja",
-          description: "Evaluasi & ide untuk program kerja OSIS.",
-          status: "DISKUSI AKTIF",
-          statusVariant: "default" as const,
-      },
-      {
-          title: "Kinerja OSIS",
-          description: "Masukan mengenai kinerja pengurus OSIS.",
-          status: "TINDAK LANJUT",
-          statusVariant: "secondary" as const,
-      },
-      {
-          title: "Saran Lainnya",
-          description: "Punya ide atau masukan lain untuk sekolah?",
-          status: "COMING SOON",
-          statusVariant: "outline" as const,
-      }
-  ];
 
   return (
     <div ref={mainRef} className="w-full bg-background text-foreground min-h-screen pt-24 md:pt-32">
@@ -437,6 +360,11 @@ export default function ClientLandingPage() {
               <Button asChild size="lg" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
                 <Link href="/#about">
                   Tentang Kami
+                </Link>
+              </Button>
+               <Button asChild variant="outline" size="lg" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg">
+                <Link href="/check-aspiration">
+                  Cek Status Aspirasi
                 </Link>
               </Button>
             </div>
@@ -484,30 +412,25 @@ export default function ClientLandingPage() {
                         Suara Kamu, <br/><span className="text-primary">Perubahan Kita.</span>
                     </h2>
                     <p className="section-p text-muted-foreground mb-8 max-w-lg">
-                        OSIS sedang fokus mengevaluasi beberapa hal penting. Pilih salah satu kategori dan berikan masukan terbaikmu untuk sekolah.
+                        Punya saran untuk program kerja atau keluhan tentang sekolah? Sampaikan aspirasimu secara anonim di sini.
                     </p>
-                     <div className="space-y-4">
+                    <div className="aspiration-form">
                         <ClientOnly>
-                          {aspirationCategories.map((cat, index) => (
-                              <AspirationDialog key={cat.title} title={cat.title} category={cat.title}>
-                                  <AspirationCard
-                                      className="aspiration-cards"
-                                      title={cat.title}
-                                      description={cat.description}
-                                      status={cat.status}
-                                      statusVariant={cat.statusVariant}
-                                  />
-                              </AspirationDialog>
-                          ))}
+                            <AspirationFormSection />
                         </ClientOnly>
+                        <div className="mt-6">
+                            <Link href="/check-aspiration" className="text-primary font-bold hover:underline flex items-center gap-2">
+                                <ClipboardCheck className="w-5 h-5" /> Sudah kirim? Cek status aspirasimu di sini
+                            </Link>
+                        </div>
                     </div>
                 </div>
                 <div className="why-speak-up bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 flex flex-col justify-center">
                     <h3 className="font-body text-3xl font-extrabold tracking-tight mb-6 italic">Kenapa Harus Bersuara?</h3>
                     <div className="space-y-5">
                         <WhySpeakUpItem number={1} text="Aspirasi kamu dibaca langsung oleh Ketua Umum & Sekbid terkait." />
-                        <WhySpeakUpItem number={2} text="Transparansi penuh: Laporan tindak lanjut akan dipublikasikan." />
-                        <WhySpeakUpItem number={3} text="Membangun Kigra yang lebih demokratis dan nyaman bagi kita semua." />
+                        <WhySpeakUpItem number={2} text="ID Pelacakan: Kamu bisa memantau apakah aspirasimu sudah diproses atau belum." />
+                        <WhySpeakUpItem number={3} text="Inklusif: Membangun Kigra yang lebih demokratis dan nyaman bagi kita semua." />
                     </div>
                 </div>
              </div>

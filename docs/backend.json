@@ -37,6 +37,17 @@
         "key": { "type": "string" },
         "value": { "type": "string" }
       }
+    },
+    "Aspiration": {
+      "title": "Aspiration",
+      "description": "Aspirasi dari siswa",
+      "type": "object",
+      "properties": {
+        "content": { "type": "string" },
+        "status": { "type": "string", "enum": ["menunggu", "dilihat", "diproses", "dipertimbangkan", "selesai"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["content", "status", "createdAt"]
     }
   },
   "auth": {
@@ -54,6 +65,10 @@
     "settings/{settingId}": {
       "schema": "Setting",
       "description": "Koleksi pengaturan seperti periode"
+    },
+    "aspirations/{aspirationId}": {
+      "schema": "Aspiration",
+      "description": "Koleksi aspirasi siswa"
     }
   }
 }
