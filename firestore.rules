@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Izinkan akses publik untuk kebutuhan MVP OSIS Kigra
+    match /aspirations/{aspirationId} {
+      allow read, write: if true;
+    }
+    match /programs/{programId} {
+      allow read, write: if true;
+    }
+    match /teamMembers/{memberId} {
+      allow read, write: if true;
+    }
+    match /settings/{settingId} {
+      allow read, write: if true;
+    }
+  }
+}
