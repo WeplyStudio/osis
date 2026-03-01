@@ -19,8 +19,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { divisions, faqItems, teamMembers as staticTeamMembers, upcomingEvents } from '@/lib/data';
-import Image from 'next/image';
+import { divisions, faqItems } from '@/lib/data';
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -45,6 +44,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { sendAspiration } from '@/app/actions';
+import { collection, query, orderBy, doc } from 'firebase/firestore';
+import { useFirestore, useCollection, useDoc } from '@/firebase';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -62,7 +63,7 @@ const aspirationSchema = z.object({
 
 type AspirationFormInputs = z.infer<typeof aspirationSchema>;
 
-const COOLDOWN_DURATION = 1 * 60 * 1000; // 1 minute in milliseconds
+const COOLDOWN_DURATION = 1 * 60 * 1000;
 
 const AspirationDialog = ({ title, category, children }: { title: string, category: string, children: React.ReactNode }) => {
     const [open, setOpen] = useState(false);
@@ -83,7 +84,7 @@ const AspirationDialog = ({ title, category, children }: { title: string, catego
 
     useEffect(() => {
         if (cooldownTime > 0) {
-            const timer = setTimeout(() => setCooldownTime(cooldownTime - 1000), 1000);
+            const timer = setTimeout(() => setCooldownTime(prev => prev - 1000), 1000);
             return () => clearTimeout(timer);
         }
     }, [cooldownTime]);
@@ -181,7 +182,6 @@ const DivisionTabs = () => {
     return (
         <div className="w-full bg-card rounded-3xl p-6 md:p-10 shadow-xl border">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 min-h-[400px]">
-                {/* Left Nav */}
                 <div className="lg:col-span-4">
                     <h3 className="font-body text-sm font-bold tracking-wider uppercase text-muted-foreground mb-4">Pilih Divisi</h3>
                     <div className="flex flex-col space-y-2">
@@ -209,8 +209,6 @@ const DivisionTabs = () => {
                         ))}
                     </div>
                 </div>
-
-                {/* Right Content */}
                 <div className="lg:col-span-8 flex flex-col justify-center">
                     {activeDivisionData && (
                         <div className="flex flex-col text-center lg:text-left">
@@ -237,9 +235,9 @@ const DivisionTabs = () => {
     );
 };
 
-const UpcomingEvents = () => {
-    const mainEvent = upcomingEvents.find(e => e.type === 'main');
-    const secondaryEvents = upcomingEvents.filter(e => e.type === 'secondary');
+const UpcomingEvents = ({ events }: { events: any[] }) => {
+    const mainEvent = events?.find(e => e.type === 'main');
+    const secondaryEvents = events?.filter(e => e.type === 'secondary');
 
     return (
         <section id="upcoming-events" className="container mx-auto px-4">
@@ -252,7 +250,6 @@ const UpcomingEvents = () => {
                 </Button>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Main Event */}
                 {mainEvent && (
                     <div className="main-event-card bg-card text-card-foreground rounded-3xl p-8 flex flex-col relative overflow-hidden shadow-2xl border">
                          <div className="absolute top-8 right-8 text-foreground/5 font-body font-extrabold text-8xl italic select-none -z-0">EVENT</div>
@@ -268,11 +265,10 @@ const UpcomingEvents = () => {
                          </div>
                     </div>
                 )}
-                {/* Secondary Events */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {secondaryEvents.map(event => (
+                    {secondaryEvents?.map(event => (
                         <div key={event.id} className="secondary-event-card bg-card/80 border backdrop-blur-sm rounded-3xl p-6 flex flex-col text-left hover:bg-accent/50 transition-colors">
-                            <p className="text-sm font-bold text-primary tracking-widest uppercase">{event.date} {event.month} • {event.location}</p>
+                            <p className="text-sm font-bold text-primary tracking-widest uppercase">{event.date} {event.month} {event.location && `• ${event.location}`}</p>
                             <h4 className="font-body text-xl font-bold uppercase text-foreground mt-2 mb-2">{event.title}</h4>
                             <p className="text-xs text-muted-foreground">{event.description}</p>
                         </div>
@@ -314,16 +310,12 @@ const WhySpeakUpItem = ({ number, text }: { number: number; text: string }) => (
     </div>
 );
 
-const PeriodMarquee = () => {
-  const currentYear = new Date().getFullYear();
-  const nextYear = currentYear + 1;
-  const marqueeText = `OSIS PERIODE ${currentYear} / ${nextYear}`;
-  
+const PeriodMarquee = ({ text }: { text: string }) => {
   return (
     <div className="bg-primary text-primary-foreground py-3 overflow-x-hidden">
       <Marquee baseVelocity={-0.5}>
         <span className="font-body text-xl font-bold italic uppercase tracking-wider mx-4">
-          {marqueeText}
+          {text || "OSIS PERIODE 2025 / 2026"}
         </span>
         <span className="text-xl mx-4">•</span>
       </Marquee>
@@ -333,23 +325,30 @@ const PeriodMarquee = () => {
 
 
 export default function ClientLandingPage() {
-  const teamMembers = staticTeamMembers;
   const mainRef = useRef<HTMLDivElement>(null);
+  const firestore = useFirestore();
+
+  const programsQuery = query(collection(firestore, 'programs'), orderBy('createdAt', 'desc'));
+  const { data: programs } = useCollection(programsQuery);
+
+  const teamQuery = query(collection(firestore, 'teamMembers'), orderBy('order', 'asc'));
+  const { data: teamMembers } = useCollection(teamQuery);
+
+  const periodDocRef = doc(firestore, 'settings', 'period');
+  const { data: periodSetting } = useDoc(periodDocRef);
+  const periodText = periodSetting?.value || "OSIS PERIODE 2025 / 2026";
 
    useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Helper function for animations
       const animateFrom = (elem: gsap.TweenTarget, vars: gsap.TweenVars = {}) => {
         const delay = vars.delay || 0;
         const duration = vars.duration || 1;
         const ease = vars.ease || "power3.out";
         const y = vars.y || 50;
-        const x = vars.x || 0;
 
         gsap.from(elem, {
           opacity: 0,
           y,
-          x,
           duration,
           delay,
           ease,
@@ -368,44 +367,28 @@ export default function ClientLandingPage() {
         });
       };
 
-      // Hero Section
       animateFrom('.hero-badge', { y: -20, delay: 0.2, duration: 0.5 });
       animateFrom('.hero-title', { y: 20, delay: 0.4, duration: 0.8 });
       animateFrom('.hero-p', { y: 20, delay: 0.7, duration: 0.8 });
       animateFrom('.hero-buttons', { y: 20, delay: 1, duration: 0.8 });
-
-      // About Section
       animateFrom("#about .section-p");
       animateFrom("#about .section-h2", {delay: 0.1});
       animateFrom("#about .section-h3", {delay: 0.2});
       animateFrom("#about .section-p-desc", {delay: 0.3});
       sequence("#about .about-cards", {delay: 0.4});
-      
-      // Upcoming Events Section
       animateFrom("#upcoming-events .main-event-card", {y: 60});
       sequence("#upcoming-events .secondary-event-card", {y: 60, delay: 0.2});
-
-
-      // Aspirasi Section
       animateFrom("#aspirasi .section-h2", {delay: 0});
       animateFrom("#aspirasi .section-p", {delay: 0.1});
       sequence("#aspirasi .aspiration-cards", {delay: 0.2});
       animateFrom("#aspirasi .why-speak-up", {delay: 0.5});
-      
-      // Team Section
       animateFrom("#team .section-title");
       animateFrom("#team .team-carousel", {delay: 0.2});
-
-      // Divisions Section
       animateFrom("#divisions .section-title");
       animateFrom("#divisions .division-tabs", {delay: 0.2});
-
-      // Newsletter Section
       animateFrom("#newsletter .section-h2");
       animateFrom("#newsletter .section-p", {delay: 0.1});
       animateFrom("#newsletter .newsletter-form", {delay: 0.2});
-      
-      // FAQ Section
       animateFrom("#faq .section-h2");
       animateFrom("#faq .section-p", {delay: 0.1});
       animateFrom("#faq .faq-contact-button", {delay: 0.2});
@@ -413,7 +396,7 @@ export default function ClientLandingPage() {
 
     }, mainRef);
     return () => ctx.revert();
-  }, []);
+  }, [programs, teamMembers]);
 
   const aspirationCategories = [
       {
@@ -439,7 +422,6 @@ export default function ClientLandingPage() {
   return (
     <div ref={mainRef} className="w-full bg-background text-foreground min-h-screen pt-24 md:pt-32">
       <main className="space-y-24 md:space-y-32 pb-24 md:pb-32">
-        {/* Hero Section */}
         <section className="text-center container mx-auto px-4">
             <div className="hero-badge inline-block bg-accent text-accent-foreground rounded-full px-4 py-2 mb-6">
                 <p className="font-bold text-sm tracking-wider uppercase">EMPOWERING FUTURE LEADERS</p>
@@ -449,7 +431,7 @@ export default function ClientLandingPage() {
                 <span className="text-primary">Satu Suara Kigra.</span>
             </h1>
             <p className="hero-p max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
-                Wadah kolaborasi inklusif bagi seluruh siswa Kigra untuk berkarya, berinovasi, dan membawa perubahan positif bagi sekolah dan masyarakat.
+                Wadah kolaborasi inklusif bagi seluruh siswa Kigra untuk berkarya, berinnovasi, dan membawa perubahan positif bagi sekolah dan masyarakat.
             </p>
             <div className="hero-buttons mt-8 flex flex-wrap justify-center gap-4">
               <Button asChild size="lg" className="font-bold text-lg py-6 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
@@ -460,9 +442,8 @@ export default function ClientLandingPage() {
             </div>
         </section>
         
-        <PeriodMarquee />
+        <PeriodMarquee text={periodText} />
 
-        {/* About Us Section */}
         <section id="about" className="container mx-auto px-4">
           <div className="text-left mb-12">
             <p className="section-p font-body text-sm font-bold tracking-wider uppercase text-primary mb-2">MENGENAL LEBIH DEKAT</p>
@@ -494,9 +475,8 @@ export default function ClientLandingPage() {
           </div>
         </section>
 
-        <UpcomingEvents />
+        <UpcomingEvents events={programs || []} />
 
-        {/* Aspirasi Section */}
         <section id="aspirasi" className="container mx-auto px-4">
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                 <div>
@@ -533,53 +513,54 @@ export default function ClientLandingPage() {
              </div>
         </section>
 
-        {/* Our Team Section */}
         <section id="team" className="container mx-auto px-4">
           <SectionTitle className="section-title">Tim <span className="text-primary">Kami</span></SectionTitle>
-          <Carousel opts={{ loop: true }} className="team-carousel w-full max-w-6xl mx-auto">
-            <CarouselContent>
-              {teamMembers && teamMembers.map((member: any) => (
-                <CarouselItem key={member.id}>
-                  <Card className="bg-card/80 backdrop-blur-sm rounded-3xl overflow-hidden border">
-                    <CardContent className="p-6 md:p-10">
-                      <div className="flex flex-col md:flex-row md:gap-10 items-center">
-                        <div className="md:w-1/3 flex-shrink-0 mb-6 md:mb-0">
-                          <div className="relative aspect-square w-48 h-48 md:w-full md:h-auto rounded-2xl overflow-hidden border mx-auto">
-                            <Image
-                              src={member.image}
-                              alt={member.name}
-                              fill
-                              className="object-cover"
-                            />
+          {teamMembers && teamMembers.length > 0 ? (
+            <Carousel opts={{ loop: true }} className="team-carousel w-full max-w-6xl mx-auto">
+              <CarouselContent>
+                {teamMembers.map((member: any) => (
+                  <CarouselItem key={member.id}>
+                    <Card className="bg-card/80 backdrop-blur-sm rounded-3xl overflow-hidden border">
+                      <CardContent className="p-6 md:p-10">
+                        <div className="flex flex-col md:flex-row md:gap-10 items-center">
+                          <div className="md:w-1/3 flex-shrink-0 mb-6 md:mb-0">
+                            <div className="relative aspect-square w-48 h-48 md:w-full md:h-auto rounded-2xl overflow-hidden border mx-auto">
+                              <img
+                                src={member.image}
+                                alt={member.name}
+                                className="object-cover w-full h-full"
+                              />
+                            </div>
                           </div>
-                        </div>
-                        <div className="md:w-2/3 text-center md:text-left">
-                          <p className="text-lg md:text-xl text-muted-foreground italic mb-6">
-                            &quot;{member.quote}&quot;
-                          </p>
-                          <div className="flex items-center justify-center md:justify-start gap-3">
-                            <Avatar className="w-12 h-12 border-2 border-primary">
-                              <AvatarImage src={member.image} alt={member.name} />
-                              <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <h4 className="font-bold text-foreground text-lg italic uppercase">{member.name}</h4>
-                              <p className="text-primary font-medium">{member.role}</p>
+                          <div className="md:w-2/3 text-center md:text-left">
+                            <p className="text-lg md:text-xl text-muted-foreground italic mb-6">
+                              &quot;{member.quote}&quot;
+                            </p>
+                            <div className="flex items-center justify-center md:justify-start gap-3">
+                              <Avatar className="w-12 h-12 border-2 border-primary">
+                                <AvatarImage src={member.image} alt={member.name} />
+                                <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <h4 className="font-bold text-foreground text-lg italic uppercase">{member.name}</h4>
+                                <p className="text-primary font-medium">{member.role}</p>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex absolute left-[-60px] top-1/2 -translate-y-1/2 h-14 w-14 bg-card hover:bg-card/90 text-foreground border backdrop-blur-sm rounded-full" />
-            <CarouselNext className="hidden md:flex absolute right-[-60px] top-1/2 -translate-y-1/2 h-14 w-14 bg-card hover:bg-card/90 text-foreground border backdrop-blur-sm rounded-full" />
-          </Carousel>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex absolute left-[-60px] top-1/2 -translate-y-1/2 h-14 w-14 bg-card hover:bg-card/90 text-foreground border backdrop-blur-sm rounded-full" />
+              <CarouselNext className="hidden md:flex absolute right-[-60px] top-1/2 -translate-y-1/2 h-14 w-14 bg-card hover:bg-card/90 text-foreground border backdrop-blur-sm rounded-full" />
+            </Carousel>
+          ) : (
+            <p className="text-center text-muted-foreground py-12">Belum ada tim yang ditambahkan.</p>
+          )}
         </section>
 
-        {/* Divisions Section */}
         <section id="divisions" className="container mx-auto px-4">
            <SectionTitle className="section-title">Divisi <span className="text-primary">Kami</span></SectionTitle>
            <div className="division-tabs">
@@ -587,9 +568,8 @@ export default function ClientLandingPage() {
            </div>
         </section>
 
-        <PeriodMarquee />
+        <PeriodMarquee text={periodText} />
 
-        {/* Newsletter Section */}
         <section id="newsletter" className="container mx-auto px-4">
             <div className="text-center">
                 <h2 className="section-h2 font-body text-4xl md:text-5xl font-extrabold tracking-tighter text-foreground mb-4 italic uppercase">
@@ -613,7 +593,6 @@ export default function ClientLandingPage() {
         </section>
 
 
-        {/* FAQ Section */}
         <section id="faq" className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                 <div className="lg:col-span-1">
@@ -660,9 +639,3 @@ export default function ClientLandingPage() {
     </div>
   );
 }
-
-    
-
-
-
-    

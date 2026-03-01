@@ -5,7 +5,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Lock, File, Download, Loader2 } from 'lucide-react';
+import { Lock, File, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { buttonVariants } from '@/components/ui/button';
@@ -18,7 +18,7 @@ type Document = {
   id: string;
   title: string;
   description: string;
-  fileUrl: string; // This will point to a file in the /public directory
+  fileUrl: string;
   icon: 'document' | 'spreadsheet' | 'presentation';
 };
 
@@ -40,15 +40,11 @@ const documents: Document[] = [
 ];
 
 const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) => {
-  const getIcon = () => {
-    return <File className="w-8 h-8 text-primary" />;
-  };
-
   return (
     <Card className="text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
       <CardContent className="p-8 flex flex-col items-center justify-center">
         <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-          {getIcon()}
+          <File className="w-8 h-8 text-primary" />
         </div>
         <h3 className="font-body text-xl font-bold uppercase tracking-tight text-foreground mb-1">{doc.title}</h3>
         <p className="text-sm text-muted-foreground mb-6 uppercase tracking-wider">{doc.description}</p>
@@ -56,7 +52,7 @@ const DocumentCard = ({ doc, isLocked }: { doc: Document, isLocked: boolean }) =
             href={isLocked ? '#' : doc.fileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            download
+            download={doc.fileUrl.split('/').pop()}
             aria-disabled={isLocked}
             className={cn(
                 buttonVariants({ variant: "link", size: "sm" }),
@@ -251,12 +247,6 @@ export default function LibraryPage() {
                 <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
                     Transparansi penuh. Akses Proposal, Laporan Pertanggungjawaban (LPJ), hingga kurikulum kepemimpinan OSIS secara bebas.
                 </p>
-                <div className="mt-6 flex justify-center">
-                    <div className="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 dark:bg-green-900/40 dark:text-green-300">
-                        <span className="h-2 w-2 rounded-full bg-green-500"></span>
-                        DATABASE UPDATED: 2H AGO
-                    </div>
-                </div>
             </section>
 
             <section>

@@ -1,0 +1,59 @@
+
+{
+  "entities": {
+    "Program": {
+      "title": "Program",
+      "description": "Agenda kegiatan OSIS",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "month": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["main", "secondary"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "date", "month", "type"]
+    },
+    "TeamMember": {
+      "title": "Team Member",
+      "description": "Anggota pengurus inti OSIS",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "quote": { "type": "string" },
+        "image": { "type": "string" },
+        "order": { "type": "number" }
+      },
+      "required": ["name", "role", "image"]
+    },
+    "Setting": {
+      "title": "Setting",
+      "description": "Pengaturan global aplikasi",
+      "type": "object",
+      "properties": {
+        "key": { "type": "string" },
+        "value": { "type": "string" }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["password"]
+  },
+  "firestore": {
+    "programs/{programId}": {
+      "schema": "Program",
+      "description": "Koleksi agenda kegiatan"
+    },
+    "teamMembers/{memberId}": {
+      "schema": "TeamMember",
+      "description": "Koleksi anggota tim"
+    },
+    "settings/{settingId}": {
+      "schema": "Setting",
+      "description": "Koleksi pengaturan seperti periode"
+    }
+  }
+}

@@ -2,7 +2,7 @@
 'use client';
 
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Home, Menu, Phone, Users, Briefcase, Info, Youtube, LucideIcon, Library } from "lucide-react";
+import { Instagram, Home, Menu, Phone, Users, Info, Youtube, LucideIcon, Library, ShieldCheck } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import LoadingScreen from "@/components/LoadingScreen";
+import { FirebaseClientProvider, initializeFirebase } from '@/firebase';
 
 const navItems = [
     { href: '/', icon: Home, label: 'Beranda' },
@@ -106,8 +107,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
     const timer = setTimeout(() => {
       setAnimationClass('animate-fade-out');
-      setTimeout(() => setLoading(false), 500); // Wait for fade-out animation
-    }, 2000); // Adjust duration as needed
+      setTimeout(() => setLoading(false), 500);
+    }, 2000);
 
     return () => {
         window.removeEventListener('scroll', handleScroll);
@@ -119,83 +120,96 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     return <LoadingScreen animationClassName={animationClass} />;
   }
 
-  return (
-    <div className="flex flex-col min-h-screen bg-background animate-fade-in">
-        <header className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out",
-          "flex items-center justify-between",
-           scrolled
-            ? 'top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl bg-card/80 backdrop-blur-sm rounded-full shadow-lg border p-2'
-            : 'w-full p-4 bg-transparent'
-        )}>
-          <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-3">
-              <h1 className="text-xl font-body font-extrabold text-foreground italic uppercase">OSIS<span className="text-primary">Kigra</span></h1>
-            </Link>
-          </div>
+  const { firebaseApp, firestore, auth } = initializeFirebase();
 
-          <nav className="hidden md:flex items-center gap-2">
-            {navItems.map(item => (
-                <Button key={item.href} asChild variant="ghost">
-                    <Link href={item.href}>
-                        {item.label}
-                    </Link>
-                </Button>
-            ))}
-             <Button asChild variant="ghost">
-                <Link href="/library">
-                    Library
-                </Link>
-            </Button>
-          </nav>
-          
-          <div className="flex items-center gap-4">
-            <Button asChild className="hidden md:flex rounded-full font-bold px-6">
-                <Link href="#">Kontak</Link>
-            </Button>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
-                  <Menu />
-                  <span className="sr-only">Buka menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-[300px] flex flex-col p-0">
-                  <SheetHeader className="p-6 pb-0">
-                    <Link href="/" className="flex items-center gap-3">
-                      <h1 className="text-xl font-body font-extrabold text-foreground italic uppercase">OSIS<span className="text-primary">Kigra</span></h1>
-                    </Link>
-                    <SheetTitle className="sr-only">Menu</SheetTitle>
-                  </SheetHeader>
-                  <div className="flex flex-col h-full p-6">
-                  <nav className="flex flex-col gap-3 flex-grow">
-                    {navItems.map((item) => (
-                      <Button key={item.href} asChild variant="ghost" className="justify-start text-lg h-14">
-                          <Link href={item.href} className="flex items-center gap-4">
-                              <item.icon className="w-6 h-6" />
-                              {item.label}
-                          </Link>
-                      </Button>
-                    ))}
-                     <Button asChild variant="ghost" className="justify-start text-lg h-14">
-                          <Link href="/library" className="flex items-center gap-4">
-                              <Library className="w-6 h-6" />
-                              Library
-                          </Link>
-                      </Button>
-                  </nav>
-                    <Button asChild className="mt-auto w-full font-bold text-lg py-6 rounded-full shadow-lg">
-                      <Link href="#"><Phone className="mr-2 h-5 w-5"/>Kontak</Link>
+  return (
+    <FirebaseClientProvider firebaseApp={firebaseApp} firestore={firestore} auth={auth}>
+      <div className="flex flex-col min-h-screen bg-background animate-fade-in">
+          <header className={cn(
+            "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out",
+            "flex items-center justify-between",
+             scrolled
+              ? 'top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl bg-card/80 backdrop-blur-sm rounded-full shadow-lg border p-2'
+              : 'w-full p-4 bg-transparent'
+          )}>
+            <div className="flex items-center gap-3">
+              <Link href="/" className="flex items-center gap-3">
+                <h1 className="text-xl font-body font-extrabold text-foreground italic uppercase">OSIS<span className="text-primary">Kigra</span></h1>
+              </Link>
+            </div>
+
+            <nav className="hidden md:flex items-center gap-2">
+              {navItems.map(item => (
+                  <Button key={item.href} asChild variant="ghost">
+                      <Link href={item.href}>
+                          {item.label}
+                      </Link>
                   </Button>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-        </header>
-        <main className="flex-1">
-          {children}
-        </main>
-        <AppFooter />
-    </div>
+              ))}
+               <Button asChild variant="ghost">
+                  <Link href="/library">
+                      Library
+                  </Link>
+              </Button>
+            </nav>
+            
+            <div className="flex items-center gap-4">
+              <Button asChild variant="outline" size="icon" className="rounded-full">
+                  <Link href="/login" title="Admin Login"><ShieldCheck className="h-4 w-4" /></Link>
+              </Button>
+              <Button asChild className="hidden md:flex rounded-full font-bold px-6">
+                  <Link href="#">Kontak</Link>
+              </Button>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="md:hidden">
+                    <Menu />
+                    <span className="sr-only">Buka menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-[300px] flex flex-col p-0">
+                    <SheetHeader className="p-6 pb-0">
+                      <Link href="/" className="flex items-center gap-3">
+                        <h1 className="text-xl font-body font-extrabold text-foreground italic uppercase">OSIS<span className="text-primary">Kigra</span></h1>
+                      </Link>
+                      <SheetTitle className="sr-only">Menu</SheetTitle>
+                    </SheetHeader>
+                    <div className="flex flex-col h-full p-6">
+                    <nav className="flex flex-col gap-3 flex-grow">
+                      {navItems.map((item) => (
+                        <Button key={item.href} asChild variant="ghost" className="justify-start text-lg h-14">
+                            <Link href={item.href} className="flex items-center gap-4">
+                                <item.icon className="w-6 h-6" />
+                                {item.label}
+                            </Link>
+                        </Button>
+                      ))}
+                       <Button asChild variant="ghost" className="justify-start text-lg h-14">
+                            <Link href="/library" className="flex items-center gap-4">
+                                <Library className="w-6 h-6" />
+                                Library
+                            </Link>
+                        </Button>
+                         <Button asChild variant="ghost" className="justify-start text-lg h-14">
+                            <Link href="/login" className="flex items-center gap-4">
+                                <ShieldCheck className="w-6 h-6" />
+                                Admin Area
+                            </Link>
+                        </Button>
+                    </nav>
+                      <Button asChild className="mt-auto w-full font-bold text-lg py-6 rounded-full shadow-lg">
+                        <Link href="#"><Phone className="mr-2 h-5 w-5"/>Kontak</Link>
+                    </Button>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          </header>
+          <main className="flex-1">
+            {children}
+          </main>
+          <AppFooter />
+      </div>
+    </FirebaseClientProvider>
   );
 }
