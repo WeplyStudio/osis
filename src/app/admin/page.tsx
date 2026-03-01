@@ -32,7 +32,9 @@ import {
     Loader2,
     MessageSquare,
     CheckCircle2,
-    Clock
+    Clock,
+    Upload,
+    Image as ImageIcon
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
@@ -44,6 +46,7 @@ function AdminDashboardContent() {
     const router = useRouter();
     const firestore = useFirestore();
     const { toast } = useToast();
+    const [isUploading, setIsUploading] = useState(false);
     
     useEffect(() => {
         const isAdmin = localStorage.getItem('isAdmin');
@@ -55,6 +58,43 @@ function AdminDashboardContent() {
     const handleLogout = () => {
         localStorage.removeItem('isAdmin');
         router.push('/login');
+    };
+
+    // --- IMGBB UPLOAD LOGIC ---
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            // Menggunakan API Key publik (sebaiknya ganti dengan milik Anda sendiri di masa depan)
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=767439031c5905d2146e257221666887`, {
+                method: 'POST',
+                body: formData,
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                setTeamForm(prev => ({ ...prev, image: result.data.url }));
+                toast({
+                    title: "Berhasil Unggah",
+                    description: "Gambar telah diunggah ke ImgBB.",
+                });
+            } else {
+                throw new Error(result.error?.message || "Gagal mengunggah gambar.");
+            }
+        } catch (error: any) {
+            toast({
+                variant: "destructive",
+                title: "Upload Gagal",
+                description: error.message,
+            });
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     // --- PROGRAMS ---
@@ -263,11 +303,55 @@ function AdminDashboardContent() {
                                     <form onSubmit={handleSaveTeam} className="space-y-4">
                                         <Input placeholder="Nama Lengkap" value={teamForm.name} onChange={e => setTeamForm({...teamForm, name: e.target.value})} required />
                                         <Input placeholder="Jabatan (Ex: Ketua Umum)" value={teamForm.role} onChange={e => setTeamForm({...teamForm, role: e.target.value})} required />
-                                        <Input placeholder="URL Gambar" value={teamForm.image} onChange={e => setTeamForm({...teamForm, image: e.target.value})} required />
-                                        <Input type="number" placeholder="Urutan" value={teamForm.order} onChange={e => setTeamForm({...teamForm, order: parseInt(e.target.value) || 0})} />
+                                        
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Foto Anggota</label>
+                                            <div className="flex flex-col gap-3 p-4 border-2 border-dashed rounded-xl bg-accent/10">
+                                                {teamForm.image ? (
+                                                    <div className="relative w-full aspect-square max-w-[120px] mx-auto rounded-lg overflow-hidden border">
+                                                        <img src={teamForm.image} alt="Preview" className="object-cover w-full h-full" />
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setTeamForm({...teamForm, image: ''})}
+                                                            className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full shadow-lg"
+                                                        >
+                                                            <Trash2 className="w-3 h-3" />
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex flex-col items-center justify-center py-4 text-muted-foreground">
+                                                        <ImageIcon className="w-8 h-8 mb-2 opacity-20" />
+                                                        <p className="text-[10px] uppercase font-bold">Belum ada foto</p>
+                                                    </div>
+                                                )}
+                                                <div className="relative">
+                                                    <Input 
+                                                        type="file" 
+                                                        accept="image/*" 
+                                                        onChange={handleImageUpload}
+                                                        disabled={isUploading}
+                                                        className="cursor-pointer pr-10"
+                                                    />
+                                                    <div className="absolute right-3 top-2.5">
+                                                        {isUploading ? <Loader2 className="w-4 h-4 animate-spin text-primary" /> : <Upload className="w-4 h-4 text-muted-foreground" />}
+                                                    </div>
+                                                </div>
+                                                {isUploading && <p className="text-[10px] text-center text-primary font-bold animate-pulse italic">MENGUNGGAH KE IMGBB...</p>}
+                                            </div>
+                                            <Input 
+                                                placeholder="Atau masukkan URL Gambar langsung" 
+                                                value={teamForm.image} 
+                                                onChange={e => setTeamForm({...teamForm, image: e.target.value})}
+                                                className="text-xs italic"
+                                            />
+                                        </div>
+
+                                        <Input type="number" placeholder="Urutan Tampil" value={teamForm.order} onChange={e => setTeamForm({...teamForm, order: parseInt(e.target.value) || 0})} />
                                         <Textarea placeholder="Quote Singkat" value={teamForm.quote} onChange={e => setTeamForm({...teamForm, quote: e.target.value})} required />
                                         <div className="flex gap-2">
-                                            <Button type="submit" className="flex-1 font-bold"><Plus className="mr-2 h-4 w-4" /> SIMPAN</Button>
+                                            <Button type="submit" className="flex-1 font-bold" disabled={isUploading}>
+                                                <Plus className="mr-2 h-4 w-4" /> {teamForm.id ? 'PERBARUI' : 'SIMPAN'}
+                                            </Button>
                                             {teamForm.id && <Button variant="ghost" type="button" onClick={() => setTeamForm({id: '', name: '', role: '', quote: '', image: '', order: 0})}>Batal</Button>}
                                         </div>
                                     </form>
@@ -277,7 +361,7 @@ function AdminDashboardContent() {
                                 {teamLoading ? <Loader2 className="animate-spin mx-auto" /> : teamMembers?.map((member: any) => (
                                     <Card key={member.id} className="hover:border-primary transition-colors">
                                         <CardContent className="p-4 flex gap-4 items-center">
-                                            <img src={member.image} alt={member.name} className="w-12 h-12 rounded-full object-cover" />
+                                            <img src={member.image} alt={member.name} className="w-12 h-12 rounded-full object-cover border" />
                                             <div className="flex-grow">
                                                 <h3 className="font-bold text-sm uppercase">{member.name}</h3>
                                                 <p className="text-xs text-muted-foreground">{member.role}</p>
