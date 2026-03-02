@@ -1,8 +1,7 @@
-
 'use client';
 
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore, initializeFirestore, terminate } from 'firebase/firestore';
+import { getFirestore, Firestore, initializeFirestore, getFirestore as getExistingFirestore } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
 import { firebaseConfig } from './config';
 import { useMemo } from 'react';
@@ -16,10 +15,15 @@ export function initializeFirebase() {
     firebaseApp = getApp();
   }
 
-  // Menggunakan initializeFirestore dengan setting Long Polling agar lebih stabil di berbagai jaringan
-  const firestore = initializeFirestore(firebaseApp, {
-    experimentalForceLongPolling: true,
-  });
+  // Cek apakah Firestore sudah diinisialisasi untuk mencegah error "already started"
+  let firestore: Firestore;
+  try {
+    firestore = initializeFirestore(firebaseApp, {
+      experimentalForceLongPolling: true,
+    });
+  } catch (e) {
+    firestore = getExistingFirestore(firebaseApp);
+  }
   
   const auth = getAuth(firebaseApp);
 

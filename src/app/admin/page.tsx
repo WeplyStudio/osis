@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useState, useMemo } from 'react';
@@ -47,8 +46,7 @@ function AdminDashboardContent() {
     const router = useRouter();
     const firestore = useFirestore();
     const { toast } = useToast();
-    const [isUploading, setIsUploading] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
     
     useEffect(() => {
         const isAdmin = localStorage.getItem('isAdmin');
@@ -62,39 +60,29 @@ function AdminDashboardContent() {
         router.push('/login');
     };
 
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Fungsi konversi gambar ke Base64 (Simpan langsung ke Firestore)
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        setIsUploading(true);
-        const formData = new FormData();
-        formData.append('image', file);
-
-        try {
-            const response = await fetch(`https://api.imgbb.com/1/upload?key=1fa90970c71549cdd68ce59dcf6f3a12`, {
-                method: 'POST',
-                body: formData,
-            });
-            const result = await response.json();
-            
-            if (result.success) {
-                setTeamForm(prev => ({ ...prev, image: result.data.url }));
-                toast({
-                    title: "Berhasil Unggah",
-                    description: "Gambar telah diunggah ke ImgBB.",
-                });
-            } else {
-                throw new Error(result.error?.message || "Gagal mengunggah gambar.");
-            }
-        } catch (error: any) {
+        if (file.size > 1024 * 1024) { // Batas 1MB untuk Firestore string
             toast({
                 variant: "destructive",
-                title: "Upload Gagal",
-                description: error.message,
+                title: "File Terlalu Besar",
+                description: "Gunakan gambar di bawah 1MB untuk performa terbaik.",
             });
-        } finally {
-            setIsUploading(false);
+            return;
         }
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setTeamForm(prev => ({ ...prev, image: reader.result as string }));
+            toast({
+                title: "Gambar Diproses",
+                description: "Gambar siap disimpan ke database.",
+            });
+        };
+        reader.readAsDataURL(file);
     };
 
     const programsQuery = useMemo(() => 
@@ -125,48 +113,38 @@ function AdminDashboardContent() {
         type: 'secondary' as 'main' | 'secondary'
     });
 
-    const handleSaveProgram = async (e: React.FormEvent) => {
+    const handleSaveProgram = (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSaving(true);
-        try {
-            if (programForm.id) {
-                const { id, ...data } = programForm;
-                const docRef = doc(firestore, 'programs', id);
-                await updateDoc(docRef, {
-                    ...data,
-                    updatedAt: serverTimestamp()
-                });
-                toast({ title: "Berhasil", description: "Program diperbarui di database." });
-            } else {
-                const { id, ...data } = programForm;
-                const colRef = collection(firestore, 'programs');
-                await addDoc(colRef, {
-                    ...data,
-                    createdAt: serverTimestamp()
-                });
-                toast({ title: "Berhasil", description: "Program ditambahkan ke database." });
-            }
-            setProgramForm({ id: '', title: '', date: '', month: '', location: '', description: '', type: 'secondary' });
-        } catch (error: any) {
-             errorEmitter.emit('permission-error', new FirestorePermissionError({
-                path: 'programs',
-                operation: 'write',
-            }));
-            toast({ variant: "destructive", title: "Gagal Simpan", description: "Cek koneksi atau izin database." });
-        } finally {
-            setIsSaving(false);
+        
+        if (programForm.id) {
+            const { id, ...data } = programForm;
+            const docRef = doc(firestore, 'programs', id);
+            updateDoc(docRef, {
+                ...data,
+                updatedAt: serverTimestamp()
+            }).catch(async () => {
+                errorEmitter.emit('permission-error', new FirestorePermissionError({ path: 'programs', operation: 'update' }));
+            });
+        } else {
+            const colRef = collection(firestore, 'programs');
+            addDoc(colRef, {
+                ...programForm,
+                createdAt: serverTimestamp()
+            }).catch(async () => {
+                errorEmitter.emit('permission-error', new FirestorePermissionError({ path: 'programs', operation: 'create' }));
+            });
         }
+
+        toast({ title: "Diproses", description: "Perubahan sedang disimpan ke database." });
+        setProgramForm({ id: '', title: '', date: '', month: '', location: '', description: '', type: 'secondary' });
     };
 
-    const handleDeleteProgram = async (id: string) => {
+    const handleDeleteProgram = (id: string) => {
         if (confirm('Hapus program ini?')) {
-            try {
-                const docRef = doc(firestore, 'programs', id);
-                await deleteDoc(docRef);
-                toast({ title: "Dihapus", description: "Program telah dihapus dari database." });
-            } catch (error) {
+            const docRef = doc(firestore, 'programs', id);
+            deleteDoc(docRef).catch(() => {
                 toast({ variant: "destructive", title: "Gagal Hapus", description: "Izin ditolak." });
-            }
+            });
         }
     };
 
@@ -179,60 +157,48 @@ function AdminDashboardContent() {
         order: 0
     });
 
-    const handleSaveTeam = async (e: React.FormEvent) => {
+    const handleSaveTeam = (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSaving(true);
-        try {
-            if (teamForm.id) {
-                const { id, ...data } = teamForm;
-                const docRef = doc(firestore, 'teamMembers', id);
-                await updateDoc(docRef, data);
-                toast({ title: "Berhasil", description: "Anggota tim diperbarui di database." });
-            } else {
-                const { id, ...data } = teamForm;
-                const colRef = collection(firestore, 'teamMembers');
-                await addDoc(colRef, data);
-                toast({ title: "Berhasil", description: "Anggota tim ditambahkan ke database." });
-            }
-            setTeamForm({ id: '', name: '', role: '', quote: '', image: '', order: 0 });
-        } catch (error) {
-             toast({ variant: "destructive", title: "Gagal Simpan", description: "Cek izin database." });
-        } finally {
-            setIsSaving(false);
+        
+        if (teamForm.id) {
+            const { id, ...data } = teamForm;
+            const docRef = doc(firestore, 'teamMembers', id);
+            updateDoc(docRef, data).catch(() => {
+                toast({ variant: "destructive", title: "Gagal", description: "Gagal memperbarui data." });
+            });
+        } else {
+            const colRef = collection(firestore, 'teamMembers');
+            addDoc(colRef, teamForm).catch(() => {
+                toast({ variant: "destructive", title: "Gagal", description: "Gagal menambah data." });
+            });
         }
+
+        toast({ title: "Berhasil", description: "Data tim diperbarui." });
+        setTeamForm({ id: '', name: '', role: '', quote: '', image: '', order: 0 });
     };
 
-    const handleDeleteTeam = async (id: string) => {
+    const handleDeleteTeam = (id: string) => {
         if (confirm('Hapus anggota ini?')) {
-            try {
-                const docRef = doc(firestore, 'teamMembers', id);
-                await deleteDoc(docRef);
-                toast({ title: "Dihapus", description: "Anggota telah dihapus." });
-            } catch (error) {
+            const docRef = doc(firestore, 'teamMembers', id);
+            deleteDoc(docRef).catch(() => {
                  toast({ variant: "destructive", title: "Gagal Hapus", description: "Izin ditolak." });
-            }
+            });
         }
     };
 
-    const handleUpdateAspirationStatus = async (id: string, newStatus: string) => {
-        try {
-            const docRef = doc(firestore, 'aspirations', id);
-            await updateDoc(docRef, { status: newStatus });
-            toast({ title: "Status Diperbarui", description: `Aspirasi sekarang berstatus ${newStatus}.` });
-        } catch (error) {
+    const handleUpdateAspirationStatus = (id: string, newStatus: string) => {
+        const docRef = doc(firestore, 'aspirations', id);
+        updateDoc(docRef, { status: newStatus }).catch(() => {
             toast({ variant: "destructive", title: "Gagal Update", description: "Izin ditolak." });
-        }
+        });
     };
 
-    const handleDeleteAspiration = async (id: string) => {
+    const handleDeleteAspiration = (id: string) => {
         if (confirm('Hapus aspirasi ini secara permanen?')) {
-            try {
-                const docRef = doc(firestore, 'aspirations', id);
-                await deleteDoc(docRef);
-                toast({ title: "Dihapus", description: "Aspirasi telah dihapus." });
-            } catch (error) {
+            const docRef = doc(firestore, 'aspirations', id);
+            deleteDoc(docRef).catch(() => {
                 toast({ variant: "destructive", title: "Gagal Hapus", description: "Izin ditolak." });
-            }
+            });
         }
     };
 
@@ -248,31 +214,21 @@ function AdminDashboardContent() {
     };
 
     const [periodText, setPeriodText] = useState('');
-    const [hasInitializedPeriod, setHasInitializedPeriod] = useState(false);
-
     useEffect(() => {
-        if (periodSetting && !hasInitializedPeriod) {
-            setPeriodText(periodSetting.value || '');
-            setHasInitializedPeriod(true);
-        }
-    }, [periodSetting, hasInitializedPeriod]);
+        if (periodSetting?.value) setPeriodText(periodSetting.value);
+    }, [periodSetting]);
 
-    const handleSavePeriod = async () => {
-        setIsSaving(true);
+    const handleSavePeriod = () => {
         const docRef = doc(firestore, 'settings', 'period');
-        const data = {
+        setDoc(docRef, {
             key: 'period',
             value: periodText,
             updatedAt: serverTimestamp()
-        };
-        try {
-            await setDoc(docRef, data, { merge: true });
-            toast({ title: "Berhasil", description: "Periode OSIS diperbarui di database." });
-        } catch (error) {
-             toast({ variant: "destructive", title: "Gagal Simpan", description: "Cek izin database." });
-        } finally {
-            setIsSaving(false);
-        }
+        }, { merge: true }).then(() => {
+            toast({ title: "Berhasil", description: "Teks periode diperbarui." });
+        }).catch(() => {
+            toast({ variant: "destructive", title: "Gagal", description: "Izin ditolak." });
+        });
     };
 
     return (
@@ -320,8 +276,8 @@ function AdminDashboardContent() {
                                             <option value="main">Main Event</option>
                                         </select>
                                         <div className="flex gap-2">
-                                            <Button type="submit" className="flex-1 font-bold" disabled={isSaving}>
-                                                {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />} SIMPAN
+                                            <Button type="submit" className="flex-1 font-bold">
+                                                <Plus className="mr-2 h-4 w-4" /> SIMPAN
                                             </Button>
                                             {programForm.id && <Button variant="ghost" type="button" onClick={() => setProgramForm({id: '', title: '', date: '', month: '', location: '', description: '', type: 'secondary'})}>Batal</Button>}
                                         </div>
@@ -362,7 +318,7 @@ function AdminDashboardContent() {
                                         <Input placeholder="Jabatan (Ex: Ketua Umum)" value={teamForm.role} onChange={e => setTeamForm({...teamForm, role: e.target.value})} required />
                                         
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Foto Anggota</label>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Foto Anggota (Langsung Upload)</label>
                                             <div className="flex flex-col gap-3 p-4 border-2 border-dashed rounded-xl bg-accent/10">
                                                 {teamForm.image ? (
                                                     <div className="relative w-full aspect-square max-w-[120px] mx-auto rounded-lg overflow-hidden border">
@@ -378,36 +334,23 @@ function AdminDashboardContent() {
                                                 ) : (
                                                     <div className="flex flex-col items-center justify-center py-4 text-muted-foreground">
                                                         <ImageIcon className="w-8 h-8 mb-2 opacity-20" />
-                                                        <p className="text-[10px] uppercase font-bold">Belum ada foto</p>
+                                                        <p className="text-[10px] uppercase font-bold text-center">Pilih file untuk upload instan</p>
                                                     </div>
                                                 )}
-                                                <div className="relative">
-                                                    <Input 
-                                                        type="file" 
-                                                        accept="image/*" 
-                                                        onChange={handleImageUpload}
-                                                        disabled={isUploading}
-                                                        className="cursor-pointer pr-10"
-                                                    />
-                                                    <div className="absolute right-3 top-2.5">
-                                                        {isUploading ? <Loader2 className="w-4 h-4 animate-spin text-primary" /> : <Upload className="w-4 h-4 text-muted-foreground" />}
-                                                    </div>
-                                                </div>
-                                                {isUploading && <p className="text-[10px] text-center text-primary font-bold animate-pulse italic">MENGUNGGAH KE IMGBB...</p>}
+                                                <Input 
+                                                    type="file" 
+                                                    accept="image/*" 
+                                                    onChange={handleImageUpload}
+                                                    className="cursor-pointer"
+                                                />
                                             </div>
-                                            <Input 
-                                                placeholder="Atau masukkan URL Gambar langsung" 
-                                                value={teamForm.image} 
-                                                onChange={e => setTeamForm({...teamForm, image: e.target.value})}
-                                                className="text-xs italic"
-                                            />
                                         </div>
 
                                         <Input type="number" placeholder="Urutan Tampil" value={teamForm.order} onChange={e => setTeamForm({...teamForm, order: parseInt(e.target.value) || 0})} />
                                         <Textarea placeholder="Quote Singkat" value={teamForm.quote} onChange={e => setTeamForm({...teamForm, quote: e.target.value})} required />
                                         <div className="flex gap-2">
-                                            <Button type="submit" className="flex-1 font-bold" disabled={isUploading || isSaving}>
-                                                {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />} {teamForm.id ? 'PERBARUI' : 'SIMPAN'}
+                                            <Button type="submit" className="flex-1 font-bold">
+                                                <Plus className="mr-2 h-4 w-4" /> {teamForm.id ? 'PERBARUI' : 'SIMPAN'}
                                             </Button>
                                             {teamForm.id && <Button variant="ghost" type="button" onClick={() => setTeamForm({id: '', name: '', role: '', quote: '', image: '', order: 0})}>Batal</Button>}
                                         </div>
@@ -512,8 +455,8 @@ function AdminDashboardContent() {
                                             value={periodText}
                                             onChange={e => setPeriodText(e.target.value)}
                                         />
-                                        <Button onClick={handleSavePeriod} className="font-bold" disabled={isSaving}>
-                                            {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />} SIMPAN PERUBAHAN
+                                        <Button onClick={handleSavePeriod} className="font-bold">
+                                            <Save className="mr-2 h-4 w-4" /> SIMPAN PERUBAHAN
                                         </Button>
                                     </div>
                                     <p className="text-[10px] text-muted-foreground italic">*Teks ini akan muncul secara real-time di halaman utama setelah disimpan.</p>

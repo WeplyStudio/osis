@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useLayoutEffect, useRef, useState, useEffect, useMemo } from 'react';
@@ -55,47 +54,37 @@ const AspirationFormSection = () => {
     const { toast } = useToast();
     const [submittedId, setSubmittedId] = useState<string | null>(null);
     const [isCopied, setIsCopied] = useState(false);
-    const [localIsSubmitting, setLocalIsSubmitting] = useState(false);
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm<AspirationFormInputs>({
         resolver: zodResolver(aspirationSchema),
     });
 
-    const onSubmit: SubmitHandler<AspirationFormInputs> = async (data) => {
-        setLocalIsSubmitting(true);
+    const onSubmit: SubmitHandler<AspirationFormInputs> = (data) => {
         const aspirationsRef = collection(firestore, 'aspirations');
         const newDocRef = doc(aspirationsRef);
         const id = newDocRef.id;
 
-        try {
-            // Kita gunakan await agar ID hanya muncul jika server sudah mengonfirmasi simpanan
-            await setDoc(newDocRef, {
-                content: data.aspiration,
-                status: 'menunggu',
-                createdAt: serverTimestamp(),
-            });
-
-            setSubmittedId(id);
+        // Optimistic Update: Langsung tampilkan ID tanpa await
+        setDoc(newDocRef, {
+            content: data.aspiration,
+            status: 'menunggu',
+            createdAt: serverTimestamp(),
+        }).then(() => {
             toast({
                 title: "Aspirasi Terkirim!",
-                description: "Terima kasih atas masukanmu. Data telah aman tersimpan di database.",
+                description: "Terima kasih atas masukanmu.",
             });
-            reset();
-        } catch (error: any) {
-            const permissionError = new FirestorePermissionError({
+        }).catch((error) => {
+            errorEmitter.emit('permission-error', new FirestorePermissionError({
                 path: newDocRef.path,
                 operation: 'create',
                 requestResourceData: data,
-            });
-            errorEmitter.emit('permission-error', permissionError);
-            toast({
-                variant: "destructive",
-                title: "Gagal Mengirim",
-                description: "Database menolak penyimpanan atau koneksi terputus. Silakan coba lagi.",
-            });
-        } finally {
-            setLocalIsSubmitting(false);
-        }
+            }));
+            setSubmittedId(null);
+        });
+
+        setSubmittedId(id);
+        reset();
     };
 
     const copyToClipboard = () => {
@@ -121,9 +110,8 @@ const AspirationFormSection = () => {
                         type="submit" 
                         size="lg" 
                         className="w-full md:w-auto font-bold rounded-full py-6 px-10 shadow-lg hover:scale-105 transition-transform"
-                        disabled={localIsSubmitting}
                     >
-                        {localIsSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'KIRIM ASPIRASI SEKARANG'}
+                        KIRIM ASPIRASI SEKARANG
                     </Button>
                 </form>
             ) : (
