@@ -60,27 +60,49 @@ function AdminDashboardContent() {
         router.push('/login');
     };
 
-    // Fungsi konversi gambar ke Base64 (Simpan langsung ke Firestore)
+    // Fungsi kompresi gambar otomatis sebelum simpan ke Base64
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        if (file.size > 1024 * 1024) { // Batas 1MB untuk Firestore string
-            toast({
-                variant: "destructive",
-                title: "File Terlalu Besar",
-                description: "Gunakan gambar di bawah 1MB untuk performa terbaik.",
-            });
-            return;
-        }
-
+        setIsProcessing(true);
         const reader = new FileReader();
-        reader.onloadend = () => {
-            setTeamForm(prev => ({ ...prev, image: reader.result as string }));
-            toast({
-                title: "Gambar Diproses",
-                description: "Gambar siap disimpan ke database.",
-            });
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                const maxDimension = 800; // Batas dimensi maksimal
+
+                if (width > height) {
+                    if (width > maxDimension) {
+                        height *= maxDimension / width;
+                        width = maxDimension;
+                    }
+                } else {
+                    if (height > maxDimension) {
+                        width *= maxDimension / height;
+                        height = maxDimension;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx?.drawImage(img, 0, 0, width, height);
+
+                // Kompres ke JPEG dengan kualitas 0.7 (Hasil Base64 akan jauh lebih kecil)
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                
+                setTeamForm(prev => ({ ...prev, image: compressedBase64 }));
+                setIsProcessing(false);
+                toast({
+                    title: "Gambar Dikompres",
+                    description: "Ukuran gambar telah dioptimalkan secara otomatis.",
+                });
+            };
+            img.src = event.target?.result as string;
         };
         reader.readAsDataURL(file);
     };
@@ -318,9 +340,14 @@ function AdminDashboardContent() {
                                         <Input placeholder="Jabatan (Ex: Ketua Umum)" value={teamForm.role} onChange={e => setTeamForm({...teamForm, role: e.target.value})} required />
                                         
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Foto Anggota (Langsung Upload)</label>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Foto Anggota (Auto Kompres)</label>
                                             <div className="flex flex-col gap-3 p-4 border-2 border-dashed rounded-xl bg-accent/10">
-                                                {teamForm.image ? (
+                                                {isProcessing ? (
+                                                    <div className="flex flex-col items-center justify-center py-6">
+                                                        <Loader2 className="w-8 h-8 animate-spin text-primary mb-2" />
+                                                        <p className="text-[10px] font-bold uppercase">Mengompres...</p>
+                                                    </div>
+                                                ) : teamForm.image ? (
                                                     <div className="relative w-full aspect-square max-w-[120px] mx-auto rounded-lg overflow-hidden border">
                                                         <img src={teamForm.image} alt="Preview" className="object-cover w-full h-full" />
                                                         <button 
@@ -334,7 +361,7 @@ function AdminDashboardContent() {
                                                 ) : (
                                                     <div className="flex flex-col items-center justify-center py-4 text-muted-foreground">
                                                         <ImageIcon className="w-8 h-8 mb-2 opacity-20" />
-                                                        <p className="text-[10px] uppercase font-bold text-center">Pilih file untuk upload instan</p>
+                                                        <p className="text-[10px] uppercase font-bold text-center">Pilih file untuk optimasi instan</p>
                                                     </div>
                                                 )}
                                                 <Input 
@@ -342,6 +369,7 @@ function AdminDashboardContent() {
                                                     accept="image/*" 
                                                     onChange={handleImageUpload}
                                                     className="cursor-pointer"
+                                                    disabled={isProcessing}
                                                 />
                                             </div>
                                         </div>
@@ -349,7 +377,7 @@ function AdminDashboardContent() {
                                         <Input type="number" placeholder="Urutan Tampil" value={teamForm.order} onChange={e => setTeamForm({...teamForm, order: parseInt(e.target.value) || 0})} />
                                         <Textarea placeholder="Quote Singkat" value={teamForm.quote} onChange={e => setTeamForm({...teamForm, quote: e.target.value})} required />
                                         <div className="flex gap-2">
-                                            <Button type="submit" className="flex-1 font-bold">
+                                            <Button type="submit" className="flex-1 font-bold" disabled={isProcessing}>
                                                 <Plus className="mr-2 h-4 w-4" /> {teamForm.id ? 'PERBARUI' : 'SIMPAN'}
                                             </Button>
                                             {teamForm.id && <Button variant="ghost" type="button" onClick={() => setTeamForm({id: '', name: '', role: '', quote: '', image: '', order: 0})}>Batal</Button>}
